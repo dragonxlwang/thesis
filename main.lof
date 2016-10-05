@@ -1,0 +1,6 @@
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Pearson's Mixture of Two Normals on ``Breadth of Forehead of Crabs''\relax }}{3}{figure.caption.6}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Comparison of the mixture model of two normals between Pearson's approach and EM algorithm. The two mixture models are very close to each other showing that the moment-matching method of Pearson obtains a near optimal likelihood.\relax }}{5}{figure.caption.7}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces A illustration of the relationship between $f$ and its conjugate $f^*$. For a given $s^*$, since $f(x) \geq \delimiter "426830A s^*, x \delimiter "526930B - f^*(s^*)$ always holds, which means that in the plot the curve of $f(x)$ is always above (or on) the line of $\delimiter "426830A s^*, x \delimiter "526930B - f^*(s^*)$. As a limiting case, $<s^*, x^*> - f^*(s^*)$ is cutting $f(x)$ at $x = x^*$. In addition, the affine function intersects the vertical axis $x = 0$ at the altitude $-f^*(s^*)$. The plot also shows the relationship between $s^*$ and $x^*$ can be described by the \emph {gradient mapping}: $x^* \in \partial f^{-1}(s^*)$.\relax }}{12}{figure.caption.9}
+\addvspace {10\p@ }

@@ -1,0 +1,228 @@
+%%
+%% This is file `thesis-ex.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% uiucthesis2009.dtx  (with options: `example')
+%%
+\def\fileversion{v2.25} \def\filedate{2016/9/21}
+%% Package and Class "uiucthesis2009" for use with LaTeX2e.
+\documentclass[edeposit,fullpage]{uiucthesis2009}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% packages
+\usepackage[super]{nth}
+\usepackage{url}
+\usepackage{dsfont}
+\usepackage{empheq, amsfonts, amsmath, amsthm, multirow}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage[toc,page]{appendix}
+\usepackage{expl3}
+\usepackage[none]{hyphenat}
+\usepackage[colorlinks,
+           linkcolor=red,
+           anchorcolor=green,
+           citecolor=blue
+           ]{hyperref}
+\usepackage[round,authoryear,sort]{natbib}
+\usepackage{cleveref}
+% \usepackage[font=small,labelfont=bf,margin=\parindent,
+%             tableposition=top]{caption} % not compatible with aaai
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% math
+\renewcommand{\P}{\mathrm{P}}
+\newcommand{\E}{\mathbf{E}}
+\newcommand{\entropy}{\mathbf{H}}
+\newcommand{\var}{\mathbf{var}}
+\newcommand{\std}{\mathbf{std}}
+\newcommand{\cov}{\mathbf{cov}}
+\renewcommand{\d}{\textrm{d}}
+\newcommand{\subjto}{\mbox{subject to}}
+\newcommand{\NA}{---}
+\newcommand{\indct}{\mathds{1}}
+% \newcommand*{\qed}{\hfill\ensuremath{\square}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Theorems
+% \newtheorem{thm}{Theorem}[section]
+% \newtheorem{col}{Corollary}[theorem]
+% \newtheorem{lem}[theorem]{Lemma}
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}[thm]
+\newtheorem{prop}{Proposition}[thm]
+\newtheorem{col}{Corollary}[thm]
+
+\theoremstyle{definition}
+\newtheorem{dfn}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \defeq
+\makeatletter
+\newcommand*{\defeq}{\mathrel{\rlap{%
+  \raisebox{0.3ex}{$\m@th\cdot$}}%
+  \raisebox{-0.3ex}{$\m@th\cdot$}}%
+   =}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \mylistbegin \mylistend
+\newcommand{\mylistbegin}{ \begin{list}{$\bullet$} {
+  \setlength{\itemsep}{-2pt}
+    %\setlength{\parsep}{0pt}
+    %\setlength{\topsep}{0pt}
+    %\setlength{\partopsep}{0pt}
+    \setlength{\leftmargin}{1em}
+    \setlength{\labelwidth}{1em}
+    \setlength{\labelsep}{0.5em} } }
+\newcommand{\mylistend}{ \end{list} }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \argmin \argmax
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\Max}{Max}
+\DeclareMathOperator*{\Min}{Min}
+\DeclareMathOperator*{\maximize}{maximize}
+\DeclareMathOperator*{\minimize}{minimize}
+\DeclareMathOperator*{\st}{s.t.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% abbrevations eg etal etc ie
+\ExplSyntaxOn
+\newcommand\latinabbrev[1]{
+  \peek_meaning:NTF . { #1\@}
+  { \peek_catcode:NTF a { #1.\@ } {#1.\@}}}
+\ExplSyntaxOff
+\def\eg{\latinabbrev{e.g}}
+\def\etal{\latinabbrev{et al}}
+\def\etc{\latinabbrev{etc}}
+\def\ie{\latinabbrev{i.e}}
+%%%%%%%%%%% shared affiliation: http://www.acm.org/sigs/publications/sigfaq#a17
+\def\sharedaffiliation{\end{tabular}\newline\begin{tabular}{c}}
+  \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\def\wg{\superscript{\dag}}
+\def\wu{\superscript{*}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% margin note
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% citation
+\renewcommand{\cite}{\citep}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Marco
+\newcommand{\DCME}{Dual-Clustering Maximum Entropy}
+\newcommand{\THETA}{\mathbf{\Theta}}
+\newcommand{\vw}{\mathbf{w}}
+\newcommand{\vx}{\mathbf{x}}
+\newcommand{\vh}{\mathbf{h}}
+\newcommand{\vhb}{\boldsymbol{\bar{h}}}
+\newcommand{\vv}{\mathbf{v}}
+\newcommand{\vW}{\mathbf{W}}
+\newcommand{\vV}{\mathbf{V}}
+\newcommand{\vH}{\mathbf{H}}
+\newcommand{\vs}{\mathbf{s}}
+\newcommand{\ii}{\mathcal{I}}
+\newcommand{\oo}{\mathcal{O}}
+\newcommand{\vmu}{\boldsymbol{\mu}}
+\newcommand{\valpha}{\boldsymbol{\alpha}}
+\newcommand{\cc}{\textrm{{Classification:}}}
+\newcommand{\ee}{\textrm{{Embedding:}}}
+\newcommand{\nop}[1]{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% shrink
+% \renewcommand{\baselinestretch}{0.93}
+
+\begin{document}
+
+\title{Probabilistic Latent Variable Models for  \\
+  Knowledge Discovery and Optimization}
+\author{Xiaolong Wang}
+\department{Computer Science}
+\schools{B.A., Peking University, 2011}
+\phdthesis
+\advisor{Chengxiang Zhai}
+\degreeyear{2016}
+\committee{Professor Chengxiang Zhai, Chair\\
+           Professor Jiawei Han\\
+           Professor David Forsyth \\
+           Professor Angelia Nedich, ASU \\
+           Professor Joy Ying Zhang, CMU }
+\maketitle
+
+\frontmatter
+
+%% Create an abstract that can also be used for the ProQuest abstract.
+%% Note that ProQuest truncates their abstracts at 350 words.
+\include{0-abstract}
+
+%% Create a dedication in italics with no heading, centered vertically
+%% on the page.
+\begin{dedication}
+To Father and Mother.
+\end{dedication}
+
+%% Create an Acknowledgements page, many departments require you to
+%% include funding support in this.
+\chapter*{Acknowledgments}
+
+This project would not have been possible without the support of many people.
+Many thanks to my adviser, Chengxiang Zhai, who read my numerous revisions and
+helped make some sense of the confusion. Also thanks to my committee members,
+Jiawei Han, David Forsyth, and Joy Zhang, who offered guidance and support.  And
+finally, thanks to parents, and numerous friends who endured this long process
+with me, always offering support and love.
+
+%% The thesis format requires the Table of Contents to come
+%% before any other major sections, all of these sections after
+%% the Table of Contents must be listed therein (i.e., use \chapter,
+%% not \chapter*).  Common sections to have between the Table of
+%% Contents and the main text are:
+%%
+%% List of Tables
+%% List of Figures
+%% List Symbols and/or Abbreviations
+%% etc.
+
+\tableofcontents
+\listoftables
+\listoffigures
+
+%% Create a List of Abbreviations. The left column
+%% is 1 inch wide and left-justified
+% \chapter{List of Abbreviations}
+
+% \begin{symbollist*}
+% \item[CA] Caffeine Addict.
+% \item[CD] Coffee Drinker.
+% \end{symbollist*}
+
+%% Create a List of Symbols. The left column
+%% is 0.7 inch wide and centered
+% \chapter{List of Symbols}
+
+% \begin{symbollist}[0.7in]
+% \item[$\tau$] Time taken to drink one cup of coffee.
+% \item[$\mu$g] Micrograms (of caffeine, generally).
+% \end{symbollist}
+
+\mainmatter
+
+\include{1-introduction}
+\include{2-background}
+% \include{3-model}
+% \include{4-predictions}
+
+% \chapter{Conclusions}
+
+% We conclude that graduate students like coffee.
+
+% \appendix*
+
+% \include{Appendix.tex}
+
+\backmatter
+
+\bibliographystyle{abbrvnat}
+\bibliography{refs}
+
+% \chapter{Vita}
+
+
+\end{document}
+\endinput
+%%
+%% End of file `thesis-ex.tex'.
