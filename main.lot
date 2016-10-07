@@ -1,4 +1,20 @@
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {1.1}{\ignorespaces Pearson's Chi-square test and p-Value for a single normal model, a single Weibull model, and the two normal mixture model of Pearson and EM algorithm in the ``Breadth of Forehead of Crabs'' problem. For the normal models, we also include the model parameters.\relax }}{6}{table.caption.8}
+\contentsline {table}{\numberline {1.1}{\ignorespaces Pearson's Chi-square test and p-Value for a single normal model, a single Weibull model, and the two normal mixture model of Pearson and EM algorithm in the ``Breadth of Forehead of Crabs'' problem. For the normal models, we also include the model parameters.\relax }}{5}{table.caption.8}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Top 10 High Impact Papers in Topic ``Sentiment Analysis'' (Topic 89, AAN)\relax }}{28}{table.caption.20}
+\contentsline {table}{\numberline {3.2}{\ignorespaces Top 10 High Impact Papers in Topic ``Air Pollution'' (Topic 175, PMC)\relax }}{28}{table.caption.20}
+\contentsline {table}{\numberline {3.3}{\ignorespaces Dominant 10 Topics in AAN (100 topics)\relax }}{31}{table.caption.27}
+\contentsline {table}{\numberline {3.4}{\ignorespaces Dominant 10 Topics in PMC (500 topics)\relax }}{31}{table.caption.27}
+\contentsline {table}{\numberline {3.5}{\ignorespaces SMT Example for Theme Evolution\relax }}{35}{table.caption.32}
+\contentsline {table}{\numberline {3.6}{\ignorespaces Loss on Forward Citation\nobreakspace {}(AAN)\relax }}{36}{table.caption.35}
+\contentsline {table}{\numberline {3.7}{\ignorespaces Loss on Journal Conditional Entropy\nobreakspace {}(PMC)\relax }}{37}{table.caption.37}
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Summary of Notations\relax }}{43}{table.caption.39}
+\contentsline {table}{\numberline {4.2}{\ignorespaces Crowd Pairwise Preferences Binding Performance (Kendall's tau Distance)\relax }}{52}{table.caption.48}
+\contentsline {table}{\numberline {4.3}{\ignorespaces \textsc {Tpp} Performance with More Workers but Sparser Annotation (Kendall's tau Distance)\relax }}{55}{table.caption.53}
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Log-Likelihood on Semantic-Syntactic Word Relationship Dataset\relax }}{71}{table.caption.64}
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

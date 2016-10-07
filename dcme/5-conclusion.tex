@@ -1,0 +1,15 @@
+\section{Conclusions}\label{sec::dcme_conclusion}
+
+We propose a novel optimization method, \DCME{}~(DCME), which solves the Maximum
+Entropy problem in its primal-dual form. Although it has a similar complexity as
+the sampling-based approaches, it allows the entire model to learn from every
+training instance, which we believe is the first algorithm that is efficient
+both in learning and computation. DCME exploits the dual clustering and
+approximates dual distributions by cluster centers. It maintains an affordable
+complexity using a hybrid online-offline optimization algorithm. Empirical
+studies demonstrate that DCME outperforms state-of-the-art algorithms such as
+NCE and NS in learning tasks with large numbers of items. A promising future
+research direction is to investigate the nonparametric mixture models for dual
+clustering. By taking advantages of probabilistic latent cluster assignments and
+learning the number of clusters from the data, we expect a better approximation
+for dual distributions.

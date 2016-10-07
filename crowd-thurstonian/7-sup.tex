@@ -1,0 +1,139 @@
+\section{Model Updating} \label{app::mmu}%M-step
+
+By zeroing  the derivatives of $\mathcal{Q}(\mathbf{\Theta}^{(t+1)};
+\mathbf{\Theta}^{(t)})$ with respect to $\mathbf{\Theta}^{(t+1)}$, the following
+closed forms are obtained for the update of $\{s_{l,i}^{(t+1)}\}$,
+$\{\delta_{l}^{2(t+1)}\}$ and $\{\theta_m^{(t+1)}\}$:
+
+\begin{empheq}[left=\empheqlbrace]{align}
+s_{l^*,i^*}^{(t+1)} &=
+  \frac{ \sum\limits_{k \in \mathcal{W}_{l^*,i^*}}
+    \E_{\mathbf{Z|D,\Theta}^{(t)}}[s_{l^*,i^*}^{(k)}]}
+    {\sum\limits_{k \in \mathcal{W}_{l^*,i^*}} 1} \label{eq::mu_ps}\\
+\delta_{l^*}^{2(t+1)} &=
+  \frac{ \sum\limits_{(k,i) \in \mathcal{P}_{l^*}}
+    \E_{\mathbf{Z|D,\Theta}^{(t)}}[(s_{l^*,i}^{(k)} - s_{l^*,i}^{(t+1)})^2] }
+    {\sum\limits_{(k,i) \in \mathcal{P}_{l^*}} 1} \label{eq::mu_d}\\
+\theta_{m^*}^{(t+1)} &\propto
+  \sum\limits_l \E_{\mathbf{Z|D,\Theta}^{(t)}}[\mathbf{1}(m_l = m^*)]
+\end{empheq}
+
+where $\mathcal{W}_{l^*,i^*}$  denotes the set of workers who have judged
+$d_{i^*}$ for $q_{l^*}$, and $\mathcal{P}_{l^*}$ denotes the set of
+$\langle\mbox{worker, document}\rangle$ pairs involved in the annotation for
+$q_{l^*}$, \ie,
+
+\begin{align}
+\mathcal{W}_{l^*,i^*} &= \{ k ~|~ \exists i, ~ \langle k, l^*,i^*, i \rangle
+  \in \mathbf{D} ~\mathrm{or}~\langle k, l^*, i, i^* \rangle \in \mathbf{D}\}
+  \nonumber \\
+\mathcal{P}_{l^*} &= \{ (k, i) ~|~ \exists \tilde{i},~
+  \langle k, l^*,i, \tilde{i} \rangle \in \mathbf{D}
+  ~\mathrm{or}~\langle k, l^*, \tilde{i}, i \rangle \in \mathbf{D}\} \nonumber
+\end{align}
+
+Unfortunately, $\{\tau_{k,m}^{(t+1)}\}$ do not have a closed-form analytic
+solution, where we employ Newton's method.  The partial derivatives
+\emph{w.r.t.}  $\tau_{k^*,m^*}^{(t+1)}$ are given by:
+
+\begin{align}
+\frac{\partial \mathcal{Q}}{\partial \tau_{k^*,m^*}^{(t+1)}} =
+& \sum\limits_{\substack{l, i_1, i_2 \\ \langle k^*, l,i_1,i_2 \rangle
+      \in \mathbf{D}}}
+  \E_{\mathbf{Z|D,\Theta}^{(t)}}
+  \left[ \mathbf{1}(m_l=m^*) \frac{s_{l,i_1}^{(k^*)} -
+    s_{l,i_2}^{(k^*)}}{\sqrt{2}} \right. \nonumber \\
+&  \left. f\big(-\frac{\tau_{k^*,m^*}^{(t+1)}}{\sqrt{2}}(s_{l,i_1}^{(k^*)} -
+    s_{l,i_2}^{(k^*)})\big) \right] \label{eq::tau1}\\
+\frac{\partial^2 \mathcal{Q}}{\partial {\tau_{k^*,m^*}^{(t+1)}}^2} =
+& -\sum\limits_{\substack{l, i_1, i_2 \\ \langle k^*, l,i_1,i_2 \rangle
+    \in \mathbf{D}}}
+    \hspace{-15pt}\E_{\mathbf{Z|D,\Theta}^{(t)}}
+    \hspace{-2pt}\Bigg[\mathbf{1}(m_l=m^*)
+      \frac{(s_{l,i_1}^{(k^*)} - s_{l,i_2}^{(k^*)})^2}{2}  \nonumber \\
+& \Big\{ f\big(-\frac{\tau_{k^*,m^*}^{(t+1)}}{\sqrt{2}}(s_{l,i_1}^{(k^*)}
+              - s_{l,i_2}^{(k^*)})\big)
+        \frac{\tau_{k^*,m^*}^{(t+1)}}{\sqrt{2}}
+        (s_{l,i_1}^{(k^*)} - s_{l,i_2}^{(k^*)}) \nonumber \\
+&  + f^2 \big(-\frac{\tau_{k^*,m^*}^{(t+1)}}{\sqrt{2}}
+        (s_{l,i_1}^{(k^*)} - s_{l,i_2}^{(k^*)})\big)
+  \Big\} \Bigg] \label{eq::tau2}
+\end{align}
+
+where we used the fact that
+$$\partial \mathrm{Q}(x) / \partial x = - \P_\mathtt{N}(x | 0, 1)$$
+And $f(\cdot)$ is defined as
+
+\begin{equation}
+f(x)=\frac{\P_\mathtt{N}(x | 0,1)}{\mathrm{Q}(x)} \label{eq::f_def}
+\end{equation}
+
+whose derivative is calculated as:
+
+\begin{equation}
+\frac{\d f(x)}{\d x}  = -x f(x) + f^2(x)
+\end{equation}
+
+An important implementation issue of Newton's method is numeric stability.
+For large $x > 0$, computing $f(x)$ using \Cref{eq::f_def} is not advised as
+both $\P_\mathtt{N}(x | 0, 1)$ and $\mathrm{Q}(x)$ approach zero fast. To
+address this issue, we use the following approximation~\cite{chiani2003new}:
+
+\begin{equation}
+\mathrm{Q}(x) \approx
+  \frac{1}{12}e^{-\frac{x^2}{2}} + \frac{1}{4}e^{-\frac{2}{3}x^2}
+\end{equation}
+
+Using this result, $f(x) \approx \frac{12}{\sqrt{2\pi}}$ can be found to be a
+good approximation for $x > 8$.
+
+\section{Inference of \textsc{Trm}} \label{app::trm}
+
+\trm{} is the building block of the proposed \tpp{} and is investigated as a
+baseline in the experiment. We present the maximum likelihood estimation~(MLE)
+using the Expectation-Maximization~(E-M) algorithm.
+
+The joint likelihood is given by
+
+\begin{align}
+& \P\big(\{\sigma_l^{(k)}\}, \{s_{l,i}^{(k)}\} |
+    \{s_{l,i}\}, \{\delta_l^2\}\big)  \nonumber \\
+=
+& \prod_{l,i,k} \P_N(s_{l,i}^{(k)} | s_{l,i}, \delta_l^2) \cdot
+  \mathds{1}(\sigma_l^{(k)}, \{s_{l,i}^{(k)} \})
+\end{align}
+
+where $\mathds{1}(\sigma_l^{(k)}, \{s_{l,i}^{(k)} \}) = 1$ if the ranking
+derived from the order of $\{s_{l,i}^{(k)} \}$ is consistent with
+$\sigma_l^{(k)}$ and $0$ otherwise.
+
+In addition, like \textsc{Tpp}, the posterior distribution is approximated by
+Gibbs sampling,
+
+\begin{align}
+& \P\big( s_{l^*,i^*}^{(k^*)} | \{s_{l,i}\}, \{\delta_l^2\}, \{\sigma_l^{(k)}\},
+            \{s_{l,i}^{(k)}\} \ \{s_{l^*,i^*}^{(k^*)}\} \big)  \nonumber \\
+=
+& \P_N(s_{l^*,i^*}^{(k^*)} | s_{l^*,i^*}, \delta_{l^*}^2) \cdot
+            \mathds{1}(s_{-} \leq s_{l^*,i^*}^{(k^*)} \leq s_{+} \})
+\end{align}
+
+where $s_{+}$ (or $s_{-}$) denotes the worker's perceived score
+$s_{l^*,i}^{(k^*)}$ of the document $d_i$ which immediately precedes (or
+follows) $d_{i^*}$ as ranked by $\sigma_{l^*}^{(k^*)}$ if such $d_i$ exists or
+otherwise evaluated as $+\infty$ (or $-\infty$). Consequently, we samples
+$s_{l^*,i^*}^{(k^*)}$ by
+
+$$s_{l^*,i^*}^{(k^*)} \sim \mathrm{TN}_{s_{-}}^{s_{+}}
+(s_{l^*,i^*}, \delta_{l^*}^2)$$
+
+Lastly, we update the parameters by optimizing the expected joint log
+likelihood, which yields the same updating rules as in \Cref{eq::mu_ps},
+\Cref{eq::mu_d} with the only difference being that $k$ is ranged over all
+workers that rank for $q_{l^*}$ in \Cref{eq::mu_ps} and $(k,i)$ over all workers
+that judge $q_{l^*}$ and documents in the ranking list of $q_{l^*}$ in
+\Cref{eq::mu_d}.
+
+A final note of \textsc{Trm} is about its identifiability: It requires rescaling
+in the same manner as in \Cref{eq::tpp_id1} and \Cref{eq::tpp_id2} to cancel
+extra freedom in order to prevent the model from undesired drifting and scaling.

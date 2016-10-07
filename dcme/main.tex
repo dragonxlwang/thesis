@@ -1,0 +1,135 @@
+%Tex
+\def\year{2017}\relax
+%File: formatting-instruction.tex
+\documentclass[letterpaper]{article}
+\usepackage[colorlinks,
+           linkcolor=red,
+           anchorcolor=blue,
+           citecolor=blue
+           ]{hyperref}
+\usepackage{aaai17}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\frenchspacing
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+\setcounter{secnumdepth}{1}     % set section number
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% packages
+\usepackage[super]{nth}
+\usepackage{url}
+\usepackage{dsfont}
+\usepackage{empheq, amsfonts, amsmath, amsthm, multirow}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage{cleveref}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage[toc,page]{appendix}
+\usepackage{expl3}
+% \usepackage[draft]{hyperref} % not compatible with aaai
+% \usepackage[font=small,labelfont=bf,margin=\parindent,
+%             tableposition=top]{caption} % not compatible with aaai
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% math
+\renewcommand{\P}{\mathrm{P}}
+\newcommand{\E}{\mathbf{E}}
+\newcommand{\entropy}{\mathbf{H}}
+\newcommand{\var}{\mathbf{var}}
+\newcommand{\std}{\mathbf{std}}
+\newcommand{\cov}{\mathbf{cov}}
+\renewcommand{\d}{\textrm{d}}
+\newcommand{\subjto}{\mbox{subject to}}
+% \newcommand*{\qed}{\hfill\ensuremath{\square}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Theorems
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \defeq
+\makeatletter
+\newcommand*{\defeq}{\mathrel{\rlap{%
+  \raisebox{0.3ex}{$\m@th\cdot$}}%
+  \raisebox{-0.3ex}{$\m@th\cdot$}}%
+   =}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \mylistbegin \mylistend
+\newcommand{\mylistbegin}{ \begin{list}{$\bullet$} {
+  \setlength{\itemsep}{-2pt}
+    %\setlength{\parsep}{0pt}
+    %\setlength{\topsep}{0pt}
+    %\setlength{\partopsep}{0pt}
+    \setlength{\leftmargin}{1em}
+    \setlength{\labelwidth}{1em}
+    \setlength{\labelsep}{0.5em} } }
+\newcommand{\mylistend}{ \end{list} }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \argmin \argmax
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\Max}{Max}
+\DeclareMathOperator*{\Min}{Min}
+\DeclareMathOperator*{\maximize}{maximize}
+\DeclareMathOperator*{\minimize}{minimize}
+\DeclareMathOperator*{\st}{s.t.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% abbrevations eg etal etc ie
+\ExplSyntaxOn
+\newcommand\latinabbrev[1]{
+  \peek_meaning:NTF . { #1\@}
+  { \peek_catcode:NTF a { #1.\@ } {#1.\@}}}
+\ExplSyntaxOff
+\def\eg{\latinabbrev{e.g}}
+\def\etal{\latinabbrev{et al}}
+\def\etc{\latinabbrev{etc}}
+\def\ie{\latinabbrev{i.e}}
+%%%%%%%%%%% shared affiliation: http://www.acm.org/sigs/publications/sigfaq#a17
+\def\sharedaffiliation{\end{tabular}\newline\begin{tabular}{c}}
+  \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\def\wg{\superscript{\dag}}
+\def\wu{\superscript{*}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% margin note
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% shrink
+% \renewcommand{\baselinestretch}{0.93}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% macros
+\newcommand{\DCME}{Dual-Clustering Maximum Entropy}
+\newcommand{\THETA}{\mathbf{\Theta}}
+\newcommand{\vw}{\mathbf{w}}
+\newcommand{\vx}{\mathbf{x}}
+\newcommand{\vh}{\mathbf{h}}
+\newcommand{\vhb}{\boldsymbol{\bar{h}}}
+\newcommand{\vv}{\mathbf{v}}
+\newcommand{\vW}{\mathbf{W}}
+\newcommand{\vV}{\mathbf{V}}
+\newcommand{\vH}{\mathbf{H}}
+\newcommand{\vs}{\mathbf{s}}
+\newcommand{\ii}{\mathcal{I}}
+\newcommand{\oo}{\mathcal{O}}
+\newcommand{\vmu}{\boldsymbol{\mu}}
+\newcommand{\valpha}{\boldsymbol{\alpha}}
+\newcommand{\cc}{\textrm{{Classification:}}}
+\newcommand{\ee}{\textrm{{Embedding:}}}
+\newcommand{\nop}[1]{}
+
+\begin{document}
+\title{\DCME{} \\ with Application to Classification and Word Embedding}
+\author{
+  Anonymous Authors
+}
+
+\maketitle
+\input{0-abstract}
+\input{1-introduction}
+\input{2-review}
+\input{3-dcme}
+\input{4-experiments}
+\input{5-conclusion}
+
+\newpage
+\bibliographystyle{aaai}
+\bibliography{refs}
+
+
+\end{document}

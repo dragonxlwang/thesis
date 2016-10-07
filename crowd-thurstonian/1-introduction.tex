@@ -1,0 +1,116 @@
+\section{Introduction}
+
+Collecting reliable annotation at scale has been a critical issue in the
+development of machine learning techniques. Crowdsourcing services make it
+possible to collect huge amount of annotations from less trained crowd workers
+in an inexpensive and efficient manner. The general philosophy of crowdsourcing
+is that instead of collecting one single expert-annotated label for each
+instance, multiple labels per example are collected from non-expert crowd
+workers at low cost to infer the ground
+truth~\cite{welinder2010multidimensional,whitehill2009whose}.
+
+\subsection{Motivation}
+
+In different tasks of learning, the form of labels can
+be as simple as binary/pairwise judgements, but can also be structured and
+complex.  An example of the latter case is a ranked list of documents with
+respect to a query. \emph{Ranked lists} offer the most informative knowledge for
+training and testing in various data mining and information retrieval tasks such
+as \emph{learning to rank}~\cite{valizadegan2009learning,yue2007support}.
+Nevertheless, unlike making binary or pairwise judgements, labeling complex
+structures such as ranked lists by crowd workers is subject to large variance
+and low efficiency. In order to generate a ranked list of $N$ items, a worker
+needs to consider a number of $N!$ possibilities. Annotation in such a huge
+labeling space is time consuming and uneconomic. Furthermore, the non-expert
+nature of crowdsourcing workers makes it even more difficult to reach  consensus
+on the ground-truth ranked lists than binary/pairwise judgements.
+
+The fact that ranked lists are highly useful but hard to be directly annotated
+motivates us to seek for alternative strategies.  Our idea is based upon a
+metaphor in which we can only \emph{learn} what \emph{an elephant} is like
+through \emph{a group of blind men}. Each one holds onto a different part, but
+only one part, such as the side or the tusk. In the original story, they then
+discuss their observations which leads to argument and complete disagreement.
+However, a smarter treatment is to analysis all the observations and to find an
+probable explanation that most fits. In this chapter, we implement such idea by
+decomposing the task of labeling ranked lists into a series of smaller and
+easier tasks: \textit{annotating pairwise preferences}, each of which requires a
+worker to compare only a pair of items out of the entire set.  In addition, the
+pairwise judgements by crowd workers are more reliable and can be easily scaled
+up. Pairs of items can be randomly generated out of the set and will be labeled
+by multiple workers.  The goal is to infer the true \emph{ranked list} out of
+the \emph{crowdsourced pairwise} annotations.
+
+\subsection{Challenges}
+
+Leveraging pairwise preferences to infer the full ranked list is promising but
+also challenging. The key challenge comes from \emph{\underline{incomplete}} and
+\emph{\underline{inconsistent}} annotations.
+
+Pairwise preferences can be \emph{incomplete} due to time and budget
+constraints. Not every two items are compared either directly or indirectly (For
+items $A$, $B$ and $C$, an \textit{indirect} annotation of $A \succ B$ may be
+obtained if \textit{direct} annotations of $A \succ C$ and $C \succ B$ have been
+given). The available annotations can also be \emph{inconsistent}, resulting
+from either the disagreements between multiple workers, or the intrinsic
+uncertainty within one single worker. A common mistake of the latter case is
+that one labels  $A \succ B, B \succ C, \mbox{ and } C \succ A$ at the same
+time. The discussion below reveals a number of factors that lead to inconsistent
+annotations:
+
+\begin{itemize}
+\item \emph{Query difficulty:}  More difficult queries, such as ambiguous and
+  vague queries, demand more effort to interpret and to judge, making them
+  intrinsically more prone to errors.
+\item  {\emph{Worker expertise across domains:}} Different workers have
+  different domain expertise; the same worker can also have varying domain
+  knowledge across different task, making the quality of their labels vary
+  accordingly. In practice, neither the task domain nor the worker's expertise
+  is known apriori.
+\item {\emph{Truthfulness of Workers:}} Truthfulness of workers is a prevailing
+  issue in crowdsourcing tasks. Two typical adversarial groups are spammer
+  workers and malicious workers: Spammers give random judgments and offer little
+  information about the ranked lists;  Malicious workers, on the other hand,
+  sabotage the utility of annotations by giving false preferences.
+\end{itemize}
+
+Identifying the sources of such incompleteness and inconsistency, and properly
+modeling them, are critical to infer the true ranked list from the crowdsourced
+pairwise annotations.
+
+\subsection{Our Proposal}
+
+We propose a novel generative model called ``Thurstonian Pairwise Preference''
+(\tpp{}) to bind pairwise preferences of the crowd into rankings.  The key
+modeling challenges that \tpp{} addresses are to resolve the inevitable
+incompleteness and inconsistency of judgements, as well as to model variable
+query difficulty and different labeling quality resulting from workers' domain
+expertise and truthfulness.
+
+\tpp{} is built on top of the Thurstonian Ranking Model (\trm{})
+\cite{thurstone1927law}, which takes noisy ranked lists of items as observations
+and estimates the true rankings. When applied to crowdsourcing, \trm{} models
+the generation of the noisy ranked lists annotated by crowd workers, taking
+variable query difficulty into account. It infers the relevance score of each
+item to form the ranked list. In contrast to \trm{}, the observations of \tpp{}
+are pairwise preferences.  Specifically, \tpp{} naturally simulates the
+generative process of incomplete pairwise annotations, and seamlessly integrates
+a worker-aware layer with the original query-aware layer to model the
+inconsistency of the labeling process.  The advantage of \tpp{} is that it does
+not require full rankings as observations, and pairwise preferences can be
+efficiently labeled at scale.
+
+While there have been earlier research efforts on (pairwise) ranking aggregation
+with similar goals, most of them investigated a ``non-crowd'' setting, or only a
+subset of the above factors are taken into account~(See
+\Cref{sec::tpp_related_work} for details). In sharp contrast, \textsc{Tpp}
+provides a unified and principled strategy to handle various influential
+factors, which  effectively binds pairwise preferences of the crowd into
+rankings.
+
+\noindent \textbf{Organization.} We briefly introduce the original Thurstonian
+Ranking Model in \Cref{sec::tpp_trm}, and present our proposed Thurstonian
+Pairwise Preference model (\tpp{}) in \Cref{sec::tpp_tpp}. The inference of
+\tpp{} is given in \Cref{sec::tpp_infer}. We provide the experimental study in
+\Cref{sec::tpp_exp}, review related work in \Cref{sec::tpp_related_work} and
+conclude our study in \Cref{sec::tpp_conclude}.

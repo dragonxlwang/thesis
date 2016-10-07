@@ -47,7 +47,7 @@ function as:
 \end{figure}
 
 An geometrical interpretation of the conjugate of a \emph{subdifferentiable}
-function is illustrated in Figure~\ref{fig::conjugate-function}. A immediate
+function is illustrated in \Cref{fig::conjugate-function}. A immediate
 result is that:
 
 \begin{thm} \label{thm::conjugate-attainer}
@@ -107,14 +107,14 @@ is presented in the theorem below.
 \end{lem}
 \begin{proof}
 
-  In light of Theorem~\ref{thm::conjugate-attainer}, the general proof of the
+  In light of \Cref{thm::conjugate-attainer}, the general proof of the
   conjugacy transformation between $f$ and $f^*$ is to verify that $x = \partial
   f^* \big( \partial f(x) \big)$. And it is easy to show that
 
   $$\vs = -\partial H \big(\partial A (\vs) \big)$$
 
-  However, it is much more intuitive to equivalence in
-  \Cref{eq::conj_dual_sol} We use the following equivalence:
+  However, it is much more intuitive to prove by showing the equivalence in
+  \Cref{eq::conj_dual}. We follow the derivation:
 
   \begin{align*}
     \E_{\vmu}[s_j] + \entropy(\vmu)
@@ -122,11 +122,157 @@ is presented in the theorem below.
           \log\sum\limits_{j=1}^N \exp(s_j) \nonumber \\
       &= -D_{KL}(\vmu || \P) + A(\vs)
   \end{align*}
-where $D_{KL}(\vmu || \P)$ is the Kullback-Leibler (KL) divergence and
-note $D_{KL}(\vmu || P) \ge 0$ and $D_{KL}(P || P) = 0$.
-It follows that
-$\vmu^* = \argmin\limits_{\vmu \in \Delta_N} D_{KL}(\vmu || P) = P$.
+where $D_{KL}(\vmu || \P)$ is the Kullback-Leibler (KL) divergence.
+
+Note that KL-divergence is always nonnegative:
+
+$$D_{KL}(\vmu || P) \ge 0$$
+
+and:
+
+$$D_{KL}(\vmu || P) = 0  \quad\iff\quad \vmu = P $$
+
+It follows that:
+
+$$\vmu^* = \argmin\limits_{\vmu \in \Delta_N} D_{KL}(\vmu || P) = P$$
+
 \end{proof}
 
-\section{Minimax Theory}
 \section{EM Algorithm: a modern reinterpretation} \label{sec::bg-em}
+
+Equipped with the conjugate duality, we now offer a new interpretation of the
+famous EM algorithm. It has not been studied thoroughly before. However, part of
+the idea presented here is also shared by the work \cite{iusem1992primal}.
+
+Suppose that there is a distribution $\P(Y | \Theta)$ where the data $Y = (X,
+Z)$ is partially observed and can be decomposed into the observation $X$ and the
+unseen variables $Z$. Given a set of data $X_1, \dots, X_N$, MLE solves the
+problem:
+
+$$ \max_\Theta \log \P(X_1, \dots, X_N | \Theta) $$
+
+Using the conjugate duality proved in \Cref{thm::conjugate-attainer}:
+
+\begin{align}
+  \log \P(X_1, \dots, X_N ; \Theta) &=
+\sum\limits_{i=1}^N \log \sum\limits_{Y_i} \P(X_i, Y_i ;\Theta)  \nonumber \\
+&=
+ \sum\limits_{i=1}^N \max_{\vmu_i \in \Delta} \Big(
+  \sum\limits_{Y_i} \vmu_{i, Y_i} \log \P(X_i, Y_i ;\Theta) +
+  \entropy(\vmu_i) \Big) \label{eq::em-conjugate}
+\end{align}
+
+Therefore, the MLE with incomplete observation is equivalent to:
+
+$$
+\max\limits_{\substack{\Theta \\ \vmu_i \in \Delta , 1 \leq i \leq N}}
+\underbrace{\sum\limits_{i=1}^N  \Big(
+  \sum\limits_{Y_i} \vmu_{i, Y_i} \log \P(X_i, Y_i ;\Theta) +
+\entropy(\vmu_i) \Big)}_{\mathcal{F}(\Theta, M)} \nonumber
+$$
+
+And for fixed $\Theta$, the optimality condition for $\mu_i$ is:
+
+$$
+\frac{\partial \mathcal{F}}{\partial \mu_i} = 0
+\quad\iff\quad
+\mu_{i, Y_i} = \P(Y_i | X_i; \Theta)
+$$
+which is exactly the E-step in EM algorithm.
+
+In addition, to optimize $\Theta$ while fixing $M$:
+
+$$
+\max\limits_{\Theta}
+\sum\limits_{i=1}^N \sum\limits_{Y_i} \vmu_{i, Y_i} \log \P(X_i, Y_i ;\Theta)
+$$
+
+where in EM algorithm, $\sum\limits_{i=1}^N \sum\limits_{Y_i} \vmu_{i, Y_i} \log
+\P(X_i, Y_i ;\Theta)$ is referred as \emph{evidence lower bound}~ELBO function,
+and the above maximization is identical to the M-step in EM algorithm.
+
+Using this interpretation, it is also straight-forward to view EM algorithm as a
+coordinate-descent algorithm where the objective function is
+$\mathcal{F}(\Theta, M)$, which is a lower bound of the log-likelihood.
+
+\subsubsection{Variant 1: restricted $\mu_i$}
+In the above basic version of EM, we assume that $\mu_i$ can freely choose any
+element in the simplex $\Delta$. Nevertheless, sometimes for computational
+efficiency, we might want to restrict $\mu_i$ to be within a subset, say,
+$\mathcal{S}$. Then the optimization problem for $\mu_i$ for constant $\Theta$
+becomes:
+
+$$\min\limits_{\mu_i \in \mathcal{S}} D_{KL}
+\big(\mu_i \; ||\; P(\cdot | X_i; \Theta)\big)$$
+
+When the solution $\mu_i$ is different from $P(\cdot | X_i; \Theta)$ (this
+happens when $\P(\cdot | X_i; \Theta) \notin \mathcal{S}$),
+\Cref{eq::em-conjugate} will not hold. In such cases, the solution will neither
+converge to that of MLE.
+
+\subsubsection{Variant 2: Bayesian variational inference}
+
+EM algorithm is also investigated in Bayesian setting although most technique
+remains the same. Specifically, $\Theta$ is viewed as a distribution which is
+controlled by hyperparameter $\Gamma$, and thus the log-likelihood involves not
+only marginalizing the latent variable $Z$ but also the parameter $\Theta$.
+
+Mathematically, by taking $\Theta$ as a special set of latent variable, we can
+still employ the EM algorithm. However, in Bayesian setting, it is more often
+called as variational inference method.
+
+In addition, computationally, by carefully choosing the form of the prior
+distribution $\P(\Theta ; \Gamma)$, it is possible to have the posterior
+$\P(\Theta | X , Z ; \Gamma)$ in the same family of distributions as the
+prior~(conjugate prior). This is appealing since the update of $\mu_i$ in
+\Cref{eq::em-conjugate} is always exactly maximized.
+
+\section{Minimax Theory}
+
+In this section we will review some results in the minimax theory which gives
+the conditions under which the following equality is hold:
+
+\begin{equation}
+ \max\limits_{z \in Z} \min\limits_{x \in X} \phi(x,z) =
+ \min\limits_{x \in X} \max\limits_{z \in Z} \phi(x,z)  \label{eq::minimax}
+\end{equation}
+
+\citeauthor{neumann1928theorie} is credited with the first investigation of this
+problem.  There are many different sufficient conditions that guarantees the
+above equation. Modern analysis employees Farkas Lemma in the \emph{min
+common/max crossing} framework and an excellent formal discussion can be found
+in \cite{bertsekas2003convex}. In this thesis, we only present an earlier
+version of minimax theory by Sion~\cite{sion1958general}, which is one of
+several celebrated generalizations of von Neumann's minimax
+theorem~\cite{neumann1928theorie}:
+
+\begin{thm}[Sion's Minimax Theorem]\label{thm::sion-minimax}
+  Let $X$ and $Z$ both be a compact convex set. Let $\phi$ be a real-valued
+  function on $X \times Z$ such that:
+  \begin{enumerate}
+    \item $\phi(x, \cdot)$ is upper semi-continuous and quasi-concave on $Y$ for
+      any $x \in X$
+    \item $phi(\cdot, y)$ is lower semi-continuous and quasi-convex on $X$ for
+      any $y \in Y$
+  \end{enumerate}
+  Then,
+  $$ \max\limits_{z \in Z} \min\limits_{x \in X} \phi(x,z) =
+     \min\limits_{x \in X} \max\limits_{z \in Z} \phi(x,z)  $$
+\end{thm}
+
+An elementary proof of Sion's minimax theorem can be found in
+\cite{komiya1988elementary}. The derivation is simple, short and elegant. Also,
+the assumption made in \cref{thm::sion-minimax} is easy to satisfy for most
+practical problems where $\phi$ is a ``regular'' function. In general,
+\Cref{eq::minimax} holds when solving problems involving the dual formulation in
+PLVMs.
+
+
+
+
+
+
+
+
+
+

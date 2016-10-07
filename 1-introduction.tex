@@ -78,7 +78,7 @@ thesis.
 The dataset on which Pearson modelled consisted of measurement on the ratio of
 forehead width to the body length of 1000 crabs sampled at the Bay of Naples by
 zoologist W.F.R. Weldon. Weldon analyzed the histogram of the observations,
-which is plotted in Figure~\ref{fig::pearson-crab}, along with a normal
+which is plotted in \Cref{fig::pearson-crab}, along with a normal
 distribution fitted using Maximum Likelihood~(see the solid blue line). However,
 \citet{weldon1893certain} speculated that the asymmetry in the histogram, ``a
 well-marked deviation from this normal shape,'' could be resulted from a
@@ -128,7 +128,7 @@ Mathematically, the problem involves five parameters $\mu_1, \mu_2, \sigma_1,
 solution the parameters need to ensure that the mixture matches on the first
 five moments. Pearson derived a ninth degree polynomial (nonic) and two
 candidate real roots are found. He finally chose the solution on the basis of
-agreement with the sixth moment. In Figure~\ref{fig::pearson-crab}, the dashed
+agreement with the sixth moment. In \Cref{fig::pearson-crab}, the dashed
 curve in red shows Pearson's mixture and its two components are displayed in
 purple and green dashed lines. Clearly, the mixture is skewed and better fits
 the histogram. And indeed, two subspecies are identified which verifies the
@@ -144,7 +144,7 @@ shape parameter is the solution to the equation $\frac{1}{k} =
 x_N^k)}- \frac{1}{N}\sum\limits_{i=1}^N \log x_i$, and numeric methods, which
 were very primitive at the time of late 19th century, is required.) Therefore
 Weibull distribution was not a practical option for fitting the data without the
-aid of computers. In Figure~\ref{fig::pearson-crab-weibull}, we compare the
+aid of computers. In \Cref{fig::pearson-crab-weibull}, we compare the
 Peason's mixture of two normals with one single Weibull distribution fitting the
 data using Maximum Likelihood. The difference between the two curves is not
 significant. However, Pearson's result seems to fit better at the mode around
@@ -175,7 +175,7 @@ distribution; (3) EM is a flexible family of approaches where the variational
 distribution in the expectation step can be simplified (or constrained) for the
 purpose of computation efficiency (e.g. mean-field EM) and the maximization step
 can also be substituted by an ascend step. We leave the details of EM algorithm
-in Chapter~\ref{sec::bg-em}.  In this section, we provide a brief comparison
+in \Cref{sec::bg-em}.  In this section, we provide a brief comparison
 between EM algorithm and Pearson's method of moments and show how we can
 improve Pearson's result by EM algorithm.
 
@@ -190,11 +190,11 @@ improve Pearson's result by EM algorithm.
 \end{figure}
 
 We plot the curves of the mixture models of the two methods as well as their
-components in Figure~\ref{fig::pearson-crab-em}. The results are almost
+components in \Cref{fig::pearson-crab-em}. The results are almost
 identical. To assess the quality of the model quantitatively, Pearson used the
 Chi-square test~\cite{pearson1900x} which he proposed to examine if the observed
 data is indeed from the model. We follow his practice and report the result in
-Table~\ref{tab::pearson-em-crab}.
+\Cref{tab::pearson-em-crab}.
 
 \begin{table}[h]
   \centering
@@ -374,7 +374,7 @@ study demonstrated that DCME outperforms other state-of-the-art approaches.
 \section{Overview of This Thesis}
 
 In the rest of this thesis, we will discuss in detail on the PLVMs.
-Specifically,  In chapter~\ref{chp::bg}, we briefly discuss a few key
+Specifically,  In \Cref{chp::bg}, we briefly discuss a few key
 mathematics that can greatly facilitate the understanding of the PLVMs.
 
 Next, we will show two scenarios where PLVMs are applied in data mining for
@@ -440,3 +440,25 @@ classification and word embedding learning demonstrate that DCME effectively
 strikes a balance between training speed and model quality, substantially
 outperforming state-of-the-art methods.
 
+The last work presented in this thesis investigates PLVMs for learning phrasal
+attachment. Existing word embedding methods are intrinsically hindered by its
+unigram (bag-of-words) assumption of language. Although efforts towards
+resolving the semantics for higher level of language units (\eg phrase,
+sentence) have been made, most of them either rely on a external resource or
+employ a complicated decoding algorithm for identifying the composition
+structure. In this work, we propose an effective yet simple generic algorithm,
+\PLANS{}~(PLANS), to compute the phrase embedding. It leverages the Dirichlet
+process as a prior for words attaching to other words/phrases. Similar to
+Skipgram, it estimates the embedding for words/phrases with negative sampling.
+Nevertheless the major challenge in learning is that a reasonable size of the
+phrases need to be carefully retained and less confident ones are constantly
+pruned during training. PLANS address this with an online block algorithm which
+refreshes the set of phrases based on their frequencies in the corpus
+periodically. In addition, simulated annealing (SA) is applied in the sampling
+process to stabilize the learned phrase set. Empirical study demonstrates that
+PLANS is able to successfully (1) identifying the frequent phrases in the
+dataset; and (2) estimate their semantics. By applying the learned
+representation from PLANS to NLP tasks such as sentiment and topical
+classification, we observe that the phrase embedding significantly outperforms
+other standard features such as bag-of-words, N-grams, as well as
+state-of-the-art word embedding.

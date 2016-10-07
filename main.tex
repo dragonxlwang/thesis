@@ -12,16 +12,12 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% packages
 \usepackage[super]{nth}
-\usepackage{url}
-\usepackage{dsfont}
-\usepackage{empheq, amsfonts, amsmath, amsthm, multirow}
-\usepackage{siunitx}
-\usepackage{graphicx}
-\usepackage{color}
-\usepackage{subcaption}
-\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{empheq, amsfonts, amsmath, amsthm, multirow, amssymb, bm, dsfont}
+\usepackage{siunitx, nicefrac, microtype, graphicx, epstopdf, color, url}
+\usepackage{subcaption, balance, expl3, times, helvet, courier}
 \usepackage[toc,page]{appendix}
-\usepackage{expl3}
+\usepackage[super]{nth}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage[none]{hyphenat}
 \usepackage[colorlinks,
            linkcolor=red,
@@ -29,6 +25,7 @@
            citecolor=blue
            ]{hyperref}
 \usepackage[round,authoryear,sort]{natbib}
+\usepackage[toc,page]{appendix}
 \usepackage{cleveref}
 % \usepackage[font=small,labelfont=bf,margin=\parindent,
 %             tableposition=top]{caption} % not compatible with aaai
@@ -45,10 +42,6 @@
 \newcommand{\indct}{\mathds{1}}
 % \newcommand*{\qed}{\hfill\ensuremath{\square}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Theorems
-% \newtheorem{thm}{Theorem}[section]
-% \newtheorem{col}{Corollary}[theorem]
-% \newtheorem{lem}[theorem]{Lemma}
-
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{lem}{Lemma}[thm]
@@ -67,15 +60,15 @@
    =}
 \makeatother
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \mylistbegin \mylistend
-\newcommand{\mylistbegin}{ \begin{list}{$\bullet$} {
-  \setlength{\itemsep}{-2pt}
-    %\setlength{\parsep}{0pt}
-    %\setlength{\topsep}{0pt}
-    %\setlength{\partopsep}{0pt}
-    \setlength{\leftmargin}{1em}
-    \setlength{\labelwidth}{1em}
-    \setlength{\labelsep}{0.5em} } }
-\newcommand{\mylistend}{ \end{list} }
+% \newcommand{\mylistbegin}{ \begin{list}{$\bullet$} {
+%   \setlength{\itemsep}{-2pt}
+%     %\setlength{\parsep}{0pt}
+%     %\setlength{\topsep}{0pt}
+%     %\setlength{\partopsep}{0pt}
+%     \setlength{\leftmargin}{1em}
+%     \setlength{\labelwidth}{1em}
+%     \setlength{\labelsep}{0.5em} } }
+% \newcommand{\mylistend}{ \end{list} }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \argmin \argmax
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -106,6 +99,7 @@
 \renewcommand{\cite}{\citep}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Marco
 \newcommand{\DCME}{Dual-Clustering Maximum Entropy}
+\newcommand{\PLANS}{Phrasal Latent Attachment with Negative Sampling}
 \newcommand{\THETA}{\mathbf{\Theta}}
 \newcommand{\vw}{\mathbf{w}}
 \newcommand{\vx}{\mathbf{x}}
@@ -123,6 +117,10 @@
 \newcommand{\cc}{\textrm{{Classification:}}}
 \newcommand{\ee}{\textrm{{Embedding:}}}
 \newcommand{\nop}[1]{}
+\newcommand{\tpp}{\textsc{Tpp}}
+\newcommand{\trm}{\textsc{Trm}}
+\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\wrt}{\emph{w.r.t.}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% shrink
 % \renewcommand{\baselinestretch}{0.93}
 
@@ -152,7 +150,7 @@
 %% Create a dedication in italics with no heading, centered vertically
 %% on the page.
 \begin{dedication}
-To Father and Mother.
+To My Family.
 \end{dedication}
 
 %% Create an Acknowledgements page, many departments require you to
@@ -201,10 +199,31 @@ with me, always offering support and love.
 
 \mainmatter
 
-\include{1-introduction}
-\include{2-background}
-% \include{3-model}
-% \include{4-predictions}
+\input{1-introduction}
+\input{2-background}
+
+\chapter{Understanding Evolution of Research Themes:  a Probabilistic Generative
+Model for Citations}
+\input{citation-lda/citation-lda}
+
+\chapter{Blind Men and The Elephant: Thurstonian Pairwise Preference for Ranking
+in Crowdsourcing}
+\input{crowd-thurstonian/1-introduction}
+\input{crowd-thurstonian/2-model}
+\input{crowd-thurstonian/3-inference}
+\input{crowd-thurstonian/4-experiments}
+\input{crowd-thurstonian/5-related}
+\input{crowd-thurstonian/6-discussion}
+
+\chapter{\DCME{} \\ with Application to Classification and Word Embedding}
+\input{dcme/1-introduction}
+\input{dcme/2-review}
+\input{dcme/3-dcme}
+\input{dcme/4-experiments}
+\input{dcme/5-conclusion}
+
+\chapter{PLANS: \PLANS{}}
+\input{plans/1-introduction.tex}
 
 % \chapter{Conclusions}
 
@@ -218,6 +237,9 @@ with me, always offering support and love.
 
 \bibliographystyle{abbrvnat}
 \bibliography{refs}
+
+\chapter{Appendices}
+\input{crowd-thurstonian/7-sup}
 
 % \chapter{Vita}
 

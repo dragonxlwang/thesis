@@ -1,0 +1,68 @@
+\section{Introduction}
+
+Maximum Entropy (ME), also known by a variety of other names, including
+log-linear, Gibbs, exponential, softmax and multinomial logistic regression
+models, is one of the most widely applied machine learning techniques in various
+fields. As a classification method, ME has seen wide-scale applications in text
+mining and natural language processing, such as text
+classification~\cite{nigam1999using}, part-of-speech
+tagging~\cite{ratnaparkhi1996maximum} and machine
+translation~\cite{berger1996maximum}. In neural networks, ME (softmax) is the
+building block of network architectures to transform a vector of signals into
+probabilities~\cite{collobert2008unified}, and has been explored to learn neural
+probabilistic language models~\cite{bengio2003neural}. In recent literature, a
+number of word embedding algorithms have been proposed based on ME, including
+skip-gram, continuous bag-of-words
+(CBOW)~\cite{mikolov2013efficient,mikolov2013distributed} and log-bilinear
+models~\cite{mnih2007three}, among others.
+
+ME establishes a distribution of the exponential form over items (classes/words)
+(\Cref{eq::me}\,). Scalability becomes a crucial challenge when the number of
+items is large, which occurs nowadays in many real-world problems.  For example,
+in a text classification problem of predicting the publishing venue for research
+papers, the number of classes can easily exceed thousands on datasets such as
+ACM digital library\footnote{\url{http://dl.acm.org/}}; for word embedding,
+commonly used training corpora, with the English
+Gigaword\footnote{\url{https://catalog.ldc.upenn.edu/LDC2011T07}} as an example,
+typically have a vocabulary of hundreds of thousands, if not millions of words.
+
+The main computational difficulty in ME comes from the fact that one has to
+enumerate all items in order to obtain either the probability of a single item
+or the corresponding gradient~\cite{mnih2012fast}. Consequently conventional ME
+optimization techniques such as iterative
+scaling~\cite{berger1996maximum,darroch1972generalized} and gradient-based
+algorithms~\cite{tsuruoka2009stochastic,gao2007comparative} are very slow to
+train with large numbers of items. In practice, sampling-based
+methods~\cite{gutmann2010noise,mnih2012fast,bengio2008adaptive} are often
+adopted since the complexity does not hinge on the number of items. However, one
+drawback they possess is the inevitable sampling variance. Furthermore, only the
+model parameters associated with the sampled items get updated at each training
+instance, while the majority of the model is left unchanged, which leads to
+inefficient learning.
+
+To achieve learning efficiency with affordable computational cost, we propose a
+\DCME{}~(DCME) approach. It optimizes ME in a primal-dual fashion, where the
+multinomial \emph{dual distribution} for each instance is exploited. The key
+step of DCME is to cluster the dual distributions and to approximate each of
+them by the corresponding \emph{cluster center}. The dual clustering proceeds by
+alternating between an online update of each instance's cluster assignment and
+an offline calculation\footnote{In this chapter, the term ``offline'' is
+equivalent to ``batch computation''. } of the cluster centers. This gives rise
+to an efficient updating scheme which splits the computation of the model
+subgradient into an \emph{online} part and an \emph{offline} part. Our proposed
+DCME enjoys two desirable properties: (1) The model parameters associated with
+\emph{all} items are updated at \emph{each} training instance, which ensures
+learning efficiency; and (2) The computational cost per instance scales as the
+product of the feature/word vector dimensionality\footnote{To be precise, by
+taking advantage of sparsity, the complexity depends only on the number of
+non-zero elements instead of the dimensionality of the vector.} and the number
+of clusters, which yields fast training speed.
+
+The rest of the chapter is organized as follows: \Cref{sec::dcme_review} reviews
+the Maximum Entropy and existing approaches for learning with large numbers of
+items. The proposed DCME is presented in \Cref{sec::dcme_dcme} with the
+derivation and complexity analysis. The overall algorithmic procedure is
+summarized in \Cref{sec::dcme_algo} where the theoretical advantages of DCME are
+also discussed. Experimental studies on text classification and word embedding
+are reported in \Cref{sec::dcme_experiments}, followed by conclusions in
+\Cref{sec::dcme_conclusion}.

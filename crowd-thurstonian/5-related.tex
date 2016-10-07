@@ -1,0 +1,37 @@
+\section{Related Work} \label{sec::tpp_related_work}
+
+Early research of crowdsourcing can be dated back to the study of
+\emph{integration of labels from multiple annotators} for image
+classification~\cite{smyth1995inferring}. Later on, studies
+including~\cite{yan2010modeling,whitehill2009whose} began focusing on explicitly
+modeling annotator quality  such as expertise, truthfulness in crowdsourcing
+settings. The dual tasks of inferring ground truth labels as well as worker
+quality have been investigated in some recent
+studies~\cite{yan2010modeling,whitehill2009whose,welinder2010multidimensional},
+including this work.
+
+Previous  research mainly focused on simple tasks (classification, regression,
+etc.) while we tackle complex labeling problem such as ranking. In this
+direction, \cite{steyvers2009wisdom} reconstructs the order of facts from
+individual worker annotated \emph{whole ranked lists} with the Thurstonian
+Ranking Model (\textsc{Trm})~\cite{thurstone1927law} and the Mallows
+model~\cite{mallows1957non}, which features a distance-based distribution of
+rankings~(permutations) using Kendall's tau.  Other studies on ``Rank
+Aggregation'' are also related to this work, including
+\cite{klementiev2008unsupervised,klementiev2009unsupervised}. They adapt the
+Mallows model for inferring ground truth rankings as well as the quality of
+ranking algorithms. However, the above approaches do not fit well for
+information retrieval and web search tasks as it is not practical for annotators
+to label the whole ranked lists. This motivates us to investigate binding
+pairwise preferences from crowd workers into rankings.
+
+There is one recent study~\cite{chen2013pairwise} that adopts a similar
+philosophy, which extends the Bradley-Terry model, a pairwise special case of
+the Plackett-Luce model~\cite{luce2005individual,plackett1975analysis}.
+Nevertheless, their model (\textsc{CrowdBt}) lacks the mechanism to model
+multiple query domains, thus incapable to characterize workers' domain-dependent
+expertise and truthfulness. \textsc{CrowdBt} does not take query difficulty into
+account either. Furthermore, unlike \textsc{Tpp}, \textsc{CrowdBt} does not
+model the  generation of rankings. Therefore, it is not capable of modeling the
+annotation inconsistency from multiple sources, which makes it less favorable as
+demonstrated by the experimental study.

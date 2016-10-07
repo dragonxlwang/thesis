@@ -1,0 +1,331 @@
+\section{Inference}  \label{sec::tpp_infer}
+
+The model parameters $\mathbf{\Theta} = \{ s_{l,i}, \delta_l^2, \theta_m,
+\tau_{k,m}\}$ are learned by Maximum Likelihood Estimation (MLE) with the
+Expectation-Maximization (E-M)~\cite{dempster1977maximum} algorithm.  The
+posterior distribution of the \textit{latent variables of interest} $\mathbf{Z}
+= \{m_l, s_{l,i}^{(k)}\}$ given the observations $\mathbf{D} = \{\pi\}$ is
+approximated via alternate sampling of $\mathbf{Z}$ and the \textit{auxiliary
+latent variables} $\mathbf{V}  = \{\Delta s^{\pi}\}$.  The inference algorithm
+of \tpp{} is summarized in \Cref{alg::tpp}.
+
+\begin{algorithm}[h!]
+\caption{Inference of \tpp{}}\label{alg::tpp}
+	\KwIn{Pairwise preferences $\mathbf{D}$}
+	\KwOut{Model parameters $\mathbf{\Theta}$}
+	Initialize $\mathbf{V}, \mathbf{Z}, \mathbf{\Theta}$\;
+	\While{convergence criteria not met}{
+		(E-step) Sample the posterior distribution of $\mathbf{V}$ and $\mathbf{Z}$\;
+		(M-step) Update $\mathbf{\Theta}$\;
+		Model rescaling\;
+	}
+\end{algorithm}
+
+\subsection{Model Parametrization}
+The pairwise preference $\pi = \langle k, l, i_1, i_2 \rangle$ between two
+documents $d_{i_1}$ and $d_{i_2}$ hinges on $\Delta s^\pi =
+\tilde{s}_{i_1}^{\pi} - \tilde{s}_{i_2}^{\pi}$.  We introduce \textit{auxiliary
+latent variables} $\mathbf{V}  = \{\Delta s^{\pi}\}$  to parameterize
+\textsc{Tpp}.
+
+Our results rely on the following lemma of (truncated) Gaussian distribution,
+the proof of which can be found in \cite{chopin2011fast}):
+\begin{lem}\label{lem::gaussian_diff}
+If $x_1$ and $x_2$ are independently sampled from $x_i \sim \mathrm{N}(\mu_i,
+\sigma^2),~i=\{1,2\}$,  then we have
+\begin{itemize}
+\item[(a)] $x_1 - x_2 \sim \mathrm{N}(\mu_1 - \mu_2, 2\sigma^2)$
+  and  $\P(x_1 - x_2 \geq 0) = Q(-\frac{\mu_1-\mu_2}{\sqrt{2}\sigma})$, where
+  $Q(\cdot)$ denotes the tail probability of the standard normal distribution:
+  $Q(s) \defeq \Pr(x \geq s)$, $x\sim \mathrm{N}(0, 1)$.
+\item[(b)] $x_1 - x_2 | x_1 - x_2 \geq 0 \sim \mathrm{TN}_0^{\infty}(\mu_1 -
+  \mu_2, 2\sigma^2)$, where $\mathrm{TN}_a^{b}(m, s^2) ~(a<b, a, b \in
+  \mathbb{R} \cup \{\pm \infty\})$ is the truncated Gaussian distribution
+  bounded by interval $(a, b)$ with the embedded Gaussian distribution being
+  $\mathrm{N}(m, s^2)$.
+\qed
+\end{itemize}
+\end{lem}
+
+Given \Cref{eq::tpp_deltas,eq::tpp_ns_gen}, it follows from
+\Cref{lem::gaussian_diff}(a) that the auxiliary latent variable $\Delta
+s^\pi$ follows the truncated Gaussian distribution:
+\begin{flalign}
+   \qquad \tilde{s}^\pi_{i_1} - \tilde{s}^\pi_{i_2} |
+  \tau_{k,m_l}, s_{l,i_1}^{(k)}, s_{l,i_2}^{(k)}
+   \sim \mathrm{N}\left(\mathrm{sgn}(\tau_{k,m_l})
+    ( s_{l,i_1}^{(k)} -  s_{l,i_2}^{(k)}), 2\tau_{k,m_l}^{-2} \right)
+  \label{eq::tpp_ds_dist}
+\end{flalign}
+
+and we have
+
+\begin{flalign}
+\P(\Delta s^\pi \geq 0 | \tau_{k,m_l}, s_{l,i_1}^{(k)}, s_{l,i_2}^{(k)}) =
+    \mathrm{Q}\left(-\frac{\tau_{k,m_l}}{\sqrt{2}}
+    ( s_{l,i_1}^{(k)} -  s_{l,i_2}^{(k)})\right) \label{eq::tpp_q_func}
+\end{flalign}
+
+In view of the above results, the joint probability of $\mathbf{D,Z,V}$ can be
+factorized as:
+
+\begin{align}
+  &&&   \P(\mathbf{D, Z, V}| \mathbf{\Theta}) =
+    \P(\mathbf{Z} | \mathbf{\Theta})
+    \P(\mathbf{V} | \mathbf{Z})
+    \P(\mathbf{D} | \mathbf{V}) \nonumber \\
+  &&=&  \prod\limits_{l} \P_{\mathtt{Mult}}(m_l | \vect{\theta}) ~\cdot~
+				\prod\limits_{k,l,i}
+          \P_{\mathtt{N}}(s_{l,i}^{(k)} | s_{l,i}, \delta_l^2) \nonumber \\
+  &&&   \prod\limits_{\pi=\langle k,l,i_1,i_2\rangle \in \mathbf{D}}
+        \left(\P_{\mathtt{N}}\left(\Delta s^\pi | \mathrm{sgn}(\tau_{k,m_l})
+            ( s_{l,i_1}^{(k)} -  s_{l,i_2}^{(k)}),
+            2\tau_{k,m_l}^{-2}\right) \right.  \nonumber \\
+  &&&   \prod\limits_{\pi=\langle k,l,i_1,i_2\rangle \in \mathbf{D}}
+					  \mathbf{1}(\Delta s^\pi \geq 0 )
+  \label{eq::tpp_join_alt}
+\end{align}
+
+Integrating out $\mathbf{V}$, we get the joint probability of the observations
+$\mathbf{D} = \{\pi\}$ and the latent variables of interest $\mathbf{Z} = \{m_l,
+s_{l,i}^{(k)}\}$:
+
+\begin{align}
+  & \P(\mathbf{D, Z}| \mathbf{\Theta}) = \int_{\mathbf{V}}
+      \P(\mathbf{D, Z, V}| \mathbf{\Theta})~ \d \mathbf{V}\nonumber \\
+  =&  \prod\limits_{l} \P_{\mathtt{Mult}}(m_l | \vect{\theta}) ~\cdot~
+			    \prod\limits_{k,l,i}
+          \P_{\mathtt{N}}(s_{l,i}^{(k)} | s_{l,i}, \delta_l^2) \nonumber\\
+  &	\prod\limits_{\pi = \langle k,l,i_1,i_2\rangle \in \mathbf{D}}
+          \mathrm{Q}\left(-\frac{\tau_{k,m_l}}{\sqrt{2}}
+          ( s_{l,i_1}^{(k)} -  s_{l,i_2}^{(k)})\right)
+  \label{eq::tpp_join}
+\end{align}
+
+The model parameters $\mathbf{\Theta} = \{ s_{l,i}, \delta_l^2, \theta_m,
+\tau_{k,m}\}$ are learned by optimizing the log likelihood $\mathbf{\Theta} =
+\argmax_{\mathbf{\Theta}} \ln \P(\mathbf{D | \Theta})$ with the E-M algorithm.
+At the $t$-th iteration, the posterior distribution of $\mathbf{Z |
+D,\Theta}^{(t)}$ is computed (E-step), followed by the model update, i.e.
+maximizing the expected joint log likelihood: $\mathbf{\Theta}^{(t+1)} =
+\argmax_\mathbf{\Theta} \mathcal{Q}(\mathbf{\Theta}; \mathbf{\Theta}^{(t)})$
+(M-step), where
+
+\begin{equation}
+\mathcal{Q}(\mathbf{\Theta}; \mathbf{\Theta}^{(t)}) =
+  \E_{\mathbf{Z | D,\Theta}^{(t)}}[\ln \P(\mathbf{D,Z | \Theta})]
+\end{equation}
+
+\subsection{Posterior Sampling}
+
+The analytic calculation of $\mathcal{Q}(\mathbf{\Theta};
+\mathbf{\Theta}^{(t)})$ is impossible due to the intractability of $\P(\mathbf{Z
+| D, \Theta})$. Instead, we approximate the posterior distribution by sampling.
+Nevertheless, sampling $\mathbf{Z}$ from $\P(\mathbf{Z | D, \Theta})$ is still
+difficult because we cannot effectively integrate over \Cref{eq::tpp_join} to
+obtain the distribution of $s_{l,i}^{(k)} | \mathbf{Z} \setminus
+\{s_{l,i}^{(k)}\},\mathbf{D,\Theta}$.  Therefore, we reintroduce the auxiliary
+latent variables $\mathbf{V}$. A blocked Gibbs sampler
+\cite{geman1984stochastic} is applied to sample $\mathbf{V}$ and $\mathbf{Z}$.
+Each block of variables, \ie, query domains $\{m_l\}$, perceived scores
+$\{s_{l,i}^{(k)}\}$, and noisy score differences $\{\Delta s^\pi\}$, are sampled
+in sequence.
+
+\subsubsection{Sample Query Domain $m_l$} It follows from
+\Cref{eq::tpp_join_alt} that the posterior distribution of the domain
+$m_{l^*}$ for a query $l^*$ is given by the following multinomial distribution:
+
+\begin{align}
+& \P(m_{l^*} = m^* |
+  \mathbf{D}, \mathbf{Z}\setminus \{ m_{l^*}\}, \mathbf{V}, \mathbf{\Theta})
+  \label{eq::tpp_m} \\
+\propto~ &  \theta_{m^*}
+  \prod\limits_{\substack{\pi = \langle k,l,i_1,i_2\rangle \in \mathbf{D}
+    \\ l = l^*}}
+  \P_{\mathtt{N}}\left(\Delta s^\pi |
+    \mathrm{sgn}(\tau_{k,m^*}) ( s_{l^*,i_1}^{(k)} -  s_{l^*,i_2}^{(k)}),
+                2\tau_{k,m^*}^{-2}\right) \nonumber
+\end{align}
+
+Note that there is no coupling (inter-dependency) among $\{m_l\}$, and the
+multinomial sampling can be accelerated with parallel implementation.
+
+\subsubsection{Sample Perceived Score $s_{l,i}^{(k)}$}
+It follows from \Cref{eq::tpp_join_alt} that the posterior distribution for the
+perceived score is given by:
+\begin{align}
+& \P(s_{l^*,i^*}^{(k^*)} = s^* | \mathbf{D},
+    \mathbf{Z}\setminus \{ s_{l^*,i^*}^{(k^*)} \}, \mathbf{V}, \mathbf{\Theta})
+    \nonumber \\
+\propto~ & \P_{\mathtt{N}}(s^* | s_{l^*,i^*}, \delta_{{l^*}}^2)
+  \label{eq::tpp_s}\\
+& \prod\limits_{\pi = \langle k^*,l^*,i^*,i\rangle \in \mathbf{D}}
+    \P_{\mathtt{N}}(\Delta s^\pi |
+      \mathrm{sgn}(\tau_{k^*,m_{l^*}}) ( s^* - s_{l^*,i}^{(k^*)}),
+      2\tau_{k^*,m_{l^*}}^{-2}) \nonumber \\
+& \prod\limits_{\pi = \langle k^*,l^*,i,i^*\rangle \in \mathbf{D}}
+		\P_{\mathtt{N}}(\Delta s^\pi |
+      \mathrm{sgn}(\tau_{k^*,m_{l^*}}) ( s_{l^*,i}^{(k^*)} - s^*),
+      2\tau_{k^*,m_{l^*}}^{-2}) \nonumber
+\end{align}
+
+To derive the sampling rule for perceived score $s_{l,i}^{(k)}$, we employ the
+following lemma that an exponential-family distribution is uniquely determined
+by its sufficient statistics and natural parameters \cite{stuart1968advanced}:
+
+\begin{lem}\label{lem::exp_dist}
+If $\P(x)$ is a valid distribution and $\P(x) \propto \exp(c_1 x + c_2 x^2)$,
+then $x \sim \mathrm{N}(- \frac{c_1}{2c_2}, -\frac{1}{2c_2})$
+\qed
+\end{lem}
+And it follows immediately that:
+
+\begin{equation}\label{eq::tpp_sps}
+s_{l^*,i^*}^{(k^*)} \sim \mathrm{N}(\frac{a_1}{a_2}, \frac{1}{a_2})
+\end{equation}
+
+where
+
+\begin{flalign}
+a_1 &= \frac{1}{\delta^2_{l^*}} s_{l^*,i^*} \label{eq::tpp_a1}\\
+	  &+ \frac{1}{2\tau_{k^*,m_{l^*}}^{-2}}
+        \left( \sum\limits_{\substack{i \\
+                          \pi = \langle k^*,l^*,i^*,i\rangle \in \mathbf{D}} }
+              s_{l^*,i}^{(k^*)} + \mathrm{sgn}(\tau_{k^*,m_{l^*}})  \Delta s^\pi
+        \right)  \nonumber \\
+	  &+ \frac{1}{2\tau_{k^*,m_{l^*}}^{-2}}
+        \left( \sum\limits_{\substack{i \\
+                          \pi = \langle k^*,l^*,i,i^*\rangle \in \mathbf{D}} }
+              s_{l^*,i}^{(k^*)} - \mathrm{sgn}(\tau_{k^*,m_{l^*}})  \Delta s^\pi
+        \right) \nonumber\\
+a_2 &= \frac{1}{\delta^2_{l^*}} + \frac{1}{2\tau_{k^*,m_{l^*}}^{-2}}
+  \left(\sum\limits_{\substack{i \\
+                      \langle k^*,l^*,i^*,i\rangle \in \mathbf{D}} }
+        1 +
+        \sum\limits_{\substack{i \\
+                      \langle k^*,l^*,i,i^*\rangle \in \mathbf{D}} }
+        1\right) \label{eq::tpp_a2}
+\end{flalign}
+
+\noindent\emph{\underline{Intuitive Interpretation}.} Here is an intuitive
+interpretation of the above calculation which provides more insights into the
+behaviors of \textsc{Tpp}:
+
+First, the mean value $\frac{a_1}{a_2}$ is a weighted average of three sources
+of estimation:
+
+\begin{itemize}
+\item $s_{l^*,i^*}$, the ground truth relevance score~(1st term in
+  \Cref{eq::tpp_a1}). It is discounted by the query difficulty $\delta^2_{l^*}$.
+  The easier the query, the more it contributes to the perceived
+  score $s_{l^*,i^*}^{(k^*)}$.
+\item $\left(s_{l^*,i}^{(k^*)} + \mathrm{sgn}(\tau_{k^*,m_{l^*}})\Delta
+  s^\pi\right)$ where $\pi = \langle k^*,l^*,i^*,i\rangle \in \mathbf{D}$, (2nd
+  term in \Cref{eq::tpp_a1}). It corresponds to a pairwise preference $\pi$ when
+  $t_{k^*}$ \textit{prefers} $d_{i^*}$ to the other document $d_{i}$.  It
+  estimates $s_{l^*,i^*}^{(k^*)}$ by combining the perceived score
+  $s_{l^*,i}^{(k^*)}$ of the less preferred document $d_i$ and the noisy score
+  difference $\Delta s^\pi = \tilde{s}^\pi_{i^*} - \tilde{s}^\pi_{i}$ multiplied
+  by the worker's truthfulness
+  $\left(\mathrm{sgn}\left(\tau_{k^*,m_{l^*}}\right)\right)$.  This estimation
+  is then weighted by the worker's domain expertise
+  ($\frac{1}{2}\tau_{k^*,m_{l^*}}^{2}$).
+\item The third source of estimation~(3rd term in \Cref{eq::tpp_a1}) corresponds
+  to the case when $d_{i^*}$ is less preferred by $t_{k^*}$. The analysis is
+  analogous to that of the 2nd term.
+\end{itemize}
+
+In addition, the variance $\frac{1}{a_2}$ in \Cref{eq::tpp_sps} is the harmonic
+average of the query difficulty  $\delta^2_{l^*}$ and the worker's domain
+expertise $2\tau_{k^*,m_{l^*}}^{-2}$, which determines the uncertainty of the
+perceived score $s_{l^*,i^*}^{(k^*)}$. The sampled perceived scores are more
+localized to the mean value $\frac{a_1}{a_2}$ with easier queries and more
+knowledgeable workers.
+
+\subsubsection{Sample Noisy Score Difference $\Delta s^\pi$} Denote the pairwise
+preference by $\pi^* = \langle k^*, l^*,i_1^*,i_2^* \rangle$. It follows from
+\Cref{eq::tpp_join_alt} that
+
+\begin{align}
+& \P( \Delta s^{\pi^*} = \Delta s^* | \mathbf{D}, \mathbf{Z},
+    \mathbf{V}\setminus \{\Delta s^{\pi^*} \}, \mathbf{\Theta})
+    \label{eq::tpp_ds}\\
+\propto~ &  \P_{\mathtt{N}}\left( \Delta s^* | \mathrm{sgn}(\tau_{k^*,m_{l^*}})
+      ( s_{l^*,i_1^*}^{(k^*)} - s_{l^*,i_2^*}^{(k^*)}),
+      2\tau_{k^*,m_{l^*}}^{-2}\right)  \mathbf{1}(\Delta s^* \geq 0 ) \nonumber
+\end{align}
+
+By Lemma~\ref{lem::gaussian_diff}(b), the posterior distribution of $\Delta
+s^{\pi^*}$ is a truncated Gaussian distribution:
+
+\[
+  \mathrm{TN}_0^\infty\left(\mathrm{sgn}(\tau_{k^*,m_{l^*}})
+    (s_{l^*,i_1^*}^{(k^*)} - s_{l^*,i_2^*}^{(k^*)}),
+    2\tau_{k^*,m_{l^*}}^{-2}\right)
+\]
+
+Efficient sampling from a truncated Gaussian distribution can be found in
+\cite{chopin2011fast}.
+
+With the above sampling rules, $\{m_l\}$, $\{s_{l,i}^{(k)}\}$, and $\{\Delta
+s^\pi\}$ are sampled in blocks. After the burn-in period, samples of
+$\mathbf{Z}$ are collected to approximate the posterior distribution
+$\P(\mathbf{Z | D, \Theta})$ (samples of $\mathbf{V}$ are discarded).
+
+
+\subsection{Model Updating}
+The model parameters are updated by
+\begin{align}
+\Theta^{(t+1)} &=
+  \argmax_\Theta \mathcal{Q}(\mathbf{\Theta}; \mathbf{\Theta}^{(t)}) \nonumber\\
+\textrm{where}~
+\mathcal{Q}(\mathbf{\Theta}; \mathbf{\Theta}^{(t)}) &=
+  \E_{\mathbf{Z | D,\Theta}^{(t)}}[\ln \P(\mathbf{D,Z | \Theta})]
+  \label{eq::tpp_elbo}
+\end{align}
+with the posterior distribution $\mathbf{Z | D,\Theta}^{(t)}$ approximated by blocked Gibbs sampling.
+
+Optimization details are given in Appendix~\ref{app::mmu}. Closed forms are
+obtained for the update of ground truth scores $\{s_{l,i}\}$, query difficulties
+$\{\delta_{l}^{2}\}$, and the domain distribution $\{\theta_m\}$. (Inexact)
+Newton's method is applied to update the domain expertise and truthfulness of
+workers $\{\tau_{k,m}\}$.
+
+\subsection{Identifiability}
+Identifiability is a property which a model must satisfy in order for precise
+inference to be possible. In plain words, it requires that different values of
+the parameters must generate different probability distributions of the
+observable variables.
+
+For modeling rankings of documents, the extra degree of freedom of the model can
+potentially lead to an arbitrary scaling of the ground truth scores (or
+parameters), and thus must be carefully avoided.
+
+One may observe that for the same collection of observations $\mathbf{D}$, the
+following two models have the same likelihood $\P(\mathbf{D|\Theta_1}) =
+\P(\mathbf{D|\Theta_2})$ for any global factor $\sigma > 0$ and query-level
+biases $\{b_l\}$.\footnote{This can be verified by comparing $\int_\mathbf{Z}
+\P(\mathbf{D, Z|\Theta})$ using \Cref{eq::tpp_join} for $\mathbf{\Theta =
+\Theta_1}$ and $\mathbf{\Theta = \Theta_2}$.}
+
+\begin{align}
+\mathbf{\Theta_1} &= \{ s_{l,i}, \delta^2_l, \theta_m, \tau_{k,m}\} \nonumber \\
+\mathbf{\Theta_2} &= \{ (s_{l,i}-b_l) / \sigma, \delta_l^2 / \sigma^2,
+  \theta_m, \tau_{k,m} \sigma \}
+\end{align}
+
+Therefore, these two sets of parameters are {not identifiable}.
+
+To cancel such extra freedom, we regularize the model by adding the following
+two constraints:
+
+\noindent\underline{\emph{Identification Conditions}}
+\begin{empheq}[left=\empheqlbrace]{align}
+\sum_l \delta_l^2 	&= 1 \label{eq::tpp_id1}\\
+\min_i s_{l,i} 	 	&= 0, \forall l \label{eq::tpp_id2}
+\end{empheq}
+
+The constraints are imposed after the model update in each iteration.
+Rescaling in this way keeps the model from undesired drifting and scaling.
+
+

@@ -1,0 +1,108 @@
+\section{Background} \label{sec::dcme_review}
+
+\subsection{Maximum Entropy Framework}
+
+The general formulation of ME is simple. For a data instance $t$, ME establishes
+a distribution over $N$ items:
+
+\begin{equation}
+  \P_t(i; \THETA) = \frac{\exp(f_t(i; \THETA))}
+  {\sum\limits_{j=1}^{N}\exp(f_t(j; \THETA))}, \quad  i = 1, \dots, N.
+  \label{eq::me}
+\end{equation}
+
+where $f_t(i; \THETA)$ is the scoring function with model parameters $\THETA$,
+which quantifies the affinity between instance $t$ and item $i$\footnote{In the
+context of energy-based models, $-f_t(i; \THETA)$ is often referred as the
+energy function~\cite{bengio2003neural}.}. In this chapter, we investigate ME in
+two settings, namely, multi-class classification and word embedding.
+
+For $N$-class classification, the dataset $\mathcal{D}$ consists of a collection
+of instances $\{(\vx_t, i_t)\}$ with $\vx_t$ being a $D$-dimensional feature
+vector and $i_t$ a label chosen from items $1, \dots ,N$.  The model $\vW =
+[\vw_1, \dots, \vw_N]$ is a $D \times N$ matrix which specifies the scoring
+function as:
+
+\begin{flalign}
+  & \cc && f_t(j; \THETA) = f_t(j; \vW) = \vw_j^T \vx_t &
+  \label{eq::scr_classification}
+\end{flalign}
+
+In the word embedding setting, we focus our discussion on the continuous
+bag-of-words algorithm (CBOW)~\cite{mikolov2013efficient}, but the analysis
+easily extends to other models. As a language modeling technique, it predicts
+the target word from a vocabulary of size $N$ given its surrounding context. The
+$t$-th training instance contains a stream of words $w_{t,-c}, w_{t,-(c-1)},
+\dots, w_{t,0}, \dots, w_{t, c-1}, w_{t,c}$ with the target word $i_t =
+w_{t,0}$. CBOW calculates the compatibility between the $j$-th word in the
+vocabulary and the context as:
+
+\begin{flalign}
+  &\ee
+  && f_t(j; \THETA) = f_{t}(j; \vV, \vH) = f(\vv_j, \vhb_t) = \vv_j^T \vhb_t &
+  \nonumber \\
+  &&& \textrm{where}\quad \vhb_t = \frac{1}{2c}
+  \sum\limits_{-c \le p \le c, p \neq 0} \vh_{w_{t,p}} &
+  \label{eq::scr_embedding}
+\end{flalign}
+
+The model parameters $\vV=[\vv_1, \dots, \vv_N]$ and $\vH=[\vh_1, \dots,
+\vh_N]$ are two $D \times N$ matrices of the ``input'' and ``output'' vector
+representations of words, respectively.
+
+\subsection{Optimization of ME}
+
+Various algorithms for ME have been studied in the literature. They approach the
+optimization by solving either the primal or the dual problem. The primal form
+maximizes the log-likelihood of the dataset. Methods of this direction, as
+surveyed in \cite{malouf2002comparison,yuan2012recent}, include iterative
+scaling algorithms~\cite{berger1996maximum,darroch1972generalized}, coordinate
+descent~\cite{huang2010iterative}, stochastic gradient
+descent~\cite{tsuruoka2009stochastic} and Quasi-Newton
+method~\cite{gao2007comparative}, just to name a few. Their training complexity
+per instance is $\oo(DN)$. This is a consequence of having to enumerate
+\emph{all} items when computing the probability of a single item or the
+corresponding gradient. On the other hand, another line of research tackles the
+problem by maximizing the entropy of \emph{dual distributions}.  Constraint
+optimization techniques, such as exponentiated
+gradient~\cite{collins2008exponentiated} and dual coordinate
+descent~\cite{yu2011dual}, are investigated. Since the dimensionality of dual
+distributions is in fact the same as the number of items, their training
+complexity is still linear in $N$. Consequently, all these algorithms are
+impractical with large numbers of items due to the prohibitively expensive
+computational cost.
+
+\subsection{Learning with Large Item Number}
+
+Scaling algorithms for learning when the number of items $N$ is large have
+become a recent research direction with focus on maintaining the training
+complexity sublinear in $N$.  Among them, hierarchical approaches explore a
+taxonomy (of items) and convert the problem into a series of binary predictions
+along the tree branches, which potentially reduces the complexity from $\oo(N)$
+to $\oo(\log N)$. Though efforts have been made in large multi-class (extreme)
+classification~\cite{choromanska2015logarithmic,choromanska2013extreme} and word
+embedding~\cite{morin2005hierarchical,mnih2009scalable,mikolov2013efficient},
+finding balanced tree structures that provide an effective partition of items is
+difficult by itself, and thus their use is limited in practice. Another work of
+extreme classification, \cite{YenHRZD16}, has developed a fast active set
+algorithm for max-margin classifiers by exploiting the sparsity of feature
+vectors. The training speed-up, nevertheless, is generally insignificant for
+dense data representations such as word embeddings. To the best of our
+knowledge, the most effective approaches for training ME models with a large $N$
+are sampling-based methods, for instance \cite{bengio2008adaptive}, offering a
+trade-off between speed and precision. In addition, as pointed out by
+\cite{mnih2012fast}, noise-contrastive estimation (NCE)~\cite{gutmann2010noise}
+is regarded as the state-of-the-art sampling algorithm which employs the idea of
+``learning by comparison'': It reduces the $N$-item ME problem to a binary
+classification between samples from the training data and ``noise'' from the
+proposal distribution, and is guaranteed to converge to the solution of ME. Yet
+in practice, a slightly simpler variant, negative sampling
+(NS)~\cite{mikolov2013distributed}, is proposed to train CBOW and skip-gram
+though mathematically it does not solve ME. However, one drawback is that
+algorithms of this kind inevitably suffer from sampling variance. More
+crucially, the computational efficiency is gained at the expense of only
+updating the model parameters associated with the sampled items, while the due
+change of the rest is discarded. Learning efficiency is therefore sacrificed.
+
+% In contrast, the proposed DCME can achieve much better learning efficiency while
+% maintaining a computational cost comparable to these sampling-based methods.

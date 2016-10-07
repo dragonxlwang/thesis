@@ -1,0 +1,22 @@
+Learning distributed representation (embedding) of language has been a very
+attractive topic in the recent development of Natural language processing. Word
+embedding assigns a (usually dense) vector to each word which is supposed to
+retain the semantic information. For example, trained by Continuous bag-of-words
+or Skip gram~\cite{mikolov2013distributed}, the word vectors
+
+Though it is advantageous to employ word
+embeddings for language representation, the usefulness is inherently limited by
+its unigram assumption of language. On one hand, the semantics of a word is
+contextually independent. Therefore the word ``bank'' in the sentences ``I made
+a deposit in the bank'' and ``We walked on the river bank'' has the same
+embedding and semantics. On the other hand, it treats the semantics of higher
+text unit (sentence, document) as an linear composition of that of each word.
+And an unappealing implication is that it oversimplifies the process of
+formation of meaning from language. For example, under the unigram assumption,
+``the White House'' would has a closer distance to ``a house in white'' than
+``president residence''.
+
+compositional method can learn the
+embedding higher language units (\eg phrase, sentence) as a function of their
+components, the parametrization is nevertheless simple and thus they lack
+sufficient flexibility to achieve reasonable performance.

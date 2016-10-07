@@ -4,3 +4,22 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces A illustration of the relationship between $f$ and its conjugate $f^*$. For a given $s^*$, since $f(x) \geq \delimiter "426830A s^*, x \delimiter "526930B - f^*(s^*)$ always holds, which means that in the plot the curve of $f(x)$ is always above (or on) the line of $\delimiter "426830A s^*, x \delimiter "526930B - f^*(s^*)$. As a limiting case, $<s^*, x^*> - f^*(s^*)$ is cutting $f(x)$ at $x = x^*$. In addition, the affine function intersects the vertical axis $x = 0$ at the altitude $-f^*(s^*)$. The plot also shows the relationship between $s^*$ and $x^*$ can be described by the \emph {gradient mapping}: $x^* \in \partial f^{-1}(s^*)$.\relax }}{12}{figure.caption.9}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces An illustration of the proposed evolution graph. We show 5 topics, and their dependency. Topic 2 and 3 are enabled by Topic 1 while Topic 5 is enabled by Topic 3 and 4.\relax }}{18}{figure.caption.13}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Topic Temporal Strength for ``WSD'' and ``DP''\relax }}{30}{figure.caption.24}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Topic-Temporal Joint Strength In AAN\relax }}{33}{figure.caption.29}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Topic-Temporal Joint Strength In PMC\relax }}{33}{figure.caption.29}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Theme Evolution Graph of AAN\relax }}{34}{figure.caption.31}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Temporal Evolution in Topics of Theme SMT\relax }}{36}{figure.caption.33}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Plate notation for \textsc {Trm}\relax }}{42}{figure.caption.38}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Plate notation for \textsc {Tpp}\relax }}{42}{figure.caption.38}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces An Illustration Example of \textsc {Tpp}{}: The generation of two pairwise preferences by a crowd worker for a given query\relax }}{44}{figure.caption.40}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Domain Prediction Accuracy and Model Log Likelihood with Standard Deviations\relax }}{54}{figure.caption.51}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces NDCG@n evaluated on MQ2008-agg Dataset\relax }}{55}{figure.caption.54}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces R.O.C. Curve for Malicious Worker Detection\relax }}{56}{figure.caption.56}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Dual Clustering in the Simplex with KL-divergence\relax }}{68}{figure.caption.62}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Performance on Text Classification and Word Embedding \relax }}{70}{figure.caption.63}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
