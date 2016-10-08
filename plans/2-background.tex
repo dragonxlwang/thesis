@@ -1,0 +1,85 @@
+\section{Background}
+
+As aforementioned, three are three necessary ingredient to develop the PLANS. In
+this section, we formally discuss them in detail.
+
+\subsection{Phrasal Allocation as Transient Chinese Restaurant Process (tCRP)}
+
+Dirichlet process is a stochastic process used in Bayesian nonparametrics, which
+extends the Dirichlet distribution, to model the discrete count observations
+over an infinite number of outcomes. It has a nice interpretation, namely the
+Chinese restaurant process~(CRP), which provides a intuitive metaphor: Suppose
+that there is an infinite number of tables in a Chinese restaurant, and the
+first customer enters the restaurant to sit at the first table. The second
+customer enters and decides either to sit with the first customer or alone at a
+new table. In general, the $n+1$-th customer either joins an already occupied
+table indexed by $k$ with probability proportional to the number of customers
+already sitting there, or sits at a new table with probability proportional to a
+hyperparameter $\alpha$.
+
+We adopt CRP for phrasal allocation and assume that there is a table for each
+phrase and customers correspond to occurrences of phrases in the dataset.
+However, CRP posits two difficulties to properly model the phrasal allocation:
+(1). For a stream of words $\dots, w_{t_1}, w_t, w_{t+1}, \dots$ in the dataset,
+it is only reasonable for $w_t$ to be enclosed by phrases of the form $w_b,
+\dots, w_e$ where $b \le t \le e$ and $t - b$, $e - t$ are small.  Thus when
+$w_t$ enters the restaurants, the choice of seating should be limited; and (2).
+When learning on a corpus of very large size or stream, it is unrealistic to run
+the CRP (sampling) over the data (enough epochs until convergence). In plain
+words, it is unappealing that the number of accommodated tables as well as
+seated customers to grow constantly over time. To this end, transient Chinese
+restaurant process~(tCRP), is proposed.
+
+\begin{algorithm}[h!]
+\caption{Transient Chinese Restaurant Process}\label{alg::tcrp}
+  \SetAlgoNoLine
+  \For{$t = 1, 2, \dots$}{
+    Let $p_1, p_2, \cdots, p_K$ be the $K$-nearest neighboring phrases of $w_t$
+      in the stream \;
+    Let $\mathcal{N}(w_t \rightarrow p_k),\, (k = 1, \dots, K)$ be the number
+      of customers sitting at the table of phrase $w_t \rightarrow p_k$ \;
+    Let $\mathcal{A}_t \leftarrow
+      \{k : \mathcal{N}(w_t \rightarrow p_k) = 0,\, k = 1, \dots, K\} $\;
+    \textbf{Sample} $k^* \in \{1, \dots, K\}$ with probability:\\ {
+       \Indp
+       \uIf{$k^* \in \mathcal{A}_t $  }{
+         $\P(k^*) \propto \frac{\alpha}{ \left\vert\mathcal{A}_t\right\vert}$\;
+        }
+       \uElse {
+         $\P(k^*) \propto \mathcal{N}(w_t \rightarrow p_{k^*})$\;
+       }}
+    $\mathcal{N}(w_t \rightarrow p_{k^*}) \leftarrow
+      \mathcal{N}(w_t \rightarrow p_{k^*}) + 1$ \;
+    \uIf{current block is completed}{
+      \textbf{Shrink} for each phrase $p$:
+        $\mathcal{N}(p) \leftarrow \beta \mathcal{N}(p)$\;
+      \textbf{Sort} phrases by $\mathcal{N}(p)$\;
+      \textbf{Prune} by retaining only the top $V$ phrases\;
+    }
+  }
+\end{algorithm}
+
+In tCRP, the choice of tables for a customer $w_t$ (occurrence of word) is
+restricted to those corresponding to the phrases $w_t \rightarrow p_k,\, (k = 1,
+\dots, K)$. To sit at an existing table, the probability is proportional to the
+number of customers already there. However, to sit at a new table, the
+probability is proportional to the hyperparameter $\alpha$ divided by the number
+of possible new tables available to the customer, which is different from the
+setting of CRP. Moreover, when seating arrangements of the current data block
+are completed, customers choose to leave the restaurant with a probability
+$\beta$, which makes room for the upcoming customers and let tCRPto reuse
+tables with no customer left as a new table (phrase) for the next customers.
+
+The above procedures of tCRP is summarized in \Cref{alg::tcrp}.
+
+
+% They either learn the
+% phrase embedding phrases by the directly~\cite{yin2014exploration}; or a
+% composition function which computes the phrase embedding from the embedding of
+% the constituent
+% words~\cite{yu2015learning,le2015compositional,irsoy2014deep,socher2011dynamic,
+% baroni2010nouns,zhao2015phrase,levy2014dependency}. Another category of study
+% focuses on the inference of the structure in an supervised manner
+% manner~\cite{socher2013parsing}, which is different from some of the first
+% category in the aspect that a structure decoding model is jointly learned.
+% % or factorization methods~\cite{huang2015convolutional,van2013tensor,yu2016embedding}
