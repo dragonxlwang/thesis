@@ -86,7 +86,7 @@ log-partition function is the bottleneck for training such a model.
 It is easy to verify that both function is convex and smooth. Their connection
 is presented in the theorem below.
 
-\begin{lem} \label{lem::conj_dual}
+\begin{lem} \label{lem::bk-cd}
   Assume that
   $$\P(i; \vs) = \frac{\exp(s_i)}{\sum\limits_{j=1}^N \exp(s_j)}$$
   and
@@ -98,11 +98,11 @@ is presented in the theorem below.
                     \{ \sum\limits_{j=1}^N \mu_j s_j -
                        \sum\limits_{j=1}^N \mu_j \log \mu_j \} \nonumber \\
            &= \max\limits_{\vmu \in \Delta_N}
-                    \{ \E_{\vmu} [s_j] + \entropy(\vmu) \} \label{eq::conj_dual}
+                    \{ \E_{\vmu} [s_j] + \entropy(\vmu) \} \label{eq::bk-cd}
   \end{align}
   where the maximizer is attained at:
   \begin{align}
-    \mu_j^* = \P(j; \vs), \quad 1 \le j \le N \label{eq::conj_dual_sol}
+    \mu_j^* = \P(j; \vs), \quad 1 \le j \le N \label{eq::bk-cd_sol}
   \end{align}
 \end{lem}
 \begin{proof}
@@ -114,7 +114,7 @@ is presented in the theorem below.
   $$\vs = -\partial H \big(\partial A (\vs) \big)$$
 
   However, it is much more intuitive to prove by showing the equivalence in
-  \Cref{eq::conj_dual}. We follow the derivation:
+  \Cref{eq::bk-cd}. We follow the derivation:
 
   \begin{align*}
     \E_{\vmu}[s_j] + \entropy(\vmu)
@@ -144,9 +144,9 @@ Equipped with the conjugate duality, we now offer a new interpretation of the
 famous EM algorithm. It has not been studied thoroughly before. However, part of
 the idea presented here is also shared by the work \cite{iusem1992primal}.
 
-Suppose that there is a distribution $\P(Y | \Theta)$ where the data $Y = (X,
-Z)$ is partially observed and can be decomposed into the observation $X$ and the
-unseen variables $Z$. Given a set of data $X_1, \dots, X_N$, MLE solves the
+Suppose that there is a distribution $\P(Z | \Theta)$ where the data $Z = (X,
+Y)$ is partially observed and can be decomposed into the observation $X$ and the
+unseen variables $Y$. Given a set of data $X_1, \dots, X_N$, MLE solves the
 problem:
 
 $$ \max_\Theta \log \P(X_1, \dots, X_N | \Theta) $$
@@ -173,19 +173,20 @@ $$
 
 And for fixed $\Theta$, the optimality condition for $\mu_i$ is:
 
-$$
-\frac{\partial \mathcal{F}}{\partial \mu_i} = 0
+\begin{flalign}
+  &\text{E-step:} \quad \frac{\partial \mathcal{F}}{\partial \mu_i} = 0
 \quad\iff\quad
 \mu_{i, Y_i} = \P(Y_i | X_i; \Theta)
-$$
+\end{flalign}
+
 which is exactly the E-step in EM algorithm.
 
 In addition, to optimize $\Theta$ while fixing $M$:
 
-$$
-\max\limits_{\Theta}
+\begin{flalign}
+  &\text{M-step:} \quad \max\limits_{\Theta}
 \sum\limits_{i=1}^N \sum\limits_{Y_i} \vmu_{i, Y_i} \log \P(X_i, Y_i ;\Theta)
-$$
+\end{flalign}
 
 where in EM algorithm, $\sum\limits_{i=1}^N \sum\limits_{Y_i} \vmu_{i, Y_i} \log
 \P(X_i, Y_i ;\Theta)$ is referred as \emph{evidence lower bound}~ELBO function,
@@ -195,37 +196,84 @@ Using this interpretation, it is also straight-forward to view EM algorithm as a
 coordinate-descent algorithm where the objective function is
 $\mathcal{F}(\Theta, M)$, which is a lower bound of the log-likelihood.
 
-\subsubsection{Variant 1: restricted $\mu_i$}
+\subsubsection{Variant 1: Relaxation by approximation}
+
 In the above basic version of EM, we assume that $\mu_i$ can freely choose any
 element in the simplex $\Delta$. Nevertheless, sometimes for computational
-efficiency, we might want to restrict $\mu_i$ to be within a subset, say,
-$\mathcal{S}$. Then the optimization problem for $\mu_i$ for constant $\Theta$
+efficiency, we might want to trade accuracy for efficiency, and to compute an
+approximation of $\mu_i$, which motivates us to study different approaches for
+approximation in the variational inference.  In below, we discuss a few well
+adopted methods.
+
+\noindent \textbf{Mean-field approximation}: The simplest approximation strategy
+is to restrict $\mu_i$ to be chosen from a subset, say, $\mathcal{S}$ instead of
+$\Delta$. Then the optimization problem for $\mu_i$ with a constant $\Theta$
 becomes:
 
-$$\min\limits_{\mu_i \in \mathcal{S}} D_{KL}
-\big(\mu_i \; ||\; P(\cdot | X_i; \Theta)\big)$$
+\begin{equation}
+\min\limits_{\mu_i \in \mathcal{S}} D_{KL}
+\big(\mu_i \; ||\; P(\cdot | X_i; \Theta)\big)\label{eq::em-alg-e-appro}
+\end{equation}
 
-When the solution $\mu_i$ is different from $P(\cdot | X_i; \Theta)$ (this
-happens when $\P(\cdot | X_i; \Theta) \notin \mathcal{S}$),
-\Cref{eq::em-conjugate} will not hold. In such cases, the solution will neither
-converge to that of MLE.
+When $\P(\cdot | X_i; \Theta) \notin \mathcal{S}$, \Cref{eq::em-conjugate} will
+not hold. In such cases, the solution of $\Theta$ will neither converge to that
+of MLE.  Moreover, because of the restricted $\mu_i \in \mathcal{S} \subsetneq
+\Delta$, the EM algorithm with mean-field approximation can be viewed as a
+maximization of a (strict) lower bound of the original log-likelihood objective.
+
+\noindent \textbf{Approximation by sampling}: It is not uncommon that the
+posterior $\P(\cdot | X, \Theta)$ does not yield a feasible solution. However in
+a lot of such cases it is still possible to use a Gibbs sampler to efficiently
+sample from the posterior. And when incorporating such sampling-based E-step
+into the EM framework, it is advantageous to run the Gibb sampler for only a few
+iterations (before its converging) to collect the statistics for maximization in
+M-step~\cite{wang2016tpp}, the idea of which can be justified similarly as that
+of Contrastive Divergence~\cite{carreira2005contrastive}.
+
+\noindent \textbf{General Density approximation}: General methods for
+approximation of $\P(\cdot | X, \Theta)$ digress from the optimization framework
+of EM algorithm by substituting the objective of \Cref{eq::em-alg-e-appro} with
+other forms of measurement for closeness, for example, Belief
+propagation~\cite{yedidia2005constructing}, Bethe
+approximation~\cite{burgess1978bethe} as well as expectation
+propagation~\cite{minka2001expectation}, just to name a few. Especially, the
+expectation propagation~(EP) method can be viewed as an approximation of the
+minimization of the reversed KL-divergence~\cite{minka2005divergence}:
+
+\begin{equation}
+\min\limits_{\mu_i \in \mathcal{S}} D_{KL}
+\big(P(\cdot | X_i; \Theta) \; ||\;  \mu_i\big)\label{eq::em-alg-e-appro-rev}
+\end{equation}
+
+Compared \Cref{eq::em-alg-e-appro-rev} to \Cref{eq::em-alg-e-appro}, we see that
+the order of two distributions in the KL-divergence is reversed. The in-depth
+discussion of this topic is beyond the scope of this thesis, and we refer the
+readers to the brochure on variational inference~\cite{wainwright2008graphical}
+and the Ph.D thesis of \citet{minka2001family} on approximation in Bayesian
+inference for a complementary review.
+
+Applying the aforementioned techniques to replace the E-step in the EM framework
+with the approximation can result efficient inference algorithms. In
+\cite{wang2012truncation}, EP was applied in variational EM for non-parametric
+models.
 
 \subsubsection{Variant 2: Bayesian variational inference}
 
-EM algorithm is also investigated in Bayesian setting although most technique
-remains the same. Specifically, $\Theta$ is viewed as a distribution which is
-controlled by hyperparameter $\Gamma$, and thus the log-likelihood involves not
-only marginalizing the latent variable $Z$ but also the parameter $\Theta$.
+EM algorithm is also investigated in Bayesian setting although most techniques
+remain the same. Specifically, $\Theta$ is viewed as a distribution which is
+controlled by hyperparameter $\Gamma$, and thus the log-likelihood function
+involves not only marginalizing the latent variable $Y$ but also the parameter
+$\Theta$.
 
-Mathematically, by taking $\Theta$ as a special set of latent variable, we can
-still employ the EM algorithm. However, in Bayesian setting, it is more often
-called as variational inference method.
-
-In addition, computationally, by carefully choosing the form of the prior
-distribution $\P(\Theta ; \Gamma)$, it is possible to have the posterior
-$\P(\Theta | X , Z ; \Gamma)$ in the same family of distributions as the
-prior~(conjugate prior). This is appealing since the update of $\mu_i$ in
-\Cref{eq::em-conjugate} is always exactly maximized.
+In Bayesian setting, it is more often called as Bayesian variational inference
+method.  Mathematically, $\Theta$ is also a latent variable, no different from
+$Y$, and we can still employ the EM algorithm. However, with sufficient
+observations, the optimization of hyperparmeter $\Gamma$ is less interested and
+the M-step is generally skipped. In addition, by carefully choosing the form of
+the prior distribution $\P(\Theta ; \Gamma)$ (as conjugate prior of $\P(Y ;
+\Theta)$), we have the posterior $\P(\Theta | X , Z ; \Gamma)$ in the same
+family of distributions as the prior. This is appealing since the update of
+$\mu_i$ in \Cref{eq::em-conjugate} can be maximized exactly easily.
 
 \section{Minimax Theory}
 

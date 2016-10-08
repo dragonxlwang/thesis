@@ -15,7 +15,6 @@
 \usepackage{empheq, amsfonts, amsmath, amsthm, multirow, amssymb, bm, dsfont}
 \usepackage{siunitx, nicefrac, microtype, graphicx, epstopdf, color, url}
 \usepackage{subcaption, balance, expl3, times, helvet, courier}
-\usepackage[toc,page]{appendix}
 \usepackage[super]{nth}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage[none]{hyphenat}
@@ -99,7 +98,7 @@
 \renewcommand{\cite}{\citep}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Marco
 \newcommand{\DCME}{Dual-Clustering Maximum Entropy}
-\newcommand{\PLANS}{Phrasal Latent Attachment with Negative Sampling}
+\newcommand{\PLANS}{Phrasal Latent Allocation with Negative Sampling}
 \newcommand{\THETA}{\mathbf{\Theta}}
 \newcommand{\vw}{\mathbf{w}}
 \newcommand{\vx}{\mathbf{x}}
@@ -121,6 +120,10 @@
 \newcommand{\trm}{\textsc{Trm}}
 \newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
 \newcommand{\wrt}{\emph{w.r.t.}}
+\newcommand{\DP}{\mathcal{DP}}
+\newcommand{\pss}{\mathcal{SS}}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% shrink
 % \renewcommand{\baselinestretch}{0.93}
 
@@ -224,13 +227,15 @@ in Crowdsourcing}
 
 \chapter{PLANS: \PLANS{}}
 \input{plans/1-introduction.tex}
+\input{plans/2-background.tex}
 
 % \chapter{Conclusions}
 
 % We conclude that graduate students like coffee.
 
-% \appendix*
-
+\appendix
+\chapter{Supplementary results on Thurstonian Pairwise Preference}
+\input{crowd-thurstonian/7-sup}
 % \include{Appendix.tex}
 
 \backmatter
@@ -238,8 +243,6 @@ in Crowdsourcing}
 \bibliographystyle{abbrvnat}
 \bibliography{refs}
 
-\chapter{Appendices}
-\input{crowd-thurstonian/7-sup}
 
 % \chapter{Vita}
 

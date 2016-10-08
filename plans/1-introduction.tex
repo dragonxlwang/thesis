@@ -1,22 +1,82 @@
+\section{Introduction}
+
 Learning distributed representation (embedding) of language has been a very
-attractive topic in the recent development of Natural language processing. Word
-embedding assigns a (usually dense) vector to each word which is supposed to
-retain the semantic information. For example, trained by Continuous bag-of-words
-or Skip gram~\cite{mikolov2013distributed}, the word vectors
+attractive topic in the recent development of natural language processing. Word
+embedding assigns a (usually dense) low dimensional vector to each word which is
+supposed to retain the semantic information. For example, the differences of
+word vectors trained by Continuous bag-of-words or Skip
+gram~\cite{mikolov2013distributed}, $\text{vec}(``woman'') - \text{vec}(``man'')
+\approx \text{vec}(``king'') - \text{vec}(``queen'')$, are found to be close.
 
-Though it is advantageous to employ word
-embeddings for language representation, the usefulness is inherently limited by
-its unigram assumption of language. On one hand, the semantics of a word is
-contextually independent. Therefore the word ``bank'' in the sentences ``I made
-a deposit in the bank'' and ``We walked on the river bank'' has the same
-embedding and semantics. On the other hand, it treats the semantics of higher
-text unit (sentence, document) as an linear composition of that of each word.
-And an unappealing implication is that it oversimplifies the process of
-formation of meaning from language. For example, under the unigram assumption,
-``the White House'' would has a closer distance to ``a house in white'' than
-``president residence''.
+Though it is advantageous to employ word embedding for language representation,
+the effectiveness is inherently limited by its unigram assumption of language.
+On one hand, the semantics of a word is context-unaware. For instance, the word
+``bank'' in the sentences ``I made a deposit in the bank.'' and ``We walked on
+the river bank.'' has the same embedding and hence semantics though human
+interpret the word as different meanings from the context. On the other hand, it
+treats the semantics of higher level of language units (phrase, sentence, and
+document) as an independent composition (linear function such as averaging) of
+that of each constituent word. An unappealing implication is that it
+oversimplifies the process of meaning formation of language. Under the unigram
+assumption, ``the White House'' would has a closer distance to ``a house in
+white'' than ``presidential residence'', which is inconsistent with human
+understanding.
 
-compositional method can learn the
-embedding higher language units (\eg phrase, sentence) as a function of their
-components, the parametrization is nevertheless simple and thus they lack
-sufficient flexibility to achieve reasonable performance.
+Previous efforts towards resolving the semantics of phrase (and sentence) beyond
+simple composition (averaging) have been made. Nevertheless by far most of them
+are trained in a supervised manner where additional annotation of the text is
+required. The annotation is necessary in order to provide richer information of
+language structure than the sequence of words. Such additional annotation can be
+a phrase dictionary~\cite{yin2014exploration},
+POS-tagging~\cite{zhao2015phrase,baroni2010nouns} or syntactic structures from a
+parser~\cite{levy2014dependency,yu2015learning,socher2013parsing,
+le2015compositional,irsoy2014deep}. It is inspiring that by modeling the high
+level language unit the performance of text representation is greatly improved.
+However, their development is achieved at the expense of requiring extra
+annotation which can hardly be scalable for training on new corpora even new
+languages.
+
+In this work, we consider phrases as consecutive sequences of words in the text
+and we present a simple yet effective algorithm to incorporate the notion of
+phrase into the representation learning task in a fully unsupervised fashion.
+This is essentially a much more challenging problem than previous investigated
+settings since not only it learns the representation (embedding) but also it
+infers the language structure from the unrestricted natural language text. Our
+study, as a preliminary step to embark on the joint learning of language
+structure and semantics, is based on the observation that \emph{phrasal} can be
+extracted from a sequence of words by analyzing the occurrence
+frequencies~\cite{witten1999kea,lindsey2012phrase,wang2007topical}, or
+information-theoretic measurement such as pairwise mutual
+information~\cite{fano1961transmission,church1990word} and generalized mutual
+information~\cite{magerman1990parsing}. More importantly,
+\cite{pantel2000unsupervised,collins1995prepositional}has been demonstrated that
+contextual similarity, or more precisely the semantic similarity, can be
+leveraged to greatly improve the resolution of the prepositional phrasal
+attachment. The strong mutual dependency between the two subtasks of structural
+and semantic learning shows that potentially a great gain can be accomplished by
+the joint modelling.
+
+The proposed algorithm, \PLANS~(PLANS), jointly discoveries the phrase and
+learns the embeddings. With a slight abuse of the notation, we call each single
+word as well as a sequence of words as \emph{a phrase}. The first ingredient of
+PLANS is that it models the allocation of phrase as a latent stochastic
+variable generated from the \emph{transient Chinese restaurant process}~(tCRP).
+Mathematically, for a word appeared in the context, it chooses its boundary of
+the enclosing phrase, with the probability specified similarly to that of the
+Chinese restaurant process, encouraging the generation of frequent phrases.
+Nevertheless, a computational challenging confronting PLANS is how to retain
+only a finite number of phrases while learning from a large corpus or stream
+dataset.  tCRP addresses this by letting customers periodically leave (with a
+probability) the restaurant. In addition, tables in tCRP are sorted and pruned
+based on the number of customers, which can be viewed as a generalization of the
+frequency thresholding. Another ingredient that underlies PLANS, namely negative
+sampling~\cite{mikolov2013efficient} which is a popular technique originally
+employed to train word embeddings, has its root in the estimation method
+noise-contrastive estimation~\cite{gutmann2010noise}.  PLANS learns the phrases
+in an online manner and the set of phrases are refreshed after the computation
+of each block of data. The last ingredient of PLANS, simulated annealing
+(SA)~\cite{aarts1988simulated,brooks1995optimization}, is applied to the Gibbs
+sampling in PLANS to stabilize the selected salient phrases while approaching
+the end of learning. SA reduces the stochastic behavior of sampling over time as
+the PLANS has more certainty about the language structure from training and
+relies less on the sampling to explore the phrasal allocation.

@@ -313,9 +313,9 @@ possibly infinite number of latent variables. Gibbs sampling takes advantage of
 the fact that the prior process usually yields a simple prediction rule of one
 latent variable given all others. For example, in Dirichlet process, using the
 notion of Chinese restaurant process~\cite{pitman2002combinatorial}, the
-probability of a latent variable choosing an existing or a new value is
-proportional to the sum of a hyperparameter $\alpha$ and the number of other
-latent variables of the same value:
+probability of a latent variable choosing an existing value proportional to the
+number of other latent variables of the same value or a new value proportional
+to the hyperparameter $\alpha$:
 
 \begin{eqnarray}
   \P_{CRP}(z_i = k | z_1, \dots, z_{i-1}, z_{i+1}, \dots, z_N)
@@ -441,24 +441,24 @@ strikes a balance between training speed and model quality, substantially
 outperforming state-of-the-art methods.
 
 The last work presented in this thesis investigates PLVMs for learning phrasal
-attachment. Existing word embedding methods are intrinsically hindered by its
+allocation. Existing word embedding methods are intrinsically hindered by its
 unigram (bag-of-words) assumption of language. Although efforts towards
 resolving the semantics for higher level of language units (\eg phrase,
 sentence) have been made, most of them either rely on a external resource or
 employ a complicated decoding algorithm for identifying the composition
 structure. In this work, we propose an effective yet simple generic algorithm,
 \PLANS{}~(PLANS), to compute the phrase embedding. It leverages the Dirichlet
-process as a prior for words attaching to other words/phrases. Similar to
-Skipgram, it estimates the embedding for words/phrases with negative sampling.
-Nevertheless the major challenge in learning is that a reasonable size of the
-phrases need to be carefully retained and less confident ones are constantly
-pruned during training. PLANS address this with an online block algorithm which
-refreshes the set of phrases based on their frequencies in the corpus
-periodically. In addition, simulated annealing (SA) is applied in the sampling
-process to stabilize the learned phrase set. Empirical study demonstrates that
-PLANS is able to successfully (1) identifying the frequent phrases in the
-dataset; and (2) estimate their semantics. By applying the learned
-representation from PLANS to NLP tasks such as sentiment and topical
+process as a prior for words to allocate the phrases within which they are
+enclosed. Similar to Skipgram, it estimates the embedding for words/phrases with
+negative sampling.  Nevertheless the major challenge in learning is that a
+reasonable size of the phrases need to be carefully retained and less confident
+ones are constantly pruned during training. PLANS address this with an online
+block algorithm which refreshes the set of phrases based on their frequencies in
+the corpus periodically. In addition, simulated annealing (SA) is applied in the
+sampling process to stabilize the learned phrase set. Empirical study
+demonstrates that PLANS is able to successfully (1) identifying the frequent
+phrases in the dataset; and (2) estimate their semantics. By applying the
+learned representation from PLANS to NLP tasks such as sentiment and topical
 classification, we observe that the phrase embedding significantly outperforms
 other standard features such as bag-of-words, N-grams, as well as
 state-of-the-art word embedding.
