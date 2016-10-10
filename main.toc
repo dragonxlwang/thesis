@@ -96,7 +96,9 @@
 \contentsline {section}{\numberline {6.1}Introduction}{74}{section.6.1}
 \contentsline {section}{\numberline {6.2}Background}{76}{section.6.2}
 \contentsline {subsection}{\numberline {6.2.1}Phrasal Allocation as Transient Chinese Restaurant Process (tCRP)}{76}{subsection.6.2.1}
-\contentsline {chapter}{Appendix\ A\hskip 1em\relax Supplementary results on Thurstonian Pairwise Preference}{78}{appendix.A}
-\contentsline {section}{\numberline {A.1}Model Updating}{78}{section.A.1}
-\contentsline {section}{\numberline {A.2}Inference of \textsc {Trm}}{79}{section.A.2}
-\contentsline {chapter}{References}{81}{appendix*.67}
+\contentsline {subsection}{\numberline {6.2.2}Phrase Embedding Learning with Negative Sampling}{77}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.3}Simulated Annealing}{78}{subsection.6.2.3}
+\contentsline {chapter}{Appendix\ A\hskip 1em\relax Supplementary results on Thurstonian Pairwise Preference}{79}{appendix.A}
+\contentsline {section}{\numberline {A.1}Model Updating}{79}{section.A.1}
+\contentsline {section}{\numberline {A.2}Inference of \textsc {Trm}}{80}{section.A.2}
+\contentsline {chapter}{References}{82}{appendix*.67}

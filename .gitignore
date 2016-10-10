@@ -16,6 +16,11 @@
 *.log
 *.out
 *.pdf
+*.lof
+*.lot
+*.nav
+*.snm
+*.toc
 buffers.list
 tags
 
