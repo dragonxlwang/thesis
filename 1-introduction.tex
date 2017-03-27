@@ -1,81 +1,83 @@
 \chapter{Introduction}
 
-The general treatment of data mining and machine learning can be categorized
-into two classes: probabilistic and non-probabilistic. For example, in
-classification, probabilistic methods include logistic regression, maximum
-entropy, and conditional random fields for binary, multi-class, and sequential
-prediction respectively; While one of the most well known non-probabilistic
-classification methods, support vector machine (or the more general max-margin
-methods) is also investigated for binary, multi-class and structure
-predictions. In clustering, there are numerous approaches of both and some
-examples are mixture models or matrix factorizations. In this thesis, our focus
-is the probabilistic model. It has several important advantages: (1)
-Probabilistic models assign probabilities instead of real-valued scores to
-outcomes (cluster id, class label), and therefore the output is naturally
-statistical meaningful.  (2) Maximum likelihood estimation (MLE), or
-equivalently, Kullback-Leibler (KL) divergence minimization, is the principled
-and generic objective for optimization. For non-probabilistic models, expert
-knowledge is required to select the objective function which yields the best
-performance.  (3) In Bayesian settings, the prior distribution of model
-parameters plays the role of model regularization with Maximum a Posterior (MAP)
-or posterior expectation extending MLE. These advantages are very appealing in
-both theory and practice. However, it is not the intention of this thesis to
-demonstrate that the probabilistic models are superior to non-probabilistic
-ones.
+The general treatment of data mining and machine learning problems can be
+categorized into two classes: probabilistic methods and non-probabilistic
+methods. For classification applications, for example, probabilistic methods
+include logistic regression, maximum entropy, and conditional random fields, for
+binary, multi-class, and sequential predictions, respectively. The
+non-probabilistic counterparts includes the well known support vector machines
+(or the more general max-margin methods), which is also investigated for binary,
+multi-class and structure predictions. In clustering problems, one of the most
+widely used probabilistic methods is the family of mixture models while matrix
+factorizations are usually adopted in non-probabilistic settings. The focus of
+this thesis is on the probabilistic methods, which have several important
+advantages: (1) Probabilistic models assign probabilities instead of real-value
+scores to outcomes (cluster id, class label), which convey statistical
+uncertainty. Also, the measurement of probability is intuitive and statistically
+meaningful. (2) In contrast to the optimization within the non-probabilistic
+framework, where expert knowledge is required to determine the form objective
+function, probabilistic methods naturally yield a principled and generic
+optimization paradigm: Maximum likelihood estimation (MLE), or equivalently,
+Kullback-Leibler (KL) divergence minimization. (3) In Bayesian settings, model
+regularization can be further achieved by specifying a prior distribution of the
+model parameters. The optimization problem is then solved by either Maximum A
+Posterior (MAP) or posterior expectation, which extends MLE. These advantages
+are appealing both theoretically and practically, which motivates the studies in
+this thesis.
 
 Probabilistic latent variable models (PLVMs) have provided a mathematical-based
 approach to the statistical modeling of a wide variety of random phenomena which
 cannot be explained well by simple distributions, such as binomial, multinomial,
-Poisson, and Gaussian, Dirichlet for discrete and continuous distributions
-respectively. PLVM assumes that the observed data is accompanied by another
-group of ``unobserved'' latent variables. And the distribution of the observed
-data is conditioned on the latent variables. Therefore, It is able to model
-quite complex distributions through an appropriate choice of its latent
-variables to represent accurately the local areas of support of the true
-distribution. Computation can be made feasible from the latent variables, as the
-latter are usually chosen with a tractable form.
+Poisson for discrete distributions, and Gaussian, Dirichlet for continuous
+distributions, respectively. PLVMs assume that the observed data are accompanied
+by a group of ``unobserved'' latent variables. And the distribution of the
+observed data is conditioned on the latent variables. PLVMs are able to model
+complex distributions through an appropriate choice of the latent variables to
+represent accurately the local areas of support of the true distribution.
+Computation can therefore be made feasible through incorporating the latent
+variables, as the latent variables are usually chosen with a tractable form.
 
 An illustrating example, topic modeling, demonstrates how latent variables can
-be used for modeling ``topics.'' A topic is mathematically represented by a
-multinomial distribution over words in the vocabulary and the unigram
-distribution of a document is regarded as the result of a ``mixture'' of the
-topics. Though our observation is merely words in the document, by introducing
-the latent variables, namely the topics and the mixture weights of documents,
-the semantic relationship of words can be identified to a great extent and the
-prominent subject of a document can be revealed as well. For instance, it is
-expected that words like ``science'' and ``technology'' would have large
-probability in one topic while others like ``baseball'' and ``basketball'' would
-in another topic. In computer vision, topic modeling is also applied to the task
-of image segmentation where pixels of an image are seen as a mixture of latent
-objects.
+be used to model ``topics.'' A topic is mathematically represented by a
+multinomial distribution over words in a vocabulary. The unigram distribution of
+a document is then regarded as a ``mixture'' of the topics. Though the
+observation is merely words in the documents, by introducing latent variables,
+namely the topic assignments of words, the semantic relationship of words can be
+identified to a great extent, and the prominent subject of a document can be
+revealed as well. For instance, in topic modeling such as Probabilistic Latent
+Semantic Indexing~(PLSI) and Latent Dirichlet Allocation~(LDA), words like
+``science'' and ``technology'' would both have a large probability in a
+particular topic of scientific research, while ``baseball'' and ``basketball''
+would both have a large probability in another topic of sports. In computer
+vision, topic modeling is also applied to the task of image segmentation where
+pixels of an image are seen as a mixture of latent objects.
 
 We devote the rest of this section to illustrate how we can leverage
 probabilistic latent variable models for knowledge discovery and optimization.
 
 \section{Latent Variable for Knowledge Discovery}
 
-PLVMs as an extremely flexible method of modeling have been extensively
-investigated in knowledge discovery and data mining. In recent decades, from
-probabilistic latent semantic indexing, latent Dirichlet allocation, to
-Dirichlet process, Indian buffet process, we have witnessed numerous of PLVMs
-being proposed and widely applied to varying fields such as natural language
-processing, speech recognition, and computer vision. To focus our discussion, we
-restrict our analysis to the mixture models, also more known now as topic
-modeling in recent literature.
+PLVMs as an extremely flexible method of modeling have been extensively studied
+for knowledge discovery. In recent decades, from probabilistic latent semantic
+indexing, latent Dirichlet allocation, to Dirichlet process, Indian buffet
+process, literatures have witnessed numerous PLVMs being proposed and widely
+applied to varying fields such as natural language processing, speech
+recognition, and computer vision. In this section, we restrict our analysis to
+mixture models, also better known as topic modeling in recent literature.
 
-\subsection{Mixture Models --- an Historical Account} The early effort of
-studying on mixture models can be dated back to
+\subsection{Mixture Models --- A Historical Account}
+
+The early research efforts on mixture models can be dated back to
 \citeyear{pearson1896mathematical} when Karl Pearson fitted a mixture of two
 normal probability density functions~\cite{pearson1896mathematical} on the
 problem of \emph{Breadth of ``Forehead'' of Crabs}. As a pioneering
 biostatistician, he has been credited for the finite mixture models and method
 of moments among his other contributions. In hindsight, his work also
-established the computational (optimization) theory of statistical modeling,
-which strikes me as a visionary as it remains a difficult yet interesting
-research area and inspires my study on this topic which composes most of this
-thesis.
+established the computational (optimization) theory of statistical modeling, a
+difficult yet interesting research area even today, which inspires my study on
+this topic composing most of this thesis.
 
-The dataset on which Pearson modelled consisted of measurement on the ratio of
+The dataset on which Pearson modeled consisted of measurement on the ratio of
 forehead width to the body length of 1000 crabs sampled at the Bay of Naples by
 zoologist W.F.R. Weldon. Weldon analyzed the histogram of the observations,
 which is plotted in \Cref{fig::pearson-crab}, along with a normal
@@ -105,79 +107,82 @@ mathematics.
   \centering
   \includegraphics[width=0.8\linewidth]{figures/pearson-crab-weibull.eps}
   \caption{Comparison between the Pearson's mixture of two normals and a single
-  Weibull distribution. Pearson's mixture model provides a better fitting at the
-  mode of empirical distribution. Note that the form of density function of
-  Weibull distribution is much more complicated than that of normal distribution
-  and it requires numeric means to estimate the parameters.}
+    Weibull distribution. Pearson's mixture model provides a tighter fitting at
+    the mode of empirical distribution. Note that the density function of
+    Weibull distribution is much more complicated than that of normal
+    distribution and it requires numeric means to estimate the parameters.}
   \label{fig::pearson-crab-weibull}
   \end{subfigure}
   \caption{Pearson's Mixture of Two Normals on ``Breadth of Forehead of Crabs''}
 \end{figure}
 
-Pearson used two normal distributions to fit the observations. To estimate the
+Pearson used two normal distributions to fit the observations. He assumed that
+the observed data are sampled from $\pi_1 \mathcal{N}(\mu_1, \sigma_1^2) + \pi_2
+\mathcal{N}(\mu_2, \sigma_2^2),~(\pi_1 + \pi_2 = 1)$. To estimate the
 parameters, namely, the means ($\mu_1, \mu_2$) and standard-variance ($\sigma_1,
 \sigma_2$) of the two normal distributions as well as the proportions ($\pi_1,
-\pi_2$) of the two components, Pearson followed the method of moments (which
-was also introduced by himself in 1894). Though moment matching is superseded
-by Fisher's method of maximum likelihood~\cite{pfanzagl1994parametric} in
-nowadays classic statistical modelling, it was a numerically simpler approach
-in most cases. However, the calculation was still formidable and daunting at
-the time without the aid of computer or other machinery of any kind.
+\pi_2$) of the two components, Pearson followed the method of moments (which was
+also introduced by himself in 1894). Though moment matching is superseded by
+Fisher's method of maximum likelihood~\cite{pfanzagl1994parametric} in nowadays
+classic statistical modelling, it was a relatively numerically simpler approach
+in most cases. However, the calculation was still formidable and daunting at the
+time without the aid of computer or other machinery of any kind.
 Mathematically, the problem involves five parameters $\mu_1, \mu_2, \sigma_1,
-\sigma_2$ and $\pi_1$ (we can obtain $\pi_2 = 1 - \pi_1$) and to find a
-solution the parameters need to ensure that the mixture matches on the first
-five moments. Pearson derived a ninth degree polynomial (nonic) and two
+\sigma_2$ and $\pi_1$ (since we can obtain $\pi_2 = 1 - \pi_1$) and to find a
+solution, the parameters need to ensure that the mixture model matches on the
+first five moments. Pearson derived a ninth degree polynomial (nonic) and two
 candidate real roots are found. He finally chose the solution on the basis of
-agreement with the sixth moment. In \Cref{fig::pearson-crab}, the dashed
-curve in red shows Pearson's mixture and its two components are displayed in
-purple and green dashed lines. Clearly, the mixture is skewed and better fits
-the histogram. And indeed, two subspecies are identified which verifies the
-hypothesis of Weldon.
+agreement with the sixth moment. In \Cref{fig::pearson-crab}, the dashed curve
+in red shows Pearson's mixture and its two components are displayed in purple
+and green dotted lines. Clearly, the mixture is skewed and better fits the
+histogram than a single normal distribution. And indeed, two subspecies are
+identified which verifies the hypothesis of Weldon.
 
 It is quite an advanced idea to leverage latent variables for statistical
-modeling at that time. Otherwise fitting the asymmetric observations would
-involve a much more complicated distribution. In fact, we can also fit the data
-with a skewed Weibull distribution, the parameter of which are nevertheless
-computational difficult to estimate (The Maximum Likelihood estimator for the
-shape parameter is the solution to the equation $\frac{1}{k} =
+modeling at that time. Otherwise properly fitting the asymmetric observations
+would involve a much more complicated distribution. In fact, we can also explain
+the data with a skewed Weibull distribution, the parameter of which are
+nevertheless computationally difficult to estimate (The Maximum Likelihood
+estimator for the shape parameter is the solution to the equation $\frac{1}{k} =
 \frac{\sum_{i=1}^N (x_i^k\log x_i - x_N^k \log x_N) }{\sum_{i=1}^N (x_i^k -
 x_N^k)}- \frac{1}{N}\sum\limits_{i=1}^N \log x_i$, and numeric methods, which
-were very primitive at the time of late 19th century, is required.) Therefore
-Weibull distribution was not a practical option for fitting the data without the
-aid of computers. In \Cref{fig::pearson-crab-weibull}, we compare the
-Peason's mixture of two normals with one single Weibull distribution fitting the
-data using Maximum Likelihood. The difference between the two curves is not
-significant. However, Pearson's result seems to fit better at the mode around
-$0.66$.
+were very primitive at the time of late 19th century, is required). Therefore
+Weibull distribution was not a practical option for Pearson to fit the data when
+the aid of computers was not available. In \Cref{fig::pearson-crab-weibull}, we
+compare Peason's mixture of two normals with one single Weibull distribution
+fitting the data using Maximum Likelihood. The difference between the two curves
+is not significant. However, Pearson's result seems to fit better at the mode
+around $0.66$.
 
-\subsection{Mixture Models --- Development of EM algorithm}
+\subsection{Mixture Models --- Development of the EM algorithm}
 
 Although solving the mixture model with the method of moments is a very
 laborious task and performing the necessary calculation is even more
 heroic~\cite{mclachlan2004finite}, it does not always yield the optimal solution
 in the statistical sense. The maximum likelihood approach, however, possesses
 superior statistical property as it tries to place higher probability close to
-the observed data and are more often unbiased. With the development of computer
-and optimization in the last century, modern statistical modeling is able to
-utilize numeric algorithms to solve Maximum Likelihood Estimator (MLE).  Among
-the different optimization methods, Expectation-Maximization (EM)
+the observed data and are more often unbiased. With the development of
+optimization in the modern computer science, statistical modeling is able to
+utilize numerical algorithms to solve Maximum Likelihood Estimation (MLE).
+Among the different optimization methods, the Expectation-Maximization (EM)
 algorithm~\cite{dempster1977maximum} has greatly stimulated interest in the use
 of mixture models as well as other PLVMs. Several reasons can be accounted for
-the popularisation of EM algorithm: (1) It is generally easy to implement the
-algorithm and it has virtually no parameters to tune, as compared to, for
+the popularisation of the EM algorithm: (1) It is generally easy to implement
+the algorithm and it has virtually no parameters to tune, as compared to, for
 example, gradient descent, where a carefully selected learning step is required
 to ensure fast training; (2) It usually does not need any special treatment to
 handle the constraints of the model. For example, in the normal mixture problem,
-the standard-variance of a component normal is always positive and in EM
-algorithm and this is naturally satisfied since it is computed as the empirical
-standard-variance of the ``generated'' completed data from the posterior
+the standard-variance of a component normal is always positive. In the EM
+algorithm, this is naturally satisfied since it is computed as the empirical
+standard-variance of the complete data generated out of the posterior
 distribution; (3) EM is a flexible family of approaches where the variational
 distribution in the expectation step can be simplified (or constrained) for the
-purpose of computation efficiency (e.g. mean-field EM) and the maximization step
-can also be substituted by an ascend step. We leave the details of EM algorithm
-in \Cref{sec::bg-em}.  In this section, we provide a brief comparison
-between EM algorithm and Pearson's method of moments and show how we can
-improve Pearson's result by EM algorithm.
+purpose of computation efficiency (e.g. mean-field EM and convex relaxations,
+\cite[see][Chapter 5, 7]{wainwright2008graphical}) and the maximization step can
+also be substituted by an ascend step. We leave the details of EM algorithm in
+\Cref{sec::bg-em}. In this section, we provide a brief comparison between EM
+algorithm and Pearson's method of moments and show how Pearson's result can be
+improved by the EM algorithm.
 
 \begin{figure}[ht!]
   \centering
@@ -236,74 +241,76 @@ mixture modeling.
 
 \subsection{From Mixture Models to Topic Modeling}
 
-Since the late of 1990s, the study on document understanding has witnessed a new
-rising approach of PLVMs which is often referred as topic modeling. The first
-well recognized topic modeling method, probabilistic latent semantic
+Since late 1990s, the study on document understanding has witnessed a new
+approach of PLVMs which is often referred to as topic modeling. The first well
+recognized topic modeling method, probabilistic latent semantic
 indexing~(PLSI)~\cite{hofmann1999probabilistic}, is simple yet effective.
-Essentially it sees the distribution $w_d$ of unigrams for a document $d$ as a
+Essentially it sees the unigram word ($w_d$) distribution of a document $d$ as a
 $K$-mixture of multinomial distributions $\beta_1, \dots, \beta_K$ with
 proportions $\theta_{d, 1}, \dots, \theta_{d, k}$. Those $\beta_K$ are referred
-as ``topics'' because the words of large probabilities in a component are often
-semantically related. In addition, the topic weights $\theta_d$ of a document
-provides a short summary of the documents.  Computationally, $\theta_d$ has a
-much lower dimensionality than $w_d$ and thus can be leveraged as a (part of)
-feature vector in tasks such as document classification or clustering. Moreover,
-$\theta_d$ is semantically meaningful as similarity of $\theta_d$ correlates
-with the subject of the documents, which can be greatly useful in document
-understanding.
+to as ``topics'' because the words of large probabilities in a component are
+often semantically related. In addition, the topic weights $\theta_d$ of a
+document provides a succinct summary of the documents. Computationally,
+$\theta_d$ has a much lower dimensionality than $w_d$ and thus can be leveraged
+as a (part of) feature vector in tasks such as document classification or
+clustering. Moreover, $\theta_d$ is semantically meaningful as the similarity of
+$\theta_d$'s correlates with the similarity of the subject of documents, which
+can be greatly useful in document understanding, information indexing, \etc.
 
-Later development of topic modeling includes numerous works which are beyond of
-the focus in this thesis. In terms of modeling the latent variables, there are
-two aspects of milestone progress that are worth a brief overview: the Bayesian
-inference and nonparametric statistics. The early effort promoting the Bayesian
-nonparametrics and advocating the theoretical formalization of topic modeling,
-specifically, the analysis on random processes of exchangeable
+In terms of modeling the latent variables, there are two milestone progresses:
+the Bayesian inference and nonparametric statistics. The early efforts promoting
+the Bayesian nonparametrics and advocating the theoretical formalization of
+topic modeling, specifically, the analysis on random processes of exchangeable
 partitions~\cite{pitman1995exchangeable}, are the lectures taught by
 \citeauthor{pitman2002combinatorial} at Berkeley in Spring
-\citeyear{pitman2002combinatorial}. Many of David Blei's later
-works~\cite{blei2009topic,blei2003latent,blei2010nested} are immediate fruit of
-the lectures and readers interested in a principle introduction on this topic
+\citeyear{pitman2002combinatorial}. Many results obtained in this
+direction~\cite{blei2009topic,blei2003latent,blei2010nested} are immediate fruit
+of the course and readers interested in a principle introduction on this topic
 should refer to the lecture notes~\cite{pitman2002combinatorial} and the
 references therein.
 
-\emph{Bayesian inference} departs from the tradition MLE framework. It assumes a
-prior distribution on latent variables parametrized by the
+\emph{Bayesian inference} departs from the traditional MLE framework. It assumes
+a prior distribution on latent variables parametrized by the
 \emph{hyperparameters}. The advantages of introducing a prior on latent
 variables are mainly two folds and we show them using the Latent Dirichlet
 Allocation~(LDA)~\cite{blei2003latent} as an example: (1) It enables user to
 incorporate human knowledge about the latent variables into modeling. In
 document understanding, the word distribution of a topic as well as the
-proportion of topics for a document are naturally sparse. LDA encourages such
-behavior by adding a Dirichlet prior. (2) By selecting the form of prior
-carefully, the prior and posterior can be in the same (with different parameters
-though). Such conjugate prior-posterior pairs are computational beneficial in
-both Gibbs sampling as well as variational inference. LDA chooses Dirichlet as
-the conjugate prior to multinomial distribution. Another significant difference
-between Bayesian inference and MLE is the estimation method. There are two major
-estimation methods of the latent variables in Bayesian setting which are
-Bayesian estimator (posterior expectation) and maximum a posterior (MAP). The
-first computes the posterior expectation of the latent variables given the
-observed data while the second selects the value with the maximal probability in
-the posterior distribution, which can be viewed as an extension of the MLE
-method. In the context of topic modeling, it has been noticed that Bayesian
-estimator is more popular than the alternatives. The major criticism of MAP is
-the fact that it is not very representative of Bayesian methods in general
-because it is still a point estimates in nature. Specifically in topic modeling,
-it is common that the posterior distribution of the latent variables are in fact
-multi-modal and therefore it is computational infeasible (or even intractable)
-to calculate MAP due to the non-convex nature of the problem.
+proportion of topics for a document are naturally \emph{sparse}. LDA encourages
+such behavior by using a Dirichlet prior with a small hyperparameter $\valpha$.
+(2) By selecting the form of prior distribution carefully, the prior and
+posterior distributions can be in the \emph{same} family (with different
+parameters though). Such conjugate prior-posterior pairs are computationally
+beneficial in both Gibbs sampling as well as variational inference. LDA chooses
+Dirichlet as the conjugate prior to the multinomial distribution, and the
+posterior distribution is also a Dirichlet of parameter $\valpha + \mathbf{n}$,
+where $\mathbf{n}$ is often referred as the pseudo-count of the latent variables
+in each topic. Estimation method for Bayesian inference has also been greatly
+developed beyond MLE. There are two major estimation methods of the latent
+variables in Bayesian setting which are Bayesian Estimator (Posterior
+Expectation) and Maximum a Posterior (MAP). The first computes the posterior
+expectation of the latent variables given the observed data while the second
+selects the value with the maximal probability in the posterior distribution,
+which can be viewed as an extension of the MLE method. In the context of topic
+modeling, it has been noticed that Bayesian estimator is more popular than MAP.
+The major criticism of MAP is the fact that it is still a point estimation in
+nature. Specifically in topic modeling, it is not uncommon that the posterior
+distribution of the latent variables are in fact multi-modal. And therefore it
+is computationally infeasible (or even intractable) to calculate MAP due to the
+non-convex nature of the problem.
 
 \emph{Nonparametric statistics} aims to model the data with possibly infinite
-number of latent variables. In topic modeling, it means that one can model
-infinite large number of topics or words in the vocabulary. Although in practice
-it does not seem to be useful immediately since there is always a finite
-upper-bound for these quantities, it relies on expert knowledge to appropriately
-select the values. Nonparametric statistics are most powerful to learn the
-number of latent variables that are adequately large to explain the data by
-using random processes. Random processes are extensively studied in recent
-literature, as surveyed in \cite{hajek2015random}, including Gaussian
-process~\cite{rasmussen2006gaussian}, Dirichlet process~\cite{teh2011dirichlet},
-Indian buffet process~\cite{ghahramani2005infinite}, and hierarchical
+number of latent variables. In topic modeling, it implies that one can model a
+infinite number of topics or words in the vocabulary. Although in practice it
+does not seem to be immediately useful since there is always a finite
+upper-bound for these quantities, it is critical to rely on expert knowledge to
+appropriately select the values. Nonparametric statistics are most powerful to
+adaptively learn the number of latent variables that are adequately large to
+explain the data by using random processes. Random processes are extensively
+studied in recent literature, as surveyed in \cite{hajek2015random}, including
+Gaussian process~\cite{rasmussen2006gaussian}, Dirichlet
+process~\cite{teh2011dirichlet}, Indian buffet
+process~\cite{ghahramani2005infinite}, and hierarchical
 processes~\cite{teh2012hierarchical,griffiths2004hierarchical,blei2010nested},
 just to name a few. Mathematically, to model the latent variables from possibly
 infinite number of choices, the nonparametric approach assumes a random process
@@ -313,21 +320,22 @@ possibly infinite number of latent variables. Gibbs sampling takes advantage of
 the fact that the prior process usually yields a simple prediction rule of one
 latent variable given all others. For example, in Dirichlet process, using the
 notion of Chinese restaurant process~\cite{pitman2002combinatorial}, the
-probability of a latent variable choosing an existing value proportional to the
-number of other latent variables of the same value or a new value proportional
-to the hyperparameter $\alpha$:
+probability of a latent variable choosing an existing value is proportional to
+the number of other latent variables of the same value, or a new value
+proportional to the hyperparameter $\alpha$:
 
-\begin{eqnarray}
+\begin{align}
   \P_{CRP}(z_i = k | z_1, \dots, z_{i-1}, z_{i+1}, \dots, z_N)
     \propto
       \begin{cases}
-        \alpha + \sum\limits_{j = 1, j \neq i}^N \indct( z_j = k )
+        \sum\limits_{j = 1, j \neq i}^N \indct( z_j = k )
         & \text{if $k < K$} \\
         \alpha
         & \text{if $k = K + 1$}
-      \end{cases} \\
-\end{eqnarray}
-Where it is supposed that the value of $z_j, j \neq i$ is choosing from $1,
+      \end{cases}
+\end{align}
+%
+where it is supposed that the value of $z_j, j \neq i$ is choosing from $1,
 \dots, K$  and for any $k < K$ the support is nonempty. Therefore it is feasible
 to investigate sampling methods for inference. While alternatively, another
 strategy for estimation is to approximate the possibly infinite posterior with a
@@ -337,48 +345,79 @@ approximation is based on a stick-breaking~\cite{ishwaran2011gibbs}
 interpretation. It views the process as breaking a stick with the proportion as
 a sample from a Beta distribution and the truncation stops the breaking after
 there is a predefined number of sticks generated. Both of the above two
-strategies have advantages as Gibbs sampling does not need to truncate the size
-of latent variables by a finite number while the truncated variational inference
-is generally more computational efficient. However, as shown in
+strategies have advantages: Gibbs sampling does not need to truncate the size of
+latent variables by a finite number, while the truncated variational inference
+is generally computational efficient. However, as shown in
 \cite{wang2012truncation}, it is possible to combine the two ideas together by
-performing the E-step in the variational EM via sampling.
+performing the E-step in variational EM via sampling.
 
-\section{Latent Variable for Optimization}
+\section{Latent Variables for Optimization}
 
 Previous research such as topic modeling mainly incorporates the latent
 variables for the purpose of knowledge discovery. Another motivation to use
-latent variable models is efficient computation. In previous discussion, we have
-already witnessed that by introducing latent variable, the mixture model of
-Pearson is much more easier to compute than that of Weibull distribution.
-However, contemporary effort in the direction of leveraging PLVMs for efficient
-computation was less explored. In one of the recent work by the author,
-Dual-Clustering Maximum Entropy (DCME)~\cite{wang2016dcme}, it demonstrats that
-the PLVM is an effective means to improve the optimization efficiency.
+latent variable models is efficient computation. In previous discussion of the
+``Breadth of Forehead of Crabs'' example, we have already seen that by
+introducing latent variables, the mixture model is much easier to compute than
+that of the Weibull distribution. However, contemporary efforts in the direction
+of leveraging PLVMs for efficient computation was less explored. In one of our
+recent work, Dual-Clustering Maximum Entropy (DCME)~\cite{wang2016dcme}, it is
+demonstrated that PLVM is an effective means to improve the optimization
+efficiency.
 
-Maximum Entropy is an classic approach in classification as well as word
-embedding. However, it becomes computationally challenging when the number of
-classes or the vocabulary size is large. DCME approaches the problem by
-optimizing ME in its primal-dual form. The key insight is to introduce a latent
-cluster assignment for each training instance and assume that the dual variables
-of an instance are determined by the corresponding latent assignment. As an
-initial investigation, we use the latent variables in a much simpler manner than
-the mixture models. Specifically, we restrict the latent variable distributed as
-a Kronecker delta which has support only on a single value, as contrast to the
-case of mixture model where the latent variable is distributed as a more general
-multinomial. DCME naturally leads to an approximation of the dual variables
-which can be computed by a K-means like clustering. In addition, it also enables
-a efficient online-offline computation scheme whose computation complexity does
-not depends on the number of classes nor the vocabulary size. And the empirical
-study demonstrated that DCME outperforms other state-of-the-art approaches.
+We explore PLVM in the context of Maximum Entropy (ME) models. ME is a classic
+approach in classification as well as word embedding. However, it becomes
+computationally challenging when the number of classes or the vocabulary size is
+large. DCME approaches the problem by optimizing ME in its primal-dual form. The
+key insight is to introduce a latent cluster assignment for each training
+instance and assume that the dual variables of an instance are determined by the
+corresponding latent assignment. As an initial investigation, we use the latent
+variables in a much simpler manner than the mixture models. Specifically, we
+restrict the latent variable to distribute as a Kronecker delta which has
+support only on a single value, in contrast to the case of mixture models where
+the latent variable is subject to a more general multinomial distribution. DCME
+naturally leads to an approximation of the dual variables which can be computed
+by a K-means like clustering. More importantly, it enables an efficient
+online-offline computation scheme whose computational complexity does not
+depends on the number of classes nor the vocabulary size. Empirical studies
+demonstrated that DCME significantly outperforms state-of-the-art approaches.
 
-\section{Overview of This Thesis}
+\section{Contribution of this thesis}
 
-In the rest of this thesis, we will discuss in detail on the PLVMs.
-Specifically,  In \Cref{chp::bg}, we briefly discuss a few key
-mathematics that can greatly facilitate the understanding of the PLVMs.
+In this thesis, I describe a range of applications where latent variables can be
+leveraged for knowledge discovery and efficient optimization. Works in this
+thesis demonstrate that PLVMs are a powerful tool for modelling incomplete
+observations. Through incorporating latent variables and assuming that the
+observations such as literature citations, pairwise preferences in crowdsourcing
+as well as unstructured text are generated following tractable distributions
+parametrized by the latent variables, PLVMs are flexible and effective to
+discover knowledge in data mining problems, where the knowledge is
+mathematically modelled as continuous or discrete values, distributions or
+uncertainty. For example, when modelling literature citations, latent variables
+can be inferred to identify research topics and evolution of research themes;
+While only observing pairwise preferences labelled by non-expert workers in
+crowdsourcing, PLVM as a generative process is capable to recover the ground
+truth ranked lists; And finally, by fitting the unstructured text with
+underlying phrasal structures, it can be shown that both the phrasal allocation
+and phrase embeddings are effectively computed. In addition, I also explore the
+PLVMs for deriving efficient algorithms. It has been shown that latent variables
+can be employed as a means for model reduction or to facilitating
+computation/sampling of intractable distributions. For instance, PLVM has been
+shown to improve efficiency of Maximum Entropy which does not scale well as the
+number of classes by performing model reduction with the latent variables; In
+addition, in cases where the computation involves a intractable distribution,
+latent variables are also investigated to facilitate the calculation via Gibbs
+sampling.
 
-Next, we will show two scenarios where PLVMs are applied in data mining for
-knowledge discover.
+\section{Overview of this Thesis}
+
+In \Cref{chp::bg}, we briefly discuss a few key mathematical ingredients that
+can greatly facilitate the understanding of PLVMs. Next, we move on to show two
+scenarios where PLVMs are applied for knowledge discovery in \Cref{chp::clda}
+and \Cref{chp::tpp}. Leveraging PLVMs for efficient optimization is presented in
+\Cref{chp::dcme}. The last work we propose in this thesis takes the advantages
+of PLVMs in both aspects, namely extracting the phrasal structure with an
+efficient optimization scheme and effectively learning the semantic embeddings
+of phrases, is discussed in \Cref{chp::plans}.
 
 The first work analyzes the citations of
 literatures~\cite{wang2013understanding}. Understanding how research themes
@@ -418,47 +457,46 @@ real-world datasets demonstrate that \textsc{Tpp} can effectively bind pairwise
 preferences of the crowd into rankings and substantially outperforms previously
 published methods.
 
-In addition, as hinted before, another aspect of PLVMs is to improve the
-efficiency of optimization. To this end, we devote another chapter to discuss
-the study of Dual-Clustering Maximum Entropy~\cite{wang2016dcme}.  Maximum
-Entropy (ME), as a general-purpose machine learning model, has been successfully
-applied to various fields such as text mining and natural language processing.
-It has been used as a classification technique and recently also applied to
-learn word embedding. ME establishes a distribution of the exponential form over
-items (classes/words). When training such a model, learning efficiency is
-guaranteed by \emph{globally} updating the entire set of model parameters
-associated with \emph{all} items at \emph{each} training instance. This creates
-a significant computational challenge when the number of items is large. To
-achieve learning efficiency with affordable computational cost, we propose an
-approach named Dual-Clustering Maximum Entropy (DCME).  Exploiting the
-primal-dual form of ME, it conducts clustering in the dual space and
-approximates each dual distribution by the corresponding cluster center.  This
-naturally enables a hybrid online-offline optimization algorithm whose time
-complexity per instance only scales as the product of the feature/word vector
-dimensionality and the cluster number. Experimental studies on text
-classification and word embedding learning demonstrate that DCME effectively
-strikes a balance between training speed and model quality, substantially
-outperforming state-of-the-art methods.
+Another aspect of PLVMs is to improve the efficiency of optimization. To this
+end, we devote another chapter to discuss the study of Dual-Clustering Maximum
+Entropy~\cite{wang2016dcme}.  Maximum Entropy (ME), as a general-purpose machine
+learning model, has been successfully applied to various fields such as text
+mining and natural language processing.  It has been used as a classification
+technique and recently also applied to learn word embedding. ME establishes a
+distribution of the exponential form over items (classes/words). When training
+such a model, learning efficiency is guaranteed by \emph{globally} updating the
+entire set of model parameters associated with \emph{all} items at \emph{each}
+training instance. This creates a significant computational challenge when the
+number of items is large. To achieve learning efficiency with affordable
+computational cost, we propose an approach named Dual-Clustering Maximum Entropy
+(DCME).  Exploiting the primal-dual form of ME, it conducts clustering in the
+dual space and approximates each dual distribution by the corresponding cluster
+center.  This naturally enables a hybrid online-offline optimization algorithm
+whose time complexity per instance only scales as the product of the
+feature/word vector dimensionality and the cluster number. Experimental studies
+on text classification and word embedding learning demonstrate that DCME
+effectively strikes a balance between training speed and model quality,
+substantially outperforming state-of-the-art methods.
 
 The last work presented in this thesis investigates PLVMs for learning phrasal
 allocation. Existing word embedding methods are intrinsically hindered by its
 unigram (bag-of-words) assumption of language. Although efforts towards
 resolving the semantics for higher level of language units (\eg phrase,
-sentence) have been made, most of them either rely on a external resource or
+sentence) have been made, most of them either rely on an external resource or
 employ a complicated decoding algorithm for identifying the composition
 structure. In this work, we propose an effective yet simple generic algorithm,
-\PLANS{}~(PLANS), to compute the phrase embedding. It leverages the Dirichlet
-process as a prior for words to allocate the phrases within which they are
-enclosed. Similar to Skipgram, it estimates the embedding for words/phrases with
-negative sampling.  Nevertheless the major challenge in learning is that a
-reasonable size of the phrases need to be carefully retained and less confident
-ones are constantly pruned during training. PLANS address this with an online
-block algorithm which refreshes the set of phrases based on their frequencies in
-the corpus periodically. In addition, simulated annealing (SA) is applied in the
-sampling process to stabilize the learned phrase set. Empirical study
-demonstrates that PLANS is able to successfully (1) identifying the frequent
-phrases in the dataset; and (2) estimate their semantics. By applying the
-learned representation from PLANS to NLP tasks such as sentiment and topical
-classification, we observe that the phrase embedding significantly outperforms
-other standard features such as bag-of-words, N-grams, as well as
-state-of-the-art word embedding.
+\PLANS{}~(PLANS), to compute the phrase embedding. We propose transient Chinese
+Restaurant Process (tCRP) as a prior for words to allocate the phrases within
+which they are enclosed. In addition, similar to Skipgram, PLANS estimates the
+embedding for words/phrases with negative sampling.  Nevertheless the major
+challenge in learning is that a reasonable size of the phrases need to be
+carefully retained and less confident ones are constantly pruned during
+training. PLANS address this with an online block algorithm which refreshes the
+set of phrases based on their ``frequencies'' in the corpus periodically. In
+addition, simulated annealing (SA) is applied in the sampling process to
+stabilize the learned phrase set. Empirical study demonstrates that PLANS is
+able to successfully (1) identify the frequent phrases in the dataset; and (2)
+estimate their semantics. By applying the learned representation from PLANS to
+NLP tasks such as sentiment and topical classification, we observe that the
+phrase embedding significantly outperforms other standard features such as
+bag-of-words, N-grams, as well as state-of-the-art word embedding.

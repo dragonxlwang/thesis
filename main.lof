@@ -2,24 +2,24 @@
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Pearson's Mixture of Two Normals on ``Breadth of Forehead of Crabs''\relax }}{3}{figure.caption.6}
 \contentsline {figure}{\numberline {1.2}{\ignorespaces Comparison of the mixture model of two normals between Pearson's approach and EM algorithm. The two mixture models are very close to each other showing that the moment-matching method of Pearson obtains a near optimal likelihood.\relax }}{5}{figure.caption.7}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces A illustration of the relationship between $f$ and its conjugate $f^*$. For a given $s^*$, since $f(x) \geq \delimiter "426830A s^*, x \delimiter "526930B - f^*(s^*)$ always holds, which means that in the plot the curve of $f(x)$ is always above (or on) the line of $\delimiter "426830A s^*, x \delimiter "526930B - f^*(s^*)$. As a limiting case, $<s^*, x^*> - f^*(s^*)$ is cutting $f(x)$ at $x = x^*$. In addition, the affine function intersects the vertical axis $x = 0$ at the altitude $-f^*(s^*)$. The plot also shows the relationship between $s^*$ and $x^*$ can be described by the \emph {gradient mapping}: $x^* \in \partial f^{-1}(s^*)$.\relax }}{12}{figure.caption.9}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces A illustration of the relationship between $f$ and its conjugate $f^*$. For a given $s^*$, since $f(x) \geq \delimiter "426830A s^*, x \delimiter "526930B - f^*(s^*)$ always holds, which means that in the plot the curve of $f(x)$ is always above (or on) the line of $\delimiter "426830A s^*, x \delimiter "526930B - f^*(s^*)$. As a limiting case, $<s^*, x^*> - f^*(s^*)$ is cutting $f(x)$ at $x = x^*$. In addition, the affine function intersects the vertical axis $x = 0$ at the altitude $-f^*(s^*)$. The plot also shows the relationship between $s^*$ and $x^*$ can be described by the \emph {gradient mapping}: $x^* \in \partial f^{-1}(s^*)$, or equivalently $s^* \in \partial f(x^*)$.\relax }}{13}{figure.caption.9}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces An illustration of the proposed evolution graph. We show 5 topics, and their dependency. Topic 2 and 3 are enabled by Topic 1 while Topic 5 is enabled by Topic 3 and 4.\relax }}{19}{figure.caption.13}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Topic Temporal Strength for ``WSD'' and ``DP''\relax }}{31}{figure.caption.24}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Topic-Temporal Joint Strength In AAN\relax }}{34}{figure.caption.29}
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Topic-Temporal Joint Strength In PMC\relax }}{34}{figure.caption.29}
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Theme Evolution Graph of AAN\relax }}{35}{figure.caption.31}
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Temporal Evolution in Topics of Theme SMT\relax }}{37}{figure.caption.33}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces An illustration of the proposed evolution graph. We show 5 topics, and their dependency. Topic 2 and 3 are enabled by Topic 1 while Topic 5 is enabled by Topic 3 and 4.\relax }}{20}{figure.caption.13}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Topic Temporal Strength for ``WSD'' and ``DP''\relax }}{32}{figure.caption.24}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Topic-Temporal Joint Strength In AAN\relax }}{35}{figure.caption.29}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Topic-Temporal Joint Strength In PMC\relax }}{35}{figure.caption.29}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Theme Evolution Graph of AAN\relax }}{36}{figure.caption.31}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Temporal Evolution in Topics of Theme SMT\relax }}{38}{figure.caption.33}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Plate notation for \textsc {Trm}\relax }}{43}{figure.caption.38}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Plate notation for \textsc {Tpp}\relax }}{43}{figure.caption.38}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces An Illustration Example of \textsc {Tpp}{}: The generation of two pairwise preferences by a crowd worker for a given query\relax }}{45}{figure.caption.40}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Domain Prediction Accuracy and Model Log Likelihood with Standard Deviations\relax }}{55}{figure.caption.51}
-\contentsline {figure}{\numberline {4.5}{\ignorespaces NDCG@n evaluated on MQ2008-agg Dataset\relax }}{56}{figure.caption.54}
-\contentsline {figure}{\numberline {4.6}{\ignorespaces R.O.C. Curve for Malicious Worker Detection\relax }}{57}{figure.caption.56}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Plate notation for \textsc {Trm}\relax }}{44}{figure.caption.38}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Plate notation for \textsc {Tpp}\relax }}{44}{figure.caption.38}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces An Illustration Example of \textsc {Tpp}{}: The generation of two pairwise preferences by a crowd worker for a given query\relax }}{47}{figure.caption.40}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Domain Prediction Accuracy and Model Log Likelihood with Standard Deviations\relax }}{56}{figure.caption.51}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces NDCG@n evaluated on MQ2008-agg Dataset\relax }}{57}{figure.caption.54}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces R.O.C. Curve for Malicious Worker Detection\relax }}{58}{figure.caption.56}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Dual Clustering in the Simplex with KL-divergence\relax }}{69}{figure.caption.62}
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Performance on Text Classification and Word Embedding \relax }}{71}{figure.caption.63}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Dual Clustering in the Simplex with KL-divergence\relax }}{71}{figure.caption.62}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Performance on Text Classification and Word Embedding \relax }}{72}{figure.caption.63}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

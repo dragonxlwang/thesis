@@ -2,103 +2,104 @@
 \contentsline {chapter}{List of Figures}{viii}{chapter*.4}
 \contentsline {chapter}{Chapter\ 1\hskip 1em\relax Introduction}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Latent Variable for Knowledge Discovery}{2}{section.1.1}
-\contentsline {subsection}{\numberline {1.1.1}Mixture Models --- an Historical Account}{2}{subsection.1.1.1}
-\contentsline {subsection}{\numberline {1.1.2}Mixture Models --- Development of EM algorithm}{4}{subsection.1.1.2}
+\contentsline {subsection}{\numberline {1.1.1}Mixture Models --- A Historical Account}{2}{subsection.1.1.1}
+\contentsline {subsection}{\numberline {1.1.2}Mixture Models --- Development of the EM algorithm}{4}{subsection.1.1.2}
 \contentsline {subsection}{\numberline {1.1.3}From Mixture Models to Topic Modeling}{6}{subsection.1.1.3}
-\contentsline {section}{\numberline {1.2}Latent Variable for Optimization}{8}{section.1.2}
-\contentsline {section}{\numberline {1.3}Overview of This Thesis}{8}{section.1.3}
-\contentsline {chapter}{Chapter\ 2\hskip 1em\relax Background}{11}{chapter.2}
-\contentsline {section}{\numberline {2.1}Conjugate Duality}{11}{section.2.1}
-\contentsline {subsubsection}{Log-Partition and Negative Entropy}{11}{section*.10}
-\contentsline {section}{\numberline {2.2}EM Algorithm: a modern reinterpretation}{14}{section.2.2}
-\contentsline {subsubsection}{Variant 1: Relaxation by approximation}{15}{section*.11}
-\contentsline {subsubsection}{Variant 2: Bayesian variational inference}{16}{section*.12}
-\contentsline {section}{\numberline {2.3}Minimax Theory}{16}{section.2.3}
-\contentsline {chapter}{Chapter\ 3\hskip 1em\relax Understanding Evolution of Research Themes: a Probabilistic Generative Model for Citations}{18}{chapter.3}
-\contentsline {section}{\numberline {3.1}Introduction}{18}{section.3.1}
-\contentsline {section}{\numberline {3.2}Related Work}{21}{section.3.2}
-\contentsline {section}{\numberline {3.3}Probabilistic Modeling of Literature Citations}{23}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}The General Model}{24}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Citation-LDA}{24}{subsection.3.3.2}
-\contentsline {section}{\numberline {3.4}Construction of Theme Evolution Graph}{25}{section.3.4}
-\contentsline {subsection}{\numberline {3.4.1}Discovery of Research Topics}{26}{subsection.3.4.1}
-\contentsline {subsubsection}{Topic Milestone Papers}{26}{section*.14}
-\contentsline {subsubsection}{Topic Temporal Strength}{26}{section*.15}
-\contentsline {subsubsection}{Topic Keywords}{27}{section*.16}
-\contentsline {subsection}{\numberline {3.4.2}Discovery of Theme Evolution}{27}{subsection.3.4.2}
-\contentsline {subsubsection}{Topic Importance}{27}{section*.17}
-\contentsline {subsubsection}{Topic Dependency}{27}{section*.18}
-\contentsline {subsubsection}{Evolution Patterns}{28}{section*.19}
-\contentsline {section}{\numberline {3.5}Experiments \& Results}{29}{section.3.5}
-\contentsline {subsection}{\numberline {3.5.1}Dataset}{30}{subsection.3.5.1}
-\contentsline {subsubsection}{ACL Anthology Network\nobreakspace {}(AAN)}{30}{section*.21}
-\contentsline {subsubsection}{PubMed Central\nobreakspace {}(PMC)}{30}{section*.22}
-\contentsline {subsection}{\numberline {3.5.2}Results of Research Topics Discovery}{30}{subsection.3.5.2}
-\contentsline {subsubsection}{Finding Milestone Papers}{31}{section*.23}
-\contentsline {subsubsection}{Discovering Temporal Strength}{31}{section*.25}
-\contentsline {subsubsection}{Extracting Topic Keywords}{32}{section*.26}
-\contentsline {subsection}{\numberline {3.5.3}Results of Theme Evolution Discovery}{33}{subsection.3.5.3}
-\contentsline {subsubsection}{Identifying Important Topics}{33}{section*.28}
-\contentsline {subsubsection}{Topic Dependency \& Evolution Patterns}{33}{section*.30}
-\contentsline {subsection}{\numberline {3.5.4}Model Selection \& Comparison Results}{36}{subsection.3.5.4}
-\contentsline {subsubsection}{Evluation on Forward Citation for AAN}{36}{section*.34}
-\contentsline {subsubsection}{Evaluation on Journal Conditional Entropy for PMC}{38}{section*.36}
-\contentsline {section}{\numberline {3.6}Notes and Conclusion}{38}{section.3.6}
-\contentsline {chapter}{Chapter\ 4\hskip 1em\relax Blind Men and The Elephant: Thurstonian Pairwise Preference for Ranking in Crowdsourcing}{40}{chapter.4}
-\contentsline {section}{\numberline {4.1}Introduction}{40}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Motivation}{40}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Challenges}{41}{subsection.4.1.2}
-\contentsline {subsection}{\numberline {4.1.3}Our Proposal}{41}{subsection.4.1.3}
-\contentsline {section}{\numberline {4.2}Thurstonian Ranking Model}{42}{section.4.2}
-\contentsline {section}{\numberline {4.3}Thurstonian Pairwise Preference}{43}{section.4.3}
+\contentsline {section}{\numberline {1.2}Latent Variables for Optimization}{8}{section.1.2}
+\contentsline {section}{\numberline {1.3}Contribution of this thesis}{9}{section.1.3}
+\contentsline {section}{\numberline {1.4}Overview of this Thesis}{9}{section.1.4}
+\contentsline {chapter}{Chapter\ 2\hskip 1em\relax Background}{12}{chapter.2}
+\contentsline {section}{\numberline {2.1}Conjugate Duality}{12}{section.2.1}
+\contentsline {subsubsection}{Log-Partition and Negative Entropy}{12}{section*.10}
+\contentsline {section}{\numberline {2.2}EM Algorithm: a modern reinterpretation}{15}{section.2.2}
+\contentsline {subsubsection}{Variant 1: Relaxation by Approximation}{16}{section*.11}
+\contentsline {subsubsection}{Variant 2: Bayesian Variational Inference}{17}{section*.12}
+\contentsline {section}{\numberline {2.3}Minimax Theory}{17}{section.2.3}
+\contentsline {chapter}{Chapter\ 3\hskip 1em\relax Understanding Evolution of Research Themes: a Probabilistic Generative Model for Citations}{19}{chapter.3}
+\contentsline {section}{\numberline {3.1}Introduction}{19}{section.3.1}
+\contentsline {section}{\numberline {3.2}Related Work}{22}{section.3.2}
+\contentsline {section}{\numberline {3.3}Probabilistic Modeling of Literature Citations}{24}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}The General Model}{25}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Citation-LDA}{25}{subsection.3.3.2}
+\contentsline {section}{\numberline {3.4}Construction of Theme Evolution Graph}{26}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Discovery of Research Topics}{27}{subsection.3.4.1}
+\contentsline {subsubsection}{Topic Milestone Papers}{27}{section*.14}
+\contentsline {subsubsection}{Topic Temporal Strength}{27}{section*.15}
+\contentsline {subsubsection}{Topic Keywords}{28}{section*.16}
+\contentsline {subsection}{\numberline {3.4.2}Discovery of Theme Evolution}{28}{subsection.3.4.2}
+\contentsline {subsubsection}{Topic Importance}{28}{section*.17}
+\contentsline {subsubsection}{Topic Dependency}{29}{section*.18}
+\contentsline {subsubsection}{Evolution Patterns}{29}{section*.19}
+\contentsline {section}{\numberline {3.5}Experiments \& Results}{30}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}Dataset}{31}{subsection.3.5.1}
+\contentsline {subsubsection}{ACL Anthology Network\nobreakspace {}(AAN)}{31}{section*.21}
+\contentsline {subsubsection}{PubMed Central\nobreakspace {}(PMC)}{31}{section*.22}
+\contentsline {subsection}{\numberline {3.5.2}Results of Research Topics Discovery}{31}{subsection.3.5.2}
+\contentsline {subsubsection}{Finding Milestone Papers}{32}{section*.23}
+\contentsline {subsubsection}{Discovering Temporal Strength}{32}{section*.25}
+\contentsline {subsubsection}{Extracting Topic Keywords}{33}{section*.26}
+\contentsline {subsection}{\numberline {3.5.3}Results of Theme Evolution Discovery}{34}{subsection.3.5.3}
+\contentsline {subsubsection}{Identifying Important Topics}{34}{section*.28}
+\contentsline {subsubsection}{Topic Dependency \& Evolution Patterns}{34}{section*.30}
+\contentsline {subsection}{\numberline {3.5.4}Model Selection \& Comparison Results}{37}{subsection.3.5.4}
+\contentsline {subsubsection}{Evluation on Forward Citation for AAN}{37}{section*.34}
+\contentsline {subsubsection}{Evaluation on Journal Conditional Entropy for PMC}{39}{section*.36}
+\contentsline {section}{\numberline {3.6}Notes and Conclusion}{39}{section.3.6}
+\contentsline {chapter}{Chapter\ 4\hskip 1em\relax Blind Men and The Elephant: Thurstonian Pairwise Preference for Ranking in Crowdsourcing}{41}{chapter.4}
+\contentsline {section}{\numberline {4.1}Introduction}{41}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Motivation}{41}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Challenges}{42}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Our Proposal}{43}{subsection.4.1.3}
+\contentsline {section}{\numberline {4.2}Thurstonian Ranking Model}{43}{section.4.2}
+\contentsline {section}{\numberline {4.3}Thurstonian Pairwise Preference}{44}{section.4.3}
 \contentsline {section}{\numberline {4.4}Inference}{46}{section.4.4}
-\contentsline {subsection}{\numberline {4.4.1}Model Parametrization}{46}{subsection.4.4.1}
-\contentsline {subsection}{\numberline {4.4.2}Posterior Sampling}{48}{subsection.4.4.2}
-\contentsline {subsubsection}{Sample Query Domain $m_l$}{48}{section*.42}
-\contentsline {subsubsection}{Sample Perceived Score $s_{l,i}^{(k)}$}{48}{section*.43}
-\contentsline {subsubsection}{Sample Noisy Score Difference $\Delta s^\pi $}{50}{section*.44}
-\contentsline {subsection}{\numberline {4.4.3}Model Updating}{50}{subsection.4.4.3}
-\contentsline {subsection}{\numberline {4.4.4}Identifiability}{51}{subsection.4.4.4}
-\contentsline {section}{\numberline {4.5}Experiments}{51}{section.4.5}
-\contentsline {subsection}{\numberline {4.5.1}Simulated Study}{52}{subsection.4.5.1}
-\contentsline {subsubsection}{Datasets}{52}{section*.46}
-\contentsline {subsubsection}{Baselines}{53}{section*.47}
-\contentsline {subsubsection}{Performance Studies}{54}{section*.49}
-\contentsline {subsubsection}{Query Domain Prediction}{54}{section*.50}
-\contentsline {subsubsection}{More Workers but Sparser Annotation}{55}{section*.52}
-\contentsline {subsubsection}{Malicious Worker Detection}{56}{section*.55}
-\contentsline {subsection}{\numberline {4.5.2}Experiments on Real-World Data}{57}{subsection.4.5.2}
-\contentsline {section}{\numberline {4.6}Related Work}{58}{section.4.6}
-\contentsline {section}{\numberline {4.7}Conclusions and Future Work}{59}{section.4.7}
-\contentsline {chapter}{Chapter\ 5\hskip 1em\relax Dual-Clustering Maximum Entropy{} \\ with Application to Classification and Word Embedding}{60}{chapter.5}
-\contentsline {section}{\numberline {5.1}Introduction}{60}{section.5.1}
-\contentsline {section}{\numberline {5.2}Background}{61}{section.5.2}
-\contentsline {subsection}{\numberline {5.2.1}Maximum Entropy Framework}{61}{subsection.5.2.1}
-\contentsline {subsection}{\numberline {5.2.2}Optimization of ME}{62}{subsection.5.2.2}
-\contentsline {subsection}{\numberline {5.2.3}Learning with Large Item Number}{63}{subsection.5.2.3}
-\contentsline {section}{\numberline {5.3}Dual-Clustering Maximum Entropy{}}{63}{section.5.3}
-\contentsline {subsection}{\numberline {5.3.1}Primal-dual ME}{63}{subsection.5.3.1}
-\contentsline {subsection}{\numberline {5.3.2}Dual Distribution Clustering}{65}{subsection.5.3.2}
-\contentsline {subsection}{\numberline {5.3.3}Online-Offline Optimization}{65}{subsection.5.3.3}
-\contentsline {subsubsection}{Updating cluster assignments\nobreakspace {}(Online)}{65}{section*.57}
-\contentsline {subsubsection}{Updating cluster centers\nobreakspace {}(Offline)}{66}{section*.58}
-\contentsline {subsubsection}{Updating model parameters\nobreakspace {}(Online/Offline)}{67}{section*.59}
-\contentsline {subsubsection}{Tuning online/offline computation}{67}{section*.60}
-\contentsline {section}{\numberline {5.4}DCME Algorithm}{68}{section.5.4}
-\contentsline {subsection}{\numberline {5.4.1}Overall Procedures}{68}{subsection.5.4.1}
-\contentsline {subsection}{\numberline {5.4.2}Connection with K-means}{68}{subsection.5.4.2}
-\contentsline {subsection}{\numberline {5.4.3}Connection with Dual ME}{69}{subsection.5.4.3}
-\contentsline {section}{\numberline {5.5}Experiments}{70}{section.5.5}
-\contentsline {subsection}{\numberline {5.5.1}Evaluation on Text Classification}{70}{subsection.5.5.1}
-\contentsline {subsection}{\numberline {5.5.2}Evaluation on Word Embedding}{72}{subsection.5.5.2}
-\contentsline {section}{\numberline {5.6}Conclusions}{73}{section.5.6}
-\contentsline {chapter}{Chapter\ 6\hskip 1em\relax PLANS: Phrasal Latent Allocation with Negative Sampling{}}{74}{chapter.6}
-\contentsline {section}{\numberline {6.1}Introduction}{74}{section.6.1}
-\contentsline {section}{\numberline {6.2}Background}{76}{section.6.2}
-\contentsline {subsection}{\numberline {6.2.1}Phrasal Allocation as Transient Chinese Restaurant Process (tCRP)}{76}{subsection.6.2.1}
-\contentsline {subsection}{\numberline {6.2.2}Phrase Embedding Learning with Negative Sampling}{77}{subsection.6.2.2}
-\contentsline {subsection}{\numberline {6.2.3}Simulated Annealing}{78}{subsection.6.2.3}
-\contentsline {chapter}{Appendix\ A\hskip 1em\relax Supplementary results on Thurstonian Pairwise Preference}{79}{appendix.A}
-\contentsline {section}{\numberline {A.1}Model Updating}{79}{section.A.1}
-\contentsline {section}{\numberline {A.2}Inference of \textsc {Trm}}{80}{section.A.2}
-\contentsline {chapter}{References}{82}{appendix*.67}
+\contentsline {subsection}{\numberline {4.4.1}Model Parametrization}{47}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Posterior Sampling}{49}{subsection.4.4.2}
+\contentsline {subsubsection}{Sample Query Domain $m_l$}{49}{section*.42}
+\contentsline {subsubsection}{Sample Perceived Score $s_{l,i}^{(k)}$}{49}{section*.43}
+\contentsline {subsubsection}{Sample Noisy Score Difference $\Delta s^\pi $}{51}{section*.44}
+\contentsline {subsection}{\numberline {4.4.3}Model Updating}{51}{subsection.4.4.3}
+\contentsline {subsection}{\numberline {4.4.4}Identifiability}{52}{subsection.4.4.4}
+\contentsline {section}{\numberline {4.5}Experiments}{52}{section.4.5}
+\contentsline {subsection}{\numberline {4.5.1}Simulated Study}{53}{subsection.4.5.1}
+\contentsline {subsubsection}{Datasets}{53}{section*.46}
+\contentsline {subsubsection}{Baselines}{54}{section*.47}
+\contentsline {subsubsection}{Performance Studies}{55}{section*.49}
+\contentsline {subsubsection}{Query Domain Prediction}{55}{section*.50}
+\contentsline {subsubsection}{More Workers but Sparser Annotation}{56}{section*.52}
+\contentsline {subsubsection}{Malicious Worker Detection}{57}{section*.55}
+\contentsline {subsection}{\numberline {4.5.2}Experiments on Real-World Data}{58}{subsection.4.5.2}
+\contentsline {section}{\numberline {4.6}Related Work}{59}{section.4.6}
+\contentsline {section}{\numberline {4.7}Conclusions and Future Work}{60}{section.4.7}
+\contentsline {chapter}{Chapter\ 5\hskip 1em\relax Dual-Clustering Maximum Entropy{} \\ with Application to Classification and Word Embedding}{61}{chapter.5}
+\contentsline {section}{\numberline {5.1}Introduction}{61}{section.5.1}
+\contentsline {section}{\numberline {5.2}Background}{62}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Maximum Entropy Framework}{62}{subsection.5.2.1}
+\contentsline {subsection}{\numberline {5.2.2}Optimization of ME}{63}{subsection.5.2.2}
+\contentsline {subsection}{\numberline {5.2.3}Learning with Large Item Number}{64}{subsection.5.2.3}
+\contentsline {section}{\numberline {5.3}Dual-Clustering Maximum Entropy{}}{64}{section.5.3}
+\contentsline {subsection}{\numberline {5.3.1}Primal-dual ME}{65}{subsection.5.3.1}
+\contentsline {subsection}{\numberline {5.3.2}Dual Distribution Clustering}{66}{subsection.5.3.2}
+\contentsline {subsection}{\numberline {5.3.3}Online-Offline Optimization}{66}{subsection.5.3.3}
+\contentsline {subsubsection}{Updating cluster assignments\nobreakspace {}(Online)}{67}{section*.57}
+\contentsline {subsubsection}{Updating cluster centers\nobreakspace {}(Offline)}{67}{section*.58}
+\contentsline {subsubsection}{Updating model parameters\nobreakspace {}(Online/Offline)}{68}{section*.59}
+\contentsline {subsubsection}{Tuning online/offline computation}{69}{section*.60}
+\contentsline {section}{\numberline {5.4}DCME Algorithm}{69}{section.5.4}
+\contentsline {subsection}{\numberline {5.4.1}Overall Procedures}{69}{subsection.5.4.1}
+\contentsline {subsection}{\numberline {5.4.2}Connection with K-means}{69}{subsection.5.4.2}
+\contentsline {subsection}{\numberline {5.4.3}Connection with Dual ME}{70}{subsection.5.4.3}
+\contentsline {section}{\numberline {5.5}Experiments}{71}{section.5.5}
+\contentsline {subsection}{\numberline {5.5.1}Evaluation on Text Classification}{71}{subsection.5.5.1}
+\contentsline {subsection}{\numberline {5.5.2}Evaluation on Word Embedding}{73}{subsection.5.5.2}
+\contentsline {section}{\numberline {5.6}Conclusions}{74}{section.5.6}
+\contentsline {chapter}{Chapter\ 6\hskip 1em\relax PLANS: Phrasal Latent Allocation with Negative Sampling{}}{75}{chapter.6}
+\contentsline {section}{\numberline {6.1}Introduction}{75}{section.6.1}
+\contentsline {section}{\numberline {6.2}Background}{77}{section.6.2}
+\contentsline {subsection}{\numberline {6.2.1}Phrasal Allocation as Transient Chinese Restaurant Process (tCRP)}{77}{subsection.6.2.1}
+\contentsline {subsection}{\numberline {6.2.2}Phrase Embedding Learning with Negative Sampling}{78}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.3}Simulated Annealing}{79}{subsection.6.2.3}
+\contentsline {chapter}{Appendix\ A\hskip 1em\relax Supplementary results on Thurstonian Pairwise Preference}{80}{appendix.A}
+\contentsline {section}{\numberline {A.1}Model Updating}{80}{section.A.1}
+\contentsline {section}{\numberline {A.2}Inference of \textsc {Trm}}{81}{section.A.2}
+\contentsline {chapter}{References}{83}{appendix*.67}

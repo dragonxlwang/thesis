@@ -1,5 +1,13 @@
 \section{Introduction}
 
+In this chapter I present a framework where ranked list is inferred from
+pairwise preferences labelled by non-expert workers in crowdsourcing. Our
+approach leverages PLVM where latent variables are introduced to model query
+difficulty and query domain, as well as worker expertise and truthfulness. It
+also demonstrate that by employing latent variables, intractable distributions
+can be effectively sampled, and thus efficient computation is accomplished.
+
+
 Collecting reliable annotation at scale has been a critical issue in the
 development of machine learning techniques. Crowdsourcing services make it
 possible to collect huge amount of annotations from less trained crowd workers
@@ -59,19 +67,19 @@ time. The discussion below reveals a number of factors that lead to inconsistent
 annotations:
 
 \begin{itemize}
-\item \emph{Query difficulty:}  More difficult queries, such as ambiguous and
-  vague queries, demand more effort to interpret and to judge, making them
-  intrinsically more prone to errors.
-\item  {\emph{Worker expertise across domains:}} Different workers have
-  different domain expertise; the same worker can also have varying domain
-  knowledge across different task, making the quality of their labels vary
-  accordingly. In practice, neither the task domain nor the worker's expertise
-  is known apriori.
-\item {\emph{Truthfulness of Workers:}} Truthfulness of workers is a prevailing
-  issue in crowdsourcing tasks. Two typical adversarial groups are spammer
-  workers and malicious workers: Spammers give random judgments and offer little
-  information about the ranked lists;  Malicious workers, on the other hand,
-  sabotage the utility of annotations by giving false preferences.
+  \item \emph{Query difficulty:}  More difficult queries, such as ambiguous and
+    vague queries, demand more effort to interpret and to judge, making them
+    intrinsically more prone to errors.
+  \item  {\emph{Worker expertise across domains:}} Different workers have
+    different domain expertise; the same worker can also have varying domain
+    knowledge across different task, making the quality of their labels vary
+    accordingly. In practice, neither the task domain nor the worker's expertise
+    is known apriori.
+  \item {\emph{Truthfulness of Workers:}} Truthfulness of workers is a prevailing
+    issue in crowdsourcing tasks. Two typical adversarial groups are spammer
+    workers and malicious workers: Spammers give random judgments and offer little
+    information about the ranked lists;  Malicious workers, on the other hand,
+    sabotage the utility of annotations by giving false preferences.
 \end{itemize}
 
 Identifying the sources of such incompleteness and inconsistency, and properly

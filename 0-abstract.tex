@@ -1,24 +1,37 @@
 \begin{abstract}
-In this thesis, we conduct a study of probabilistic latent vairable models with
-applications to knowledge discovery and optimizations. Probabilistic modeling is
-one of the most significant principled means to gain insight of the data. By
-assuming the observations of the data are generated from a distribution, we can
-estimate its density, or the statistics of our interest, by either Maximum
-Likelihood or Bayesian inference, depending whether there is a prior
-distribution for the parameters of assumed data distribution.
 
-It is more important to us to reveal the underlying knowledge of the data, and
-the common practice is to model the latent variables in addition to the
-observations. Such latent variables naturally compute, for example, the classes
-(labels), the clusters, and other unobserved measurements of the data. Besides,
-through introducing the latent variables, it also facilities the optimization,
-and provides a trade-off between performance and efficiency.
+I conduct a systematic study of probabilistic latent variable models (PLVMs)
+with applications to knowledge discovery and optimization. Probabilistic
+modeling is a principled means to gain insight of data. By assuming that the
+observed data are generated from a distribution, we can estimate its density, or
+the statistics of our interest, by either Maximum Likelihood Estimation or
+Bayesian inference, depending on whether there is a prior distribution for the
+parameters of the assumed data distribution.
 
-We describe a range of applications where latent variables can be leveraged to
-explore the knowledge of the data and speed up the optimization. Our results
-lead to efficient algorithms which take the advantages of latent variables in
-probabilistic models. We conduct experiments against state-of-the-art approaches
-and the empirical evaluation shows that probabilistic latent variable models
-improve the learning performance as well as computation efficiency.
+One of the primary goals of various machine learning/data mining models is to
+reveal the underlying knowledge of observed data. A common practice is to
+introduce latent variables, which are modeled together with the observations.
+Such latent variables compute, for example, the class assignments (labels), the
+cluster membership, as well as other unobserved measurements of the data.
+Besides, proper exploitation of latent variables facilities the optimization
+itself, which leads to computationally efficient inference algorithms.
+
+In this thesis, I describe a range of applications where latent variables can be
+leveraged for knowledge discovery and efficient optimization. Works in this
+thesis demonstrate that PLVMs are a powerful tool for modelling incomplete
+observations. Through incorporating latent variables and assuming that the
+observations such as citations, pairwise preferences as well as text are
+generated following tractable distributions parametrized by the latent
+variables, PLVMs are flexible and effective to discover knowledge in data mining
+problems, where the knowledge is mathematically modelled as continuous or
+discrete values, distributions or uncertainty. In addition, I also explore the
+PLVMs for deriving efficient algorithms. It has been shown that latent variables
+can be employed as a means for model reduction or facilitating
+computation/sampling of intractable distributions.
+
+Our results lead to algorithms which take advantage of latent variables in
+probabilistic models.  We conduct experiments against state-of-the-art models
+and empirical evaluation shows that our proposed approaches improve both
+learning performance and computational efficiency.
 
 \end{abstract}

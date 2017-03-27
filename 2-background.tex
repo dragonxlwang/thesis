@@ -1,6 +1,6 @@
 \chapter{Background} \label{chp::bg}
 
-For self-containedness, we provide a short references to the mathematical tools
+For self-containedness, we provide a short reference to the mathematical tools
 that we have been frequently used in PLVMs. Readers familiar with the theory of
 conjugate duality and EM algorithm can skip the content of this chapter. And for
 a comprehensive account, please refer to the book \cite{hiriart1993convex}.
@@ -41,7 +41,7 @@ function as:
     addition, the affine function intersects the vertical axis $x = 0$ at the
     altitude $-f^*(s^*)$. The plot also shows the relationship between $s^*$ and
     $x^*$ can be described by the \emph{gradient mapping}: $x^* \in \partial
-    f^{-1}(s^*)$.}
+    f^{-1}(s^*)$, or equivalently $s^* \in \partial f(x^*)$.}
 
   \label{fig::conjugate-function}
 \end{figure}
@@ -55,16 +55,16 @@ For any $x^* \in \argmax \{ \langle s^*, x \rangle  - f^*(s^*)
 \}$, we have that $x^* \in \partial f^{-1}(s^*)$
 \end{thm}
 
-In addition, the conjugacy transformation is in general symmetric: $f^{**} = f$
+In addition, the conjugacy transformation is generally symmetric: $f^{**} = f$
 for convex functions. To be exact, the identity between the bi-conjugate
-$f^{**}$ and $f$ is equivalent to the requirement that the convex $f$ is
-lower semi-continuity (l.s.c): $\liminf\limits_{x \rightarrow x_0} \geq f(x_0)$,
-a sufficient condition of which is that $f$ is subdifferentiablen.
+$f^{**}$ and $f$ is equivalent to the requirement that the convex $f$ is lower
+semi-continuity (l.s.c): $\liminf\limits_{x \rightarrow x_0} \geq f(x_0)$, a
+sufficient condition of which is that $f$ is subdifferentiable.
 
 \subsubsection{Log-Partition and Negative Entropy}
 
 One important instance of the conjugate in PLVMs is between log-partition and
-negative entropy, which are defined as below:
+negative entropy, which are defined as:
 
 \begin{alignat}{-1}
   &\text{Log-Parition:} & \quad
@@ -72,18 +72,18 @@ negative entropy, which are defined as below:
   &\text{Negative Entropy:} & \quad
   - H(\mathbf{p}) &= \sum\limits_{i = 1}^N p_i \log p_i
 \end{alignat}
-where the $\mathbf{p}$ is an element in the simplex set which is defined as:
+where $\mathbf{p}$ is an element in the simplex set which is defined as:
 $$\Delta_N = \{\mathbf{p} \in
   \mathbb{R}^{N}: p_j \ge 0, \sum\limits_{j=1}^N p_j = 1\}$$
 
-The log-partition function is often seen in Maximum Entropy model, energy-based
-model, as well as Markov Random Fields, \etc. The straight-forward computation
-involves a summation over $N$ items, which can be computational challenging if
-$N$ is large. For example, in Markov Random Fields, $N = m!$  where is $m$ is
-the number of nodes in the random fields, and therefore computing the
-log-partition function is the bottleneck for training such a model.
+The log-partition function is often seen in Maximum Entropy models, energy-based
+models, as well as Markov Random Fields, \etc. The straight-forward computation
+involves a summation over $N$ items, which can be computationally challenging if
+$N$ is large. For example, in Markov Random Fields, $N = m!$  where  $m$ is the
+number of nodes in the random fields. Computing the log-partition function is
+often the bottleneck for training such a model.
 
-It is easy to verify that both function is convex and smooth. Their connection
+It is easy to verify that both functions are convex and smooth. Their connection
 is presented in the theorem below.
 
 \begin{lem} \label{lem::bk-cd}
@@ -113,8 +113,8 @@ is presented in the theorem below.
 
   $$\vs = -\partial H \big(\partial A (\vs) \big)$$
 
-  However, it is much more intuitive to prove by showing the equivalence in
-  \Cref{eq::bk-cd}. We follow the derivation:
+  However, it is much more intuitive to alternatively prove by showing the
+  equivalence in \Cref{eq::bk-cd}. We follow the derivation:
 
   \begin{align*}
     \E_{\vmu}[s_j] + \entropy(\vmu)
@@ -122,6 +122,7 @@ is presented in the theorem below.
           \log\sum\limits_{j=1}^N \exp(s_j) \nonumber \\
       &= -D_{KL}(\vmu || \P) + A(\vs)
   \end{align*}
+  %
 where $D_{KL}(\vmu || \P)$ is the Kullback-Leibler (KL) divergence.
 
 Note that KL-divergence is always nonnegative:
@@ -140,12 +141,12 @@ $$\vmu^* = \argmin\limits_{\vmu \in \Delta_N} D_{KL}(\vmu || P) = P$$
 
 \section{EM Algorithm: a modern reinterpretation} \label{sec::bg-em}
 
-Equipped with the conjugate duality, we now offer a new interpretation of the
-famous EM algorithm. It has not been studied thoroughly before. However, part of
-the idea presented here is also shared by the work \cite{iusem1992primal}.
+Equipped with the conjugate duality, here we offer a new interpretation of the
+famous EM algorithm. Part of the idea presented here is also shared by the work
+\cite{iusem1992primal}.
 
 Suppose that there is a distribution $\P(Z | \Theta)$ where the data $Z = (X,
-Y)$ is partially observed and can be decomposed into the observation $X$ and the
+Y)$ is partially observed and can be decomposed into the observations $X$ and the
 unseen variables $Y$. Given a set of data $X_1, \dots, X_N$, MLE solves the
 problem:
 
@@ -162,7 +163,7 @@ Using the conjugate duality proved in \Cref{thm::conjugate-attainer}:
   \entropy(\vmu_i) \Big) \label{eq::em-conjugate}
 \end{align}
 
-Therefore, the MLE with incomplete observation is equivalent to:
+Therefore, the MLE with incomplete observation amounts to:
 
 $$
 \max\limits_{\substack{\Theta \\ \vmu_i \in \Delta , 1 \leq i \leq N}}
@@ -178,7 +179,7 @@ And for fixed $\Theta$, the optimality condition for $\mu_i$ is:
 \quad\iff\quad
 \mu_{i, Y_i} = \P(Y_i | X_i; \Theta)
 \end{flalign}
-
+%
 which is exactly the E-step in EM algorithm.
 
 In addition, to optimize $\Theta$ while fixing $M$:
@@ -188,27 +189,30 @@ In addition, to optimize $\Theta$ while fixing $M$:
 \sum\limits_{i=1}^N \sum\limits_{Y_i} \vmu_{i, Y_i} \log \P(X_i, Y_i ;\Theta)
 \end{flalign}
 
-where in EM algorithm, $\sum\limits_{i=1}^N \sum\limits_{Y_i} \vmu_{i, Y_i} \log
-\P(X_i, Y_i ;\Theta)$ is referred as \emph{evidence lower bound}~ELBO function,
-and the above maximization is identical to the M-step in EM algorithm.
+In the EM algorithm, $\sum\limits_{i=1}^N \sum\limits_{Y_i} \vmu_{i, Y_i} \log
+\P(X_i, Y_i ;\Theta)$ is referred as \emph{evidence lower bound}~(ELBO)
+function, and the above maximization is identical to the M-step in the EM
+algorithm.
 
-Using this interpretation, it is also straight-forward to view EM algorithm as a
-coordinate-descent algorithm where the objective function is
-$\mathcal{F}(\Theta, M)$, which is a lower bound of the log-likelihood.
+Using this interpretation, it is also straight-forward to view the EM algorithm
+as a coordinate-descent algorithm where the objective function is constructed as
+$\mathcal{F}(\Theta, M)$, which is always a lower bound of the log-likelihood.
+In below, we briefly discuss two important variants of the EM algorithm.
 
-\subsubsection{Variant 1: Relaxation by approximation}
+\subsubsection{Variant 1: Relaxation by Approximation}
 
 In the above basic version of EM, we assume that $\mu_i$ can freely choose any
-element in the simplex $\Delta$. Nevertheless, sometimes for computational
-efficiency, we might want to trade accuracy for efficiency, and to compute an
-approximation of $\mu_i$, which motivates us to study different approaches for
-approximation in the variational inference.  In below, we discuss a few well
-adopted methods.
+element from the simplex $\Delta$. Nevertheless, it often posits a computational
+difficulty when solving the posterior distribution $\P(\cdot | X_i; \Theta)$.
+And it makes sense to trade accuracy of $\mu_i$ for computational efficiency,
+and to compute an approximation of $\mu_i$ by a tractable surrogate, which
+motivates us to study different approximation approaches in the variational
+inference. In below, we discuss a few well adopted methods.
 
-\noindent \textbf{Mean-field approximation}: The simplest approximation strategy
-is to restrict $\mu_i$ to be chosen from a subset, say, $\mathcal{S}$ instead of
-$\Delta$. Then the optimization problem for $\mu_i$ with a constant $\Theta$
-becomes:
+\noindent \textbf{Mean-Field Approximation}: The simplest strategy for
+approximation is to restrict $\mu_i$ to be chosen from a subset, say,
+$\mathcal{S}$ instead of $\Delta$. Then the optimization problem for $\mu_i$
+with a constant $\Theta$ becomes:
 
 \begin{equation}
 \min\limits_{\mu_i \in \mathcal{S}} D_{KL}
@@ -218,62 +222,64 @@ becomes:
 When $\P(\cdot | X_i; \Theta) \notin \mathcal{S}$, \Cref{eq::em-conjugate} will
 not hold. In such cases, the solution of $\Theta$ will neither converge to that
 of MLE.  Moreover, because of the restricted $\mu_i \in \mathcal{S} \subsetneq
-\Delta$, the EM algorithm with mean-field approximation can be viewed as a
-maximization of a (strict) lower bound of the original log-likelihood objective.
+\Delta$, the EM algorithm with mean-field approximation is in fact maximizing a
+(strict) lower bound of the log-likelihood objective.
 
-\noindent \textbf{Approximation by sampling}: It is not uncommon that the
-posterior $\P(\cdot | X, \Theta)$ does not yield a feasible solution. However in
-a lot of such cases it is still possible to use a Gibbs sampler to efficiently
-sample from the posterior. And when incorporating such sampling-based E-step
-into the EM framework, it is advantageous to run the Gibb sampler for only a few
-iterations (before its converging) to collect the statistics for maximization in
+\noindent \textbf{Approximation by Sampling}: As discussed above, it is not
+uncommon that the posterior $\P(\cdot | X, \Theta)$ does not yield a feasible
+solution. However instead of compute the density analytically, it is generally
+possible to use a Gibbs sampler to efficiently sample from the distribution. And
+when incorporating such sampling-based E-step into the EM framework, it is
+advantageous to run the Gibb sampler for only a few iterations (before its
+converging) to collect the statistics for maximization in
 M-step~\cite{wang2016tpp}, the idea of which can be justified similarly as that
 of Contrastive Divergence~\cite{carreira2005contrastive}.
 
-\noindent \textbf{General Density approximation}: General methods for
+\noindent \textbf{General Density Approximation}: General methods for
 approximation of $\P(\cdot | X, \Theta)$ digress from the optimization framework
 of EM algorithm by substituting the objective of \Cref{eq::em-alg-e-appro} with
-other forms of measurement for closeness, for example, Belief
+other forms of measurement for closeness. For example, Belief
 propagation~\cite{yedidia2005constructing}, Bethe
 approximation~\cite{burgess1978bethe} as well as expectation
-propagation~\cite{minka2001expectation}, just to name a few. Especially, the
-expectation propagation~(EP) method can be viewed as an approximation of the
-minimization of the reversed KL-divergence~\cite{minka2005divergence}:
+propagation~\cite{minka2001expectation}, when used in EM do not yields a lower
+bound nor upper bound of the log likelihood. Nevertheless, they are extensively
+investigated for their empirical improvement in terms of efficiency and
+performance. Especially, the expectation propagation~(EP) method was applied to
+replace the E-step in the EM framework and it outperforms the mean-field
+alternatives in cases when evidence is limited~\cite{wang2012truncation}. The EP
+method can be viewed as an approximation to the minimization of the reversed
+KL-divergence~\cite{minka2005divergence}:
 
 \begin{equation}
 \min\limits_{\mu_i \in \mathcal{S}} D_{KL}
 \big(P(\cdot | X_i; \Theta) \; ||\;  \mu_i\big)\label{eq::em-alg-e-appro-rev}
 \end{equation}
 
-Compared \Cref{eq::em-alg-e-appro-rev} to \Cref{eq::em-alg-e-appro}, we see that
-the order of two distributions in the KL-divergence is reversed. The in-depth
-discussion of this topic is beyond the scope of this thesis, and we refer the
-readers to the brochure on variational inference~\cite{wainwright2008graphical}
-and the Ph.D thesis of \citet{minka2001family} on approximation in Bayesian
-inference for a complementary review.
+Comparing \Cref{eq::em-alg-e-appro-rev} to \Cref{eq::em-alg-e-appro}, we see
+that the order of two distributions in the KL-divergence is reversed. The
+in-depth discussion of this topic is beyond the scope of this thesis, and we
+refer the readers to the brochure on variational
+inference~\cite{wainwright2008graphical} and the Ph.D thesis of
+\citet{minka2001family} on approximation in Bayesian inference for a
+complementary review.
 
-Applying the aforementioned techniques to replace the E-step in the EM framework
-with the approximation can result efficient inference algorithms. In
-\cite{wang2012truncation}, EP was applied in variational EM for non-parametric
-models.
-
-\subsubsection{Variant 2: Bayesian variational inference}
+\subsubsection{Variant 2: Bayesian Variational Inference}
 
 EM algorithm is also investigated in Bayesian setting although most techniques
 remain the same. Specifically, $\Theta$ is viewed as a distribution which is
-controlled by hyperparameter $\Gamma$, and thus the log-likelihood function
+governed by hyperparameter $\Gamma$, and thus the log-likelihood function
 involves not only marginalizing the latent variable $Y$ but also the parameter
 $\Theta$.
 
-In Bayesian setting, it is more often called as Bayesian variational inference
-method.  Mathematically, $\Theta$ is also a latent variable, no different from
-$Y$, and we can still employ the EM algorithm. However, with sufficient
-observations, the optimization of hyperparmeter $\Gamma$ is less interested and
-the M-step is generally skipped. In addition, by carefully choosing the form of
-the prior distribution $\P(\Theta ; \Gamma)$ (as conjugate prior of $\P(Y ;
-\Theta)$), we have the posterior $\P(\Theta | X , Z ; \Gamma)$ in the same
-family of distributions as the prior. This is appealing since the update of
-$\mu_i$ in \Cref{eq::em-conjugate} can be maximized exactly easily.
+In the Bayesian setting, EM is more often called as Bayesian variational
+inference method. Mathematically, $\Theta$ is also a latent variable, no
+different from $Y$, and we can still employ the EM algorithm. However, with
+sufficient observations, the optimization of hyperparmeter $\Gamma$ is less
+interested and the M-step is generally skipped. More importantly, by carefully
+choosing the form of the prior distribution $\P(\Theta ; \Gamma)$ (as conjugate
+prior of $\P(Y ; \Theta)$), we have the posterior $\P(\Theta | Y ; \Gamma)$ in
+the same family of distributions as the prior. This is appealing since the
+update of $\mu_i$ in \Cref{eq::em-conjugate} can be maximized exactly easily.
 
 \section{Minimax Theory}
 
@@ -287,11 +293,11 @@ the conditions under which the following equality is hold:
 
 \citeauthor{neumann1928theorie} is credited with the first investigation of this
 problem.  There are many different sufficient conditions that guarantees the
-above equation. Modern analysis employees Farkas Lemma in the \emph{min
-common/max crossing} framework and an excellent formal discussion can be found
-in \cite{bertsekas2003convex}. In this thesis, we only present an earlier
-version of minimax theory by Sion~\cite{sion1958general}, which is one of
-several celebrated generalizations of von Neumann's minimax
+above equation. Modern analysis employs Farkas Lemma in the \emph{min common/max
+crossing} framework and an excellent formal discussion can be found in
+\cite{bertsekas2003convex}. In this thesis, we only present an earlier version
+of minimax theory by Sion~\cite{sion1958general}, which is one of several
+celebrated generalizations of von Neumann's minimax
 theorem~\cite{neumann1928theorie}:
 
 \begin{thm}[Sion's Minimax Theorem]\label{thm::sion-minimax}
@@ -300,7 +306,7 @@ theorem~\cite{neumann1928theorie}:
   \begin{enumerate}
     \item $\phi(x, \cdot)$ is upper semi-continuous and quasi-concave on $Y$ for
       any $x \in X$
-    \item $phi(\cdot, y)$ is lower semi-continuous and quasi-convex on $X$ for
+    \item $\phi(\cdot, y)$ is lower semi-continuous and quasi-convex on $X$ for
       any $y \in Y$
   \end{enumerate}
   Then,
@@ -310,17 +316,7 @@ theorem~\cite{neumann1928theorie}:
 
 An elementary proof of Sion's minimax theorem can be found in
 \cite{komiya1988elementary}. The derivation is simple, short and elegant. Also,
-the assumption made in \cref{thm::sion-minimax} is easy to satisfy for most
-practical problems where $\phi$ is a ``regular'' function. In general,
+the assumption made in \cref{thm::sion-minimax} is often satisfied for most
+practical problems under mild assumptions of $\phi$. In general,
 \Cref{eq::minimax} holds when solving problems involving the dual formulation in
 PLVMs.
-
-
-
-
-
-
-
-
-
-
