@@ -21,5 +21,7 @@
 \contentsline {figure}{\numberline {5.1}{\ignorespaces Dual Clustering in the Simplex with KL-divergence\relax }}{71}{figure.caption.62}
 \contentsline {figure}{\numberline {5.2}{\ignorespaces Performance on Text Classification and Word Embedding \relax }}{72}{figure.caption.63}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Curves of average customers per table, number of tables, the number of days when tables are pruned, and ratio of customers being assigned to a new table. The x-axis is the total number of customers so far. \relax }}{88}{figure.caption.69}
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

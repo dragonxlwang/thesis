@@ -1,0 +1,16 @@
+\section{Conclusion}
+
+We propose a novel model, \PLANS{}~(PLANS), to jointly learn the phrasal
+allocation and the embeddings. Although previous study have separately
+investigated either of the subtasks, PLANS is the first to
+address the two problems in a fully unsupervised fashion. PLANS has three main
+ingredients: 1). A transient Chinese Restaurant Process (tCRP) is proposed to
+model possibly infinite discrete observations in a stream while maintaining an
+economic and affordable size of tables and customers by periodical shrinking;
+2). Negative sampling~(NS) is integrated to efficiently estimate the
+embedding of phrases; and 3). Simulated Annealing~(SA) with geometric cooling
+stabilizes PLANS by reducing the stochastic behavior towards the end of
+training. In addition, we implement PLANS with multi-threads with a modified
+Hogwild algorithm which ensures fast training. Empirical studies demonstrate
+that PLANS is able to identify meaningful phrases and accurately estimate the semantic
+embeddings.

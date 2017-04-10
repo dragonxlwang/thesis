@@ -1,0 +1,65 @@
+\section{A Multithread Implementation}
+
+With the development of computer hardware, it is now standard to have machines
+with 40 or more cores of CPU. Hogwild~\cite{recht2011hogwild}, a lock-free
+parallelizing stochastic optimization method, is therefore proposed.
+
+Briefly speaking, Hogwild is an asynchronous ``don't care'' approach for
+stochastic gradient descent sharing the same parameters. That is, each thread
+runs training passes without explicitly synchronizing with the other threads,
+but they concurrently update the parameters by applying SGD updates. In
+practice, the threads will ``race'', \ie, write over each other occasionally,
+but that is affordable if the update over the parameters are sufficiently
+sparse, as in the case of embedding training.
+
+\subsection{Lock-Free Optimizing the Embedding}
+
+It is straightforward to optimize the (output) phrase and (input) word embedding
+with Hogwild since the number of phrases and words is large and it is not
+frequent to have collision of parameter updating. When multiple threads
+optimizes $\mathbf{H, V}$ by \eqref{eq::plans_optim2} in parallel, the
+back-propagation only involves the sampled phrase $p_k$, the context words $w_j$
+and the negative samples $\mathcal{W}_l$. Since threads are scheduled to work on
+different sections of the corpus, and the negative samples are randomly drawn
+from the noisy distribution, it is hence of low probability for a racing
+condition to occur where the embedding of the same phrase/word is being
+updated by different threads at the same time.
+
+When a racing condition ``unfortunately'' occurred, each thread is trying to
+apply its gradient multiplied by the learning step size to update the embedding
+vector. Since the learning step size is small, the update is also of small
+values, which can only result a small amount of uncertainty in the parameters
+after collision. And through the long time training, the pollution due to the
+racing can be forgiven.
+
+\subsection{Minimal-Lock for Phrasal Allocation}
+
+The racing condition becomes a crucial issue when updating the restaurants.
+Specifically, two operations are mostly impacted by the multithread
+computation: 1) adding a new table in the restaurant; and 2) periodically
+shrinking the restaurant.
+
+The restaurant is stored in memory using hash table data structure. When two
+tables of the same hash value are added to the restaurant, it will cause the
+hash table to fail~\footnote{the detail of crash is implementation dependent.
+  For example if for each hash slot a linked list is stored, it will cause one
+of the added table missing, or the linked list broken.} However, we expect such
+racing condition to be rare since collision in hash table is not frequent in
+general. We solve the problem by assigning each hash slot a mutex lock. Adding phrase to the hash table with hash value $h$ can only proceed when the
+mutex lock for $h$ is successfully obtained. Otherwise, the thread will wait
+until other thread releases the lock.
+
+Another situation we need to consider is the periodical shrinking. Since each
+thread may invoke the shrinking independently, it is possible that more than one
+threads are shrinking the restaurant concurrently. We use another mutex lock to
+avoid the racing. Nevertheless, after sorting the tables, removing tables with
+fewer customers may cause failures the same way as adding tables. The
+difference between removing and adding is that only one table is added at a time
+while removing involves many tables consecutively. And thus it is not
+efficient to lock each corresponding hash slot at removal time. Instead, we
+construct another restaurant and only add retained tables to the new restaurant.
+After the construction of the new table, the thread will broadcast the change of
+the restaurant and all threads will start working on the new restaurant instead.
+
+
+

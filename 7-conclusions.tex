@@ -1,0 +1,83 @@
+\chapter{Conclusions}
+
+In this thesis, I describe a range of practical real-world applications where
+latent variables can be leveraged for effective knowledge discovery and
+efficient optimization. I designed novel probabilistic latent variable models
+which manage to model complex distributions through appropriate choices of the
+latent variables.
+
+Firstly, I demonstrated that by modeling literature citations as observations of
+a generative model with latent variables, research topics as well as evolution
+themes of research can be identified and described inactively. The proposed
+model 1) discovers research topics, which includes finding milestone papers,
+computing topic temporal strength, and extracting keywords for topics; and 2)
+identifies research theme evolution, which includes identifying topic
+importance, learning topic dependency relation, and recognizing the evolution
+patterns. These computational components together enable us to understand
+evolution of research themes by constructing the evolution graph.  This work can
+be very useful to help researchers digest literature quickly, thus speeding up
+scientific research discovery and delivering very broad positive impact on the
+society. In general, the model can also be applied to any graph data for tasks
+such as network clustering and ranking, as well as modeling the evolution of
+network generation.
+
+
+Secondly, I proposed a framework where a ranked list can be inferred from
+pairwise preferences labelled by non-expert workers in crowdsourcing, which is
+highly useful in various data mining and information retrieval tasks such as
+learning to rank. Latent variables are introduced to model query difficulty and
+query domain, as well as worker expertise and truthfulness, effectively
+resolving the inevitable incompleteness and inconsistency of pairwise
+judgements. In addition, by employing latent variables, intractable
+distributions are effectively sampled, and thus efficient computation is
+accomplished.
+
+Thirdly, I proposed a novel approach, Dual-Clustering Maximum Entropy, which
+addresses the stability problem of Maximum Entropy when there is an extreme
+large number of items (classes/words) present. Latent variables are employed for
+model reduction and facilitate inference. By incorporating the modeling of
+latent variables, the dual space of the Maximum Entropy problem is explored and
+a K-means like clustering is conducted over the simplex space. The use of PLVM
+leads to an efficient algorithm, the complexity of which does not depend on the
+number of items.
+
+In the end, we propose a novel model, Phrasal Latent Allocation with Negative
+Sampling (PLANS), to jointly learn the phrasal allocation and the embeddings.
+PLANS consists of three key components: 1) A transient Chinese Restaurant
+Process (tCRP) is proposed to model possibly infinite discrete observations in a
+stream while maintaining an economic and affordable size of tables and customers
+by periodical shrinking; 2) Negative sampling~(NS) is integrated to efficiently
+estimate the embedding of phrases; and 3) Simulated Annealing~(SA) with
+geometric cooling stabilizes PLANS by reducing the stochastic behavior towards
+the end of training.  By fitting the unstructured text with underlying phrasal
+structures, it is demonstrated that both the phrasal allocation and phrase
+embeddings are effectively computed.
+
+Overall, in this thesis, we have explored a wide range of applications where
+Probabilistic Latent Variable Models~(PLVMs) can efficiently model data of
+different types or greatly improve the performance in terms of efficiency and
+scalability. Specifically, we show in this thesis that:
+
+\begin{itemize}
+\item PLVMs are a very flexible approach for modeling complex observations (such
+  as networks, ranked lists, or sequences) by incorporating latent variables
+  into the generative modeling.
+\item PLVMs are a powerful tool for knowledge discovery and data mining. By
+  encoding the useful information as latent variables and modeling them with
+  feasible generative process, it can significatnly simplify the computation and
+  achieves good performance.
+\item PLVMs can also be leveraged for efficient and salable optimization. As one
+  example shown in the thesis, posterior sampling can be leveraged as E-step in
+  the E-M algorithm.
+\end{itemize}
+
+It is our expectation that PLVMs benefit many other research topics in machine
+learning and data mining. The general methodology is that PLVMs allow us to
+model complex observations by assuming simpler generation at the cost of
+incorporating latent variables into modeling. More importantly, those
+``artificially'' added latent variables are in fact statistically meaningful in
+most applications, as they preserve crucial information of the data.  In
+addition, another merit of PLVMs is that it provides a principle means to
+develop scalable and efficient algorithms for inference.  It would be useful to
+explore other applications of PLVMs that could benefit from the idea of modeling
+with latent variables in the future.

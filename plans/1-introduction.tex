@@ -1,85 +1,125 @@
 \section{Introduction}
 
-Learning distributed representations (embeddings) of language has been a very
-attractive topic in recent development of natural language processing. Word
-embedding assigns a (usually dense) low dimensional vector to each word which is
-supposed to retain the semantic information. For example, the differences of
-word vectors trained by Continuous bag-of-words or
-Skipgram~\cite{mikolov2013distributed}, $\text{vec}(``woman'') -
-\text{vec}(``man'') \approx \text{vec}(``king'') - \text{vec}(``queen'')$, are
-found to be close.
+As the last work in this thesis, we present how PLVM can be leveraged to model
+the structure of sequence data and learns a meaningful representation. The
+modeling flexibility PLVM enjoys makes it possible to incorporate various
+insights into a unified model.  Learning distributed representations
+(embeddings) of language has been a very attractive topic in recent development
+of natural language processing. Word embedding assign a (usually dense) low
+dimensional vector to each word which is supposed to retain the semantic
+information. For example, the differences of word vectors trained by Continuous
+bag-of-words or Skipgram~\cite{mikolov2013distributed}, $\text{vec}(``woman") -
+\text{vec}(``man") \approx \text{vec}(``king") - \text{vec}(``queen")$, are
+found to be close. The ``common sense" of human perception, \ie, comprehending
+the semantics of words and their relationships, is encoded in the distributed
+representations. In machine learning tasks, natural language processing as an
+example, they are extremely valuable as being able to be learnt from abundant
+raw text data in a completely unsupervised manner.
 
-Though it is advantageous to employ word embedding for language representation,
+Though it is advantageous to employ word embeddings for language representation,
 the effectiveness is inherently limited by its unigram assumption of language.
 On one hand, the semantics of a word is context-unaware. For instance, the word
-``bank'' in the sentences ``I made a deposit in the bank.'' and ``We walked on
-the river bank.'' has the same embedding and hence semantics though a human
-would interpret the word as different meanings based on the context. On the
-other hand, it treats the semantics of higher level of language units (phrase,
+``bank'' is represented by the same word embedding in the sentences ``I made a
+deposit in the bank.'' and ``We walked on the river bank.'' Therefore there is
+no means to discriminate the two occurrences of word ``bank'', whereas the
+semantics perceived by a human would be different based on the context. On the
+other hand, it treats the semantics of higher level units in language (phrase,
 sentence, and document) as an independent composition (linear function such as
 averaging) of that of each constituent word. An unappealing implication is that
-it oversimplifies the process of meaning formation of language. Under the
-unigram assumption, ``the White House'' would has a greater similarity to ``a
-house in white'' than ``presidential residence'', which is inconsistent with
+the formation process of meaning in language is oversimplified. Under the
+bag-of-words assumption, ``the White House'' would have a larger similarity to
+``a house in white'' than ``presidential residence'', which contradicts the
 human understanding.
 
-Previous efforts towards resolving the semantics of phrase (and sentence) beyond
-simple composition (averaging) have been made. Nevertheless by far most of them
-are trained in a supervised manner where additional annotation of the text is
-required. The annotation is necessary in order to provide richer information of
-language structure than the sequence of words. Such additional annotation can be
-a phrase dictionary~\cite{yin2014exploration},
-POS-tagging~\cite{zhao2015phrase,baroni2010nouns} or syntactic structures from a
-parser~\cite{levy2014dependency,yu2015learning,socher2013parsing,
-le2015compositional,irsoy2014deep}. It is inspiring that by modeling the high
-level language unit, the performance of text representation is greatly improved.
-However, their development is achieved at the expense of requiring extra
-annotation which can hardly be scalable for training on new corpora even new
-languages.
+To address the two aforementioned limitations, a lot of efforts towards
+resolving the semantics of phrase (or sentence) have been made. Instead of using
+a simple averaging operation, phrase/sentence embeddings are calculated by more
+complicated and effective functions. Examples include
+convolution~\cite{kim2014convolutional}, attention mechanism, or general
+first-order or second-order
+transformations~\cite{le2015compositional,irsoy2014deep}. Empirical evaluation
+shows that by modeling the higher level language unit, the performance of text
+representation is greatly improved. The shared idea behind these approaches is
+that the semantics of the phrase/sentence can be inferred from those of its
+child units. Though reasonable in general, it lacks the
+flexibility to model the (large number of) phrases whose semantics does not
+depend on its constituents, taking ``White House'', ``New York Times'' as
+examples.
 
-In this work, we consider phrases as consecutive sequences of words in the text
-and we present a simple yet effective algorithm to incorporate the notion of
-phrase into the representation learning task in a fully unsupervised fashion.
-This is essentially a much more challenging problem than previous investigated
-settings since not only it learns the representation (embedding) but also it
-infers the language structure from the unrestricted natural language text. Our
-study, as a preliminary step to embark on the joint learning of language
-structure and semantics, is based on the observation that \emph{phrasal
-allocation} can be extracted from unstructured text by analyzing the occurrence
-frequencies~\cite{witten1999kea,lindsey2012phrase,wang2007topical}, or
-information-theoretic measurements such as pairwise mutual
-information~\cite{fano1961transmission,church1990word} and generalized mutual
-information~\cite{magerman1990parsing}. More importantly,
+More importantly, by far most approaches assume that additional annotations are
+available to resolve the structure of the phrases/sentences. For instances,
+phrases segmentation~\cite{yin2014exploration} is identified from anchor text in
+Wikipedia; And POS-tagging~\cite{zhao2015phrase,baroni2010nouns} or syntactic
+parsing~\cite{levy2014dependency,yu2015learning,socher2013parsing} can be
+obtained from pre-trained parsers. Therefore it is difficult to adapt to text
+corpora of new domains or even another language.
+
+The above analysis motivates us to investigate the problem of jointly
+recognizing the phrases and learning their embeddings. In this work, we consider
+a phrase as a consecutive sequence of words in a sentence and its semantics is
+represented by a embedding vector. Specifically, with a slight abuse of the
+notation, single-term words are also \emph{phrases}. In addition, we do not
+assume any dependency between the phrase embedding and their constituent word
+embeddings, which allows us to model the meaning of phrases like ``White House''
+and ``New York Times'' with sufficient flexibility. Therefore, once a phrase is
+identified, it will be treated no differently from a new term in the vocabulary.
+
+Our task is essentially a much more challenging problem than settings in
+previous research since the segmentation of phrases is jointly learnt with the
+embeddings. As a preliminary step to embark on the joint learning problem, we
+base our analysis on the observation that \emph{phrasal allocation} and
+\emph{embedding learning} are two related tasks that can be mutually enhanced.
+On one hand, we have already witnessed that text representation via
+compositional embedding
+learning~\cite{levy2014dependency,yu2015learning,socher2013parsing} achieved
+better performance than word embedding learning where the text structure is
+explicitly given; On the other hand,
 \cite{pantel2000unsupervised,collins1995prepositional} has demonstrated that
-contextual similarity, or more precisely the semantic similarity of context, can
-be leveraged to significantly boost the resolution of the prepositional phrasal
-attachment. The strong mutual dependency between the two subtasks of structural
-and semantic learning shows that potentially a great gain can be accomplished by
-the joint modelling.
+contextual similarity, \ie, semantic similarity of context, can also be
+leveraged to significantly improve the resolution of the prepositional phrasal
+attachment. The strong mutual dependency between the structural learning and
+semantic learning inspires us to investigate the two subtasks in one framework.
 
-The proposed algorithm, \PLANS~(PLANS), jointly discoveries the phrase and
-learns the embeddings. With a slight abuse of the notation, we call each single
-word as well as a sequence of words as \emph{a phrase}. The first ingredient of
-PLANS is that it models the allocation of phrase as a latent stochastic variable
-generated from the \emph{transient Chinese restaurant process}~(tCRP).
-Mathematically, for a word appeared in the context, it chooses its boundary of
-the \emph{enclosing phrase}, with the probability specified similarly to that of
-the Chinese restaurant process, encouraging the generation of frequent phrases.
-Nevertheless, a computational challenge confronting PLANS is to retain only a
-finite number of phrases while learning from a large corpus or stream dataset.
-tCRP addresses this by letting customers periodically leave (with a probability)
-the restaurant. In addition, tables in tCRP are sorted and pruned based on their
-number of customers, which can be viewed as a generalization of the
-\emph{frequency thresholding}. Another ingredient that underlies PLANS, namely
-negative sampling~\cite{mikolov2013efficient} which is a popular technique
-originally employed to train word embeddings, has its root in the estimation
-method noise-contrastive estimation~\cite{gutmann2010noise} and is investigated
-to train phrase embeddings. PLANS learns the phrases in an online manner and the
-tables in tCRP are refreshed after the computation of each block of data, which
-maintains a economic and reasonable set of phrases. The last ingredient of
-PLANS, simulated annealing
-(SA)~\cite{aarts1988simulated,brooks1995optimization}, is applied to the Gibbs
-sampling in PLANS to stabilize the selected salient phrases while approaching
-the end of learning. SA reduces the stochastic behavior of sampling over time as
-the PLANS has more certainty about the language structure from training and
-relies less on the sampling to explore the phrasal allocation.
+To this end, we propose a algorithm named \PLANS~(PLANS), which jointly
+identifies the phrases and learns the embeddings. The first ingredient is the
+\emph{transient Chinese restaurant process}~(tCRP). We use tCRP to model the
+allocation of phrases as generating latent stochastic variable. Given a word in
+a sentence, its (left and right) boundaries of the \emph{enclosing phrase} are
+generated from tCRP. Similar to Chinese restaurant process, tCRP also encourages
+``richer get richer'', and phrases with higher frequencies are more likely to be
+chosen again. Nevertheless, a computational challenge confronting PLANS is to
+retain only a finite number of phrases while learning from a large corpus. tCRP
+addresses it by down-sizing the restaurant periodically: Every day a number of
+customers joins the restaurant and at the end of day, tables in tCRP are sorted
+and pruned by the number of customers, and customers also leave the restaurant
+with a constant probability. Such down-size strategy can be viewed as a
+generalization of the \emph{online frequency thresholding} where
+infinite-dimensional multinomial samples are drawn into a stream and a
+finite-dimensional multinomial distribution is estimated to approximate it.
+Another ingredient underlying PLANS, namely negative
+sampling~\cite{mikolov2013efficient}, is a popular technique originally employed
+to train word embeddings. After the phrase allocation is determined by tCRP,
+negative sampling approximates the probability to generate context words given
+the allocated phrase, and optimizes the embedding to reflect the semantic
+relationships between the phrase and context words. Since Gibbs sampling is used
+to draw the allocated phrases and new phrases are added during the training, it
+is crucial to ensure numeric stability and the convergence of the phrases in
+tCRP. The last ingredient of PLANS, simulated
+annealing~(SA)~\cite{aarts1988simulated,brooks1995optimization}, is
+investigated. In brief, SA plays a similar role in sampling as decreasing the
+learning step in gradient descent. When approaching the end of training, SA
+reduces the stochastic behavior of sampling as PLANS has more certainty about
+the semantics and the structure of the phrases, thus it should relies less on
+sampling to explore the phrasal allocation. This in turn benefits us by speeding
+up the convergence of the selected salient phrases and their embeddings learnt
+by tCRP.
+
+Another contribution of our work is an efficient multi-thread implementation of
+PLANS. Hogwild~\cite{recht2011hogwild} is investigated to optimize the phrase
+embeddings across threads. In addition, parallel sampling the phrasal allocation
+and adding new tables to tCRP are implemented with minimal lock mechanism, which
+strikes a balance between efficiency and robustness. We have tested our package
+on a Intel Xeon E5-2678 machine of 48 cores with one thread on each core and
+observes reliable performance at a speed of processing 2.28 million words per
+second.
+

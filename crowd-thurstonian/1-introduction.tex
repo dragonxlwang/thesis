@@ -1,11 +1,14 @@
 \section{Introduction}
 
-In this chapter I present a framework where ranked list is inferred from
-pairwise preferences labelled by non-expert workers in crowdsourcing. Our
-approach leverages PLVM where latent variables are introduced to model query
-difficulty and query domain, as well as worker expertise and truthfulness. It
-also demonstrate that by employing latent variables, intractable distributions
-can be effectively sampled, and thus efficient computation is accomplished.
+From the first Chapter we have seen that PLVM can be applied to model network
+data with good performance. Nevertheless, there are other types of data which
+possesses significantly different nature from the networks. In this chapter I
+present a framework where \emph{ranked list} is inferred from pairwise
+preferences labelled by non-expert workers in crowdsourcing. Our approach
+leverages PLVM where latent variables are introduced to model query difficulty
+and query domain, as well as worker expertise and truthfulness. It also
+demonstrate that by employing latent variables, intractable distributions can be
+effectively sampled, and thus efficient computation is accomplished.
 
 
 Collecting reliable annotation at scale has been a critical issue in the
@@ -75,11 +78,11 @@ annotations:
     knowledge across different task, making the quality of their labels vary
     accordingly. In practice, neither the task domain nor the worker's expertise
     is known apriori.
-  \item {\emph{Truthfulness of Workers:}} Truthfulness of workers is a prevailing
-    issue in crowdsourcing tasks. Two typical adversarial groups are spammer
-    workers and malicious workers: Spammers give random judgments and offer little
-    information about the ranked lists;  Malicious workers, on the other hand,
-    sabotage the utility of annotations by giving false preferences.
+  \item {\emph{Truthfulness of Workers:}} Truthfulness of workers is a
+    prevailing issue in crowdsourcing tasks. Two typical adversarial groups are
+    spammer workers and malicious workers: Spammers give random judgments and
+    offer little information about the ranked lists;  Malicious workers, on the
+    other hand, sabotage the utility of annotations by giving false preferences.
 \end{itemize}
 
 Identifying the sources of such incompleteness and inconsistency, and properly

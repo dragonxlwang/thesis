@@ -1,180 +1,57 @@
 \section{Background}
 
-As mentioned before, there are three necessary ingredients to develop PLANS. In
-this section, we formally discuss them in detail.
+This chapter addresses the problem of jointly learning phrasal allocation and phrase
+embedding. To our best knowledge, this is the first work that integrates
+the two tasks into one framework. To give a fair account of related work, we
+discuss previous studies on each task.
 
-\subsection{Phrasal Allocation as Transient Chinese Restaurant Process (tCRP)}
+\subsection{Phrasal Allocation}
 
-Dirichlet Process is a stochastic process used in Bayesian nonparametrics, which
-extends the Dirichlet distribution to model the discrete count observations over
-an infinite number of outcomes. It has a nice interpretation, namely the Chinese
-Restaurant Process~(CRP), which provides a intuitive metaphor: Suppose that
-there is an infinite number of tables in a Chinese restaurant, and the first
-customer enters the restaurant to sit at the first table. The second customer
-enters and decides either to sit with the first customer or alone at a new
-table. In general, the $n+1$-th customer either joins an already occupied table
-indexed by $k$ with probability proportional to the number of customers already
-sitting there, or sits at a new table with probability proportional to a
-hyperparameter $\alpha$.
+It was a classic problem to extract phrases from unstructured text. Approaches
+by analyzing the co-occurrence
+frequencies~\cite{witten1999kea,lindsey2012phrase,wang2007topical}, or
+information-theoretic measurements such as pointwise mutual
+information~(PMI)~\cite{fano1961transmission,church1990word} and generalized
+mutual information~(GMI)~\cite{magerman1990parsing} are proposed. One common
+drawback shared by methods of this line is that it is difficult to compare the
+importance of phrases containing variable length of words. One implication is
+that they are hardly scalable when learning from large corpora in the online
+stream setting as it is unrealistic to keep track of all n-grams. Another aspect
+of limitation is that though it is hard to find segmentation of phrases with
+respect of the context. For example, in ``New York Times Square'', ``New York
+Times'' would likely to be recognized as a phrase even though a better
+segmentation should be ``New York'' and ``Times square''.
 
-We adopt CRP for phrasal allocation and assume that there is a table for each
-phrase and customers correspond to occurrences of phrases in the dataset.
-However, CRP posits two failings to properly model the phrasal allocation: (1).
-For a stream of words $\dots, w_{t-1}, w_t, w_{t+1}, \dots$, it is only
-reasonable for $w_t$ to be enclosed by phrases of the form $\langle w_b, \dots,
-w_e \rangle$ where $b \le t \le e$ and $e - b$ is small.  Thus when $w_t$ enters
-the restaurants, its choice of seating should be limited; and (2).  When
-learning on a corpus of very large size or stream, it is unrealistic to run
-sampling of CRP over the data enough epochs until convergence. In plain words,
-it is unappealing that the number of the served tables as well as the seated
-customers to grow constantly over time. To this end, transient Chinese
-Restaurant Process~(tCRP) is proposed.
+\subsection{Embedding Learning}
 
-\begin{algorithm}[h!]
-\caption{Transient Chinese Restaurant Process}\label{alg::tcrp}
-  \SetAlgoNoLine
-  \For{$t = 1, 2, \dots$}{
-    $\mathcal{P}_t \leftarrow
-      \left\{ \langle w_b, \dots, b_e \rangle :
-        b \le t \le e ~\text{and}~ e - b \le L \right\}$\;
-    $\mathcal{V}_t \leftarrow \text{existing tables in the restaurant}$\;
-    $\mathcal{A}_t \leftarrow \mathcal{P}_t \setminus \mathcal{V}_t$\;
-    Let $\mathcal{N}(p_k),\, (k = 1, \dots, \left\vert\mathcal{V}_t\right\vert)$
-      be the number of customers sitting at the table of phrase $p_k$\;
-    \textbf{Sample} $k^* \in \{1, \dots, \left\vert\mathcal{V}_t\right\vert\}$
-      with probability:\\ {
-       \Indp
-       \uIf{$k^* \in \mathcal{A}_t$  }{
-         $\P(k^*) \propto \frac{\alpha}{ \left\vert\mathcal{A}_t\right\vert}$\;
-        }
-       \uElse {
-         $\P(k^*) \propto \mathcal{N}(p_{k^*})$\;
-       }
-     }
-    \uIf{current block is completed}{
-      \textbf{Shrink} for each phrase $p$:
-        $\mathcal{N}(p) \leftarrow \beta \mathcal{N}(p)$\;
-      \textbf{Sort} phrases by $\mathcal{N}(p)$\;
-      \textbf{Prune} by retaining only the top $V$ phrases\;
-    }
-  }
-\end{algorithm}
+It was recently brought to people's attention that distributed representation of
+words can be leveraged for NLP learning tasks such as text classification. Among
+different word embedding algorithms, ``Skip-gram''~(SG) and ``Continuous
+bag-of-words''~(CBOW) are simple yet effective. The underlying idea is to model
+the relationship between words co-occurred in a short window. Take SG as an
+example, it computes the probability of seeing a context word given the target
+(center) word and optimizes the word embedding via Negative Sampling, which is a
+simplified version of the Noise-Contrastive
+Estimation~(NCE)~\cite{gutmann2010noise}.  Word embedding trained on large
+corpora shows good property by preserving the semantic relationship between
+words, for instance, $\text{vec}(``woman") - \text{vec}(``man") \approx
+\text{vec}(``king") - \text{vec}(``queen")$.
 
-The first difference between tCRP and CRP is that the choice of tables for a
-customer $w_t$ (occurrence of word) in tCRP is restricted to those corresponding
-to the possible phrases given the context, $\langle w_b, \dots, w_e \rangle$
-where $b \le t \le e$ and $e - b \le L$. Specifically, it only considers phrases
-include the word $w_t$ and has the length no longer than $L$, which is a
-parameter given by the user.  tCRP assigns the probability for a customer to sit
-at an existing table proportional to the number of customers already there.
-However, to sit at a new table, the probability is proportional to the
-hyperparameter $\alpha$ divided by the number of possible new tables available
-to the customer, which makes tCRP significantly different from CRP.
+Beyond word embedding, compositional methods are investigated, where the
+embedding of a higher language unit such as phrase (or sentence): $v_{A B}$ is
+computed by composition function $f(v_A, v_B)$. Since the input and the output
+are vectors of the same dimension, recursive neural networks are used to learn the
+composition, as in \cite{le2015compositional,irsoy2014deep,socher2013parsing}.
+However, they all require additional parsing tree for training and can only
+accommodate binary composition. Another composition, using convolution neural
+network, is also leveraged to model sentence embedding for classification, which
+achieves superior performance than simple word embedding averaging. Though
+compositional methods are more flexible than word embedding, they lacks the
+capability to model phrases whose semantics are not decomposable to its
+constituent words, such as ``White House'' and ``New York Times''. To address
+this, \cite{yin2014exploration} proposed a preprocessing strategy to perform
+phrase segmentation by a dictionary of phrases. Phrase embedding is learnt for
+each multi-term phrase and single-term word. Although all aforementioned works
+have enjoyed improved performance by modeling phrase or sentence embeddings,
+they did not include the phrasal allocation into their learning task.
 
-Another distinguishing feature of tCRP is that it allows customers to leave the
-restaurant when they finish \emph{dining}. Specifically, after customers in a
-block of data are seated, customers in tCRP choose to leave with a probability
-$\beta$. Naturally, it has an ``aging'' effect since the for a customer to stay
-in the restaurant after $i$ data block, the probability is $(1 - \beta)^i$,
-which decreases exponentially with $i$. In addition, the restaurant will sort
-the tables by the number of customers and only retain the top $V$ tables. In
-this way, we maintain an affordable number tables (phrases) in tCRP.
-
-The above procedures of tCRP is summarized in \Cref{alg::tcrp}.
-
-\subsection{Phrase Embedding Learning with Negative Sampling}
-
-The second ingredient in PLANS is negative sampling for estimating the phrase
-embeddings. Suppose that given a context phrase $p_i$,
-the maximum likelihood model would compute the probability of predicting the
-target phrase $p_k$ as:
-
-\begin{equation}
-  \P(p_k | p_i) =
-    \frac{\exp(\vv_k^T \vh_i)}{\sum\limits_{j=1}^V \exp(\vv_j^T \vh_i)}
-\end{equation}
-
-where the $\vv_k$ and $\vh_i$ are the \emph{output} and \emph{input} vector for
-phrase $p_k$ and $p_i$, respectively.  We adopt the Skipgram model to substitute
-this probability with a scoring function in the similar spirit of the
-noise-contrastive estimation approach, and now we have:
-
-\begin{equation}
-  \mathcal{S}(p_k | p_i) = \exp\left\{
-  \log\sigma(\vv_k^T \vh_i) +
-  \sum\limits_{l=1}^Q \log(1 - \sigma\big(\vv_{\mathcal{P}_l}^T \vh_i)\big)
-  \right\}
-\end{equation}
-%
-where in Skipgram as well as noise-contrastive estimation, a noisy distribution
-is assumed to be easily sampled from, and $\{\mathcal{P}_l\}$ are samples from
-the noisy distribution. Although using the score $\mathcal{S}$ instead of the
-probability no longer preserves the statistical justification, it is
-computationally efficient and performs well in practice.
-
-Combining the negative sampling with the tCRP discussed earlier it is now ready
-to jointly discover the phrases and learn the embeddings. Given a context word
-$w_c$ and a target word $w_t$. The posterior probability to sample a phrase
-$p_c$ for $w_c$ is thus proportional to:
-
-\begin{equation}
-  \P(p_c | w_c, w_t) \propto \P_{tCRP}(p_c | w_c) \mathcal{S}(w_t | p_c)
-\end{equation}
-
-Another strategy is to sample phrases for both context and target words.
-Specifically, we will sample not only the context phrase but also the target
-phrase. However, the sampling of the two phrases is coupled, and thus
-computationally expensive:
-
-\begin{align}
-  \P(p_c | w_c, w_t, p_t) &\propto \P_{tCRP}(p_c | w_c)  \mathcal{S}(p_t | p_c)
-    \\
-  \P(p_t | w_c, w_t, p_c) &\propto \P_{tCRP}(p_t | w_t)  \mathcal{S}(p_t | p_c)
-\end{align}
-
-With the samples from the posterior distribution, the optimization of the
-embedding can be done as the M-step in the EM algorithm.
-
-\subsection{Simulated Annealing}
-
-With the amount of trained data increasing, PLANS is more certain about the
-language structure and the phrasal allocation. Therefore, it is appealing to
-decrease the stochastic behavior of sampling. Another motivation is to stabilize
-the phrase set when approaching the end of training. Intuitively speaking, this
-is the same idea of decreasing the learning step size for the gradient descent.
-To this end, we investigate simulated annealing~(SA) in PLANS, which modifies
-the posterior probability for sampling with a temperature parameter $T_t$:
-
-\begin{equation}
-  \P_{SA}(p_c | w_c, w_t) \propto \P^{1/T_t}(p_c | w_c, w_t)
-\end{equation}
-%
-where $\lim_{t\rightarrow \infty} T_t = 0$. Under weak regularity assumption, it
-is easy to see that the probability in SA density concentrates on the mode of
-original distribution. In other words, the phrase with the maximum posterior
-probability will be deterministically selected.
-
-The temperature function, $T_t$, is yet to be specified. There are many
-annealing schedule that we can explore. The \emph{geometric cooling}, computes
-the temperature as:
-
-\begin{equation}
-  T_t = \gamma^t T_0
-\end{equation}
-%
-where $0 < \gamma < 1$ is the cooling rate, which usually takes value between
-0.8 to 0.99~\cite{yuan2004annealed}. The geometric cooling is widely used for
-its quick cooling and convergence. In our work, we set $\gamma = 0.99$.
-
-
-
-% They either learn the
-% phrase embedding phrases by the directly~\cite{yin2014exploration}; or a
-% composition function which computes the phrase embedding from the embedding of
-% the constituent
-% words~\cite{yu2015learning,le2015compositional,irsoy2014deep,socher2011dynamic,
-% baroni2010nouns,zhao2015phrase,levy2014dependency}. Another category of study
-% focuses on the inference of the structure in an supervised manner
-% manner~\cite{socher2013parsing}, which is different from some of the first
-% category in the aspect that a structure decoding model is jointly learned.
-% % or factorization methods~\cite{huang2015convolutional,van2013tensor,yu2016embedding}

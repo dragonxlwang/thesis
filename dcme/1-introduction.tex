@@ -1,13 +1,16 @@
 \section{Introduction}
 
-In this chapter, a novel approach, \DCME, is proposed to address the stability
-problem of Maximum Entropy when there is a extreme large number of items
-(classes/words) present. My insight is that latent variables can be investigated
-to perform model reduction and to facilitate inference. By incorporating the
-modelling of latent variables, the dual space of the Maximum Entropy problem is
-explored and a K-means like clustering is conducted over the simplex space. We
-show that the use of PLVM leads to an efficient algorithm the complexity of
-which does not depend on the number of items.
+We have already witnessed that PLVM is an excellent tool for modeling data of
+different types. However, it is less explored whether we can leverage PLVM for
+scalable and efficient optimization as well. In this chapter, a novel approach,
+\DCME, is proposed to address the stability problem of Maximum Entropy when
+there is an extreme large number of items (classes/words) present. The key
+insight is that latent variables can be investigated to perform model reduction
+and to facilitate inference. By incorporating the modeling of latent variables,
+the dual space of the Maximum Entropy problem is explored and a K-means like
+clustering is conducted over the simplex space. We demonstrate that leveraging
+PLVM leads to an efficient algorithm, the complexity of which does not depend on
+the number of items.
 
 Maximum Entropy (ME), also known by a variety of other names, including
 log-linear, Gibbs, exponential, softmax and multinomial logistic regression

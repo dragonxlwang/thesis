@@ -1,0 +1,241 @@
+\section{\PLANS{}}
+
+In this section, we present the proposed algorithm \PLANS{}~(PLANS). First, we
+introduce the transient Chinese Restaurant Process~(tCRP), which extends the
+Chinese Restaurant Process to assign a prior probability to phrasal allocation.
+Second, we show how the phrasal embedding can be learnt with Negative
+Sampling~(NS). Last, we show a sampling stabilizing technique, Simulated
+Annealing~(SA), to improve the convergence of training.
+
+\subsection{Phrasal Allocation as Transient Chinese Restaurant Process (tCRP)}
+
+Dirichlet Process is a stochastic process used in Bayesian nonparametrics, which
+extends the Dirichlet distribution to model the discrete count observations over
+an infinite number of outcomes. It has a nice interpretation, namely the Chinese
+Restaurant Process~(CRP), which provides a intuitive metaphor: Suppose that
+there is an infinite number of tables in a Chinese restaurant, and the first
+customer enters the restaurant to sit at the first table. The second customer
+enters and decides either to sit with the first customer or alone at a new
+table. In general, the $n+1$-th customer either joins an already occupied table
+indexed by $k$ with probability proportional to the number of customers already
+sitting there, or sits at a new table with probability proportional to a
+hyperparameter $\alpha$.
+
+We adopt CRP for phrasal allocation to allow modeling of infinite number of
+phrases of variable length. We assume that there is a table for each phrase and
+customers correspond to occurrences of phrases in the dataset. However, CRP
+posits two failings to properly model the phrasal allocation: (1). In a stream
+of words $\dots, w_{t-1}, w_t, w_{t+1}, \dots$, it is only reasonable for $w_t$
+to be enclosed by phrases of the form $\langle w_b, \dots, w_e \rangle$ where $b
+\le t \le e$ and $e - b$ is small. Therefore when $w_t$ in $\dots, w_{t-1}, w_t,
+w_{t+1}, \dots$ enters the restaurants, its choice of seating is limited by the
+context; (2). When learning on a corpus of very large size, such as in the
+online setting, it is unrealistic to run sampling of CRP over the data with
+sufficient epochs until convergence. Instead, customers are added into the
+restaurant one after anther without exiting (re-sampling). One unappealing
+effect is that the number of the tables as well as the customers are growing
+constantly over time, which will exceeds the capacity of computing resource
+eventually. To this end, transient Chinese Restaurant Process~(tCRP) is
+proposed.
+
+The first difference between tCRP and CRP is that the seating choice for a
+customer in tCRP is restricted. For word $w_t$ in context $\dots, w_{t-1}, w_t,
+w_{t+1}, \dots$, seating is only possible at the tables corresponding to phrases
+of the form:
+
+$$\langle w_b, \dots, w_e \rangle$$
+where $b \le t \le e$ and $e - b \le L$ if we assume that the maximal length of
+phrases is $L$. Specifically, $w$ can only join to form phrases which spans over
+itself and has the length no longer than $L$. Among those phrases there are two
+categories, either the ones corresponding to tables which already have customers
+sitting at or the ones corresponding to new tables. For the former case, tCRP
+assigns a probability of seating at an existing table proportional to the number
+of seated customers; while for the latter case, the total probability of sitting
+at new tables is proportional to the hyperparameter $\alpha$ and is shared
+evenly among the possible new tables. Therefore, tCRP is capable of balancing
+between generating existing phrases and exploring new phrases, which makes it
+significantly different from CRP.
+
+Another distinguishing feature of tCRP is its ``periodical shrinking
+mechanism''. Unlike CRP where customers are constantly re-entering the
+restaurant in Gibbs sampling, tCRP operates in a stream fashion where infinite
+number of customers are entering. It is critical to maintain a economic and
+reasonable set of salient tables~(phrases) given the limited computing
+resources~(memory). In addition, it is also desirable to avoid the number of
+customers at each table increasing all the time. First, it would be numerically
+unstable or even causing overflow with increasing number of customers at a
+table; Second, in an online learning setting, models should be adaptive and pay
+more attention to recent data instead of obsolete samples. The ``periodical
+shrinking mechanism'' allows tCRP introduces a constant number $\mathcal{I}$ of
+customers per ``day''. At the end of each day, it sorts the tables by the number
+of existing customers and prunes those with fewer customers. And for each
+customer, he (or she) chooses to leave the restaurant with a predefined
+probability $\beta$. Only the remaining customers would be served in the
+following day. Naturally, it has an ``aging'' effect since the for a customer to
+stay in the restaurant after the $i$-th day the probability is $(1 - \beta)^i$,
+which is decreasing exponentially with $i$. In this way, we maintain an
+affordable number tables (phrases) and customers (occurrences) in tCRP.
+
+The above procedures of tCRP is summarized in \Cref{alg::tcrp}.
+
+\begin{algorithm}[h!]
+  \caption{Transient Chinese Restaurant Process}\label{alg::tcrp}
+  \SetAlgoNoLine
+  \For{$t = 1, 2, \dots$}{
+    $\mathcal{P}_t \leftarrow
+    \left\{ \langle w_b, \dots, b_e \rangle :
+    b \le t \le e ~\text{and}~ e - b \le L \right\}$ (feasible phrases) \;
+    $\mathcal{V}_t \leftarrow \text{existing tables in the restaurant}$\;
+    $\mathcal{A}_t \leftarrow \mathcal{P}_t \setminus \mathcal{V}_t$ (feasible
+    new phrases)\;
+    Let $\mathcal{N}(p_k),\, (k = 1, \dots, \left\vert\mathcal{V}_t\right\vert)$
+    be the number of customers sitting at the table of phrase $p_k$\;
+    \textbf{Sample} $k^* \in \{1, \dots, \left\vert\mathcal{V}_t\right\vert\}$
+    with probability:\\ {
+      \Indp
+      \uIf{$k^* \in \mathcal{A}_t$  }{
+        $\P(k^*) \propto \frac{\alpha}{ \left\vert\mathcal{A}_t\right\vert}$\;
+      }
+      \uElse {
+        $\P(k^*) \propto \mathcal{N}(p_{k^*})$\;
+      }
+    }
+    \uIf{$\mathcal{I}$ customers have been served}{
+      \textbf{Sort} phrases by $\mathcal{N}(p)$\;
+      \textbf{Prune} by retaining only the top $V$ phrases\;
+      \textbf{Shrink} for each phrase $p$:
+      $\mathcal{N}(p) \leftarrow \beta \mathcal{N}(p)$\;
+    }
+  }
+\end{algorithm}
+
+\subsection{Phrase Embedding Learning with Negative Sampling}
+
+The second ingredient of PLANS is negative sampling for estimating the phrase
+embeddings. We treat single-term words also as phrases. Each phrase ${p_k}$ (the
+$k$-th table in tCRP) has an embedding $\vv_k$ which is called the \emph{output}
+vector. In addition, for each single-term word $w$ (whether it is in tCRP or
+not), it also has a \emph{input} vector $\vh_w$.
+
+Suppose that in the example of $\dots, w_{t-1}, w_t, w_{t+1}, \dots$ the
+enclosing phrase of $w_t$ sampled from tCRP is $p_k = \langle w_b, \dots, w_e
+\rangle$. Assuming that the context window is $C$, it's context is defined as
+the words of $w_j$ where $b - C \le j < b$ or $e < j \le e + C$. We follow the
+Skipgram algorithm and models the probability of seeing the phrase $p_k$ given a
+context word $w_j$ as specified by the following maximum entropy formula:
+
+\begin{equation}
+  \P_{ME}(p_k | w_{j}) =
+  \frac{\exp(\vv_k^T \vh_{w_j})}{\sum\limits_{i=1}^V \exp(\vv_i^T \vh_j)}
+  \label{eq::plans_me}
+\end{equation}
+%
+which is computational expensive to directly optimize with the maximum
+likelihood estimation.
+
+We adopt ``Negative Sampling''~(NS) to simplify the optimization. NS replaces
+the probability in \eqref{eq::plans_me} by a scoring function in the similar
+spirit of the noise-contrastive estimation~\cite{gutmann2010noise}. The idea
+converts the problem into a series of binary classification tasks, where the
+positive examples are the observed $w_j$ while the negative samples are drawn
+from any noisy distribution~$\mathcal{W}$ that is known and easy to draw sample
+from. Suppose that we are drawing $Q$ samples $\{\mathcal{W}_l\} \sim
+\mathcal{W}$, and now we have the scoring function in NS as:
+
+\begin{equation}
+  \mathcal{S}_{NS}(p_k | \{w_j\}, \{\mathcal{W}_l\}) = \exp\left\{
+    \sum\limits_j \log\sigma(\vv_k^T \vh_{w_j}) +
+    \sum\limits_{l=1}^Q \log\big( 1 - \sigma( \vv_k^T \vh_{\mathcal{W}_l} )\big)
+  \right\}
+  \label{eq::plans_ns}
+\end{equation}
+%
+Intuitively, NS tries to tell apart the two groups of words, \ie, the observed
+context words and the noisy sampled words. Although using the scoring function
+$\mathcal{S}$ instead of the probability no longer preserves the statistical
+justification, it is computationally efficient and performs well in practice.
+
+It is now ready to show the integration of the tCRP and NS in PLANS. For a word
+in sequence, the prior of selecting the enclosing phrase $p_k$ specified by tCRP
+is $P_{tCRP}(p_k)$ and the likelihood is approximated by $\mathcal{S}_{NS}(p_k)$
+in NS. And thus the posterior is thus  to sample a phrase $p_k$ is thus
+proportional to:
+
+\begin{equation}
+  \P(p_k) \propto \P_{tCRP}(p_k) \mathcal{S}(p_k) \label{eq::plans_post}
+\end{equation}
+%
+Note that the sampling is efficient: Given the maximal phrase length $L$ and the
+context window $C$, numbers of negative samples as $Q$, and the embedding
+dimension as $N$, the complexity scales as $\oo(NL^2(C+Q))$.
+
+To learn the embeddings $\mathbf{V}$ and $\mathbf{H}$, the original optimization
+problem:
+
+\begin{equation}
+  \maximize\limits_{\mathbf{V,H}} \E_{t}\big[
+    \E_{k \sim \P_{tCRP}}[ P_{ME}({p_k}^t) ]
+  \big]
+  \label{eq::plans_optim1}
+\end{equation}
+%
+can now be written as:
+
+\begin{equation}
+  \maximize\limits_{\mathbf{V,H}, \hat{k} \sim \P_{tCRP} }
+  \E_{t}\big[ \mathcal{S}_{NS}( {p_{\hat{k}}}^t ) \big]
+  \label{eq::plans_optim2}
+\end{equation}
+
+where the marginalization over $k$ has now been replaced by the posterior
+samples $\hat{k}$. Another way to view the optimization is to solve the
+optimization problem \eqref{eq::plans_optim1} with Expectation-Maximization
+(E-M)~\cite{dempster1977maximum} algorithm and approximate the posterior
+distribution by its sampling.
+
+\subsection{Simulated Annealing}
+
+The stochastic behavior of posterior sampling not only affects the training of
+phrase and word embeddings, but also has a impact on the learnt phrases
+discovered in the tCRP. One potential issue is that the phrases in the
+restaurants may not converge fast enough. And to alleviate such stochastic
+randomness, we apply Simulated Annealing~(SA)~\cite{brooks1995optimization}.
+
+SA algorithm have been investigated to stochastic optimization problem where the
+objective is stochastic. Specifically, it is a metaheuristic to approximate
+global optimization in a large search space. The name and inspiration come from
+annealing in metallurgy, annealing a molten metal causes it to reach its
+crystalline state which is the global minimum in terms of thermodynamic energy.
+The simulated annealing algorithm was developed to simulate the annealing
+process. In the simulated annealing algorithm, artificial temperatures are
+introduced and gradually cooled, analagous to the annealing technique. This
+artificial temperature acts as a source of control over the stochasticity. Near
+the end of the annealing process, the parameters are hopefully inside the
+attractive local areas.
+
+With the amount of trained data accumulating, PLANS is more certain about the
+phrasal allocation and the embeddings. Therefore, it is logical to decrease the
+stochasticity of sampling. Another motivation is to stabilize the phrase set
+when approaching the end of training. Intuitively speaking, this is the same
+idea of decreasing the learning step size for the gradient descent.
+Specifically, we investigate simulated annealing~(SA) in PLANS, which modifies
+the posterior probability~\eqref{eq::plans_post} for sampling with a temperature
+parameter $T_t$ at time $t$:
+
+\begin{equation}
+  \P_{SA}(p_k) \propto \P^{1/T_t}(p_k)
+\end{equation}
+%
+where $\lim_{t\rightarrow \infty} T_t = 0$. Under weak regularity assumption, it
+is easy to see that the probability in SA density concentrates on the mode of
+original distribution. In other words, the phrase with the maximum posterior
+probability will be deterministically selected.
+The temperature function, $T_t$, is yet to be specified. There are many
+annealing schedule that we can explore. The \emph{geometric cooling}, computes
+the temperature as:
+
+\begin{equation} T_t = \gamma^t T_0 \end{equation}
+%
+where $0 < \gamma < 1$ is the cooling rate~\cite{yuan2004annealed}. The
+geometric cooling is widely used for its quick cooling and convergence. We adopt
+it for scheduling the cooling and set the final temperature to $0.2$ or $0.1$.
