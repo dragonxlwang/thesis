@@ -112,7 +112,7 @@
 \contentsline {subsection}{\numberline {6.5.4}Classification Experiment}{88}{subsection.6.5.4}
 \contentsline {section}{\numberline {6.6}Conclusion}{89}{section.6.6}
 \contentsline {chapter}{Chapter\ 7\hskip 1em\relax Conclusions}{90}{chapter.7}
-\contentsline {chapter}{References}{92}{chapter*.71}
-\contentsline {chapter}{Supplementary results on Thurstonian Pairwise Preference}{99}{appendix*.72}
-\contentsline {section}{\numberline {.1}Model Updating}{99}{section.Alph0.1}
-\contentsline {section}{\numberline {.2}Inference of \textsc {Trm}}{100}{section.Alph0.2}
+\contentsline {chapter}{Chapter\ 8\hskip 1em\relax References}{92}{chapter.8}
+\contentsline {chapter}{Appendix\ A\hskip 1em\relax Supplementary results on Thurstonian Pairwise Preference}{99}{appendix.A}
+\contentsline {section}{\numberline {A.1}Model Updating}{99}{section.A.1}
+\contentsline {section}{\numberline {A.2}Inference of \textsc {Trm}}{100}{section.A.2}
