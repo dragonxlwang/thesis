@@ -50,9 +50,9 @@ $30$ documents, and $\textsc{Sr} = 0.05$, each worker will judge $\frac{30\times
 
 Finally, the following $8$ datasets are generated. Each of them contains $10$
 workers, $10$ query domains and $100$ queries:  \textsc{Doc5Sr1.0Demo1,
-Doc5Sr0.5Demo1, Doc5Sr0.5Demo2, Doc5Sr0.5Demo3}, \textsc{Doc30Sr0.1Demo1},
-\textsc{Doc30Sr0.05Demo1}, \textsc{Doc30Sr0.05Demo2} and
-\textsc{Doc30Sr0.05Demo3}.
+Doc5Sr0.5Demo1}, \textsc{Doc5Sr0.5Demo2}, \textsc{Doc5Sr0.5Demo3},
+\textsc{Doc30Sr0.1Demo1}, \textsc{Doc30Sr0.05Demo1}, \textsc{Doc30Sr0.05Demo2}
+and \textsc{Doc30Sr0.05Demo3}.
 
 \subsubsection{Baselines}
 We compare the performance of \textsc{Tpp} against the following four baselines:
@@ -160,8 +160,8 @@ Spammers and malicious workers have negative effects on all the methods. The
 decrease in performance due to malicious workers is  more striking than that due
 to spammers.  Nevertheless, the proposed \textsc{Tpp} is more robust in
 resisting the attack from malicious workers than the baselines.  Specifically,
-we observe that the Kendall's tau increases by $88.516$ for \textsc{Tpp} when
-changing the dataset from \textsc{Doc30Sr0.5Demo1} to
+we observe that the Kendall's tau has increased by $88.516$ for \textsc{Tpp}
+when changing the dataset from \textsc{Doc30Sr0.5Demo1} to
 \textsc{Doc30r0.5Demo3}~\footnote{The maximal Kendall's tau distance for
 \textsc{Doc30} is $\frac{30(30-1)}{2} = 435$.}, while this number is $93.656$
 for \textsc{TppUniDom}, $96.860$ for \textsc{TppUniExp}, and $104.57$ for

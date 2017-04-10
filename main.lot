@@ -14,7 +14,7 @@
 \contentsline {table}{\numberline {4.2}{\ignorespaces Crowd Pairwise Preferences Binding Performance (Kendall's tau Distance)\relax }}{54}{table.caption.48}
 \contentsline {table}{\numberline {4.3}{\ignorespaces \textsc {Tpp} Performance with More Workers but Sparser Annotation (Kendall's tau Distance)\relax }}{57}{table.caption.53}
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Log-Likelihood on Semantic-Syntactic Word Relationship Dataset\relax }}{73}{table.caption.64}
+\contentsline {table}{\numberline {5.1}{\ignorespaces Log-Likelihood on Semantic-Syntactic Word Relationship Dataset\relax }}{74}{table.caption.64}
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {6.1}{\ignorespaces Phrasal Allocation Evaluation\relax }}{85}{table.caption.66}
 \contentsline {table}{\numberline {6.2}{\ignorespaces Top phrases in tCRP\relax }}{86}{table.caption.67}
